@@ -1,0 +1,41 @@
+﻿@using Blazorise.DataGrid
+@using InfraEstrutura.Repositorios
+@using core
+
+
+<DataGrid @ref="gridRef"  TItem="Funcionario"  Editable="true"
+          Data="@funcionarios">
+    <DataGridCommandColumn TItem="Funcionario">
+        <DeleteCommandTemplate >
+            <Button   Color="Color.Danger"  Clicked="()=>OnDeleteClicked(context)">Deletar</Button>
+        </DeleteCommandTemplate>
+    </DataGridCommandColumn>
+
+    <DataGridColumn TItem="Funcionario" Field="@nameof(Funcionario.Nome)" Caption="Nome" Sortable="true" />
+    <DataGridColumn TItem="Funcionario" Field="@nameof(Funcionario.Email)" Caption="Email" Sortable="false" />
+    <DataGridColumn TItem="Funcionario" Field="@nameof(Funcionario.CPF)" Caption="CPF" Sortable="false" />
+
+</DataGrid>
+
+
+@code{
+    [Inject] public IFuncionariosRepository Repo { get; set; }
+    public List<Funcionario> funcionarios { get; set; }
+    Funcionario funcionarioSelecionado { get; set; }
+    DataGrid<Funcionario> gridRef { get; set; }
+    [Parameter] public EventCallback<MouseEventArgs> OnDeleting { get; set; }
+
+    protected override void OnInitialized()
+    {
+
+        funcionarios = Repo.GetFuncionarios().ToList();
+
+    }
+
+    protected async Task OnDeleteClicked(CommandContext context)
+    {
+        
+            
+        
+    }
+}
