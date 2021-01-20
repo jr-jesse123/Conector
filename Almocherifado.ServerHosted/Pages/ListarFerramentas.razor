@@ -1,0 +1,50 @@
+﻿@page "/ListarFerramentas"
+@using Blazorise.DataGrid
+@using InfraEstrutura.Repositorios
+@using core
+
+
+<row style="max-height:50px">
+
+    <DataGrid TItem="Ferramenta" Editable="true" Data="Ferramentas" Filterable="true">
+        <DataGridCommandColumn TItem="Ferramenta">
+            <DeleteCommandTemplate>
+                <Button Color="Color.Danger" Clicked="() => OnDeleClicked(context)">Deletar</Button>
+            </DeleteCommandTemplate>
+        </DataGridCommandColumn>
+        <DataGridCheckColumn TItem="Ferramenta" Field="@nameof(Ferramenta.Id)" Caption="#" />
+        <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.NomeAbreviado)" Caption="Nome" />
+        <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.DataCompra)" Caption="Comprado em" />
+
+        <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.FotoUrl)" Caption="Foto">
+            <DisplayTemplate>
+                <Figure Size="FigureSize.Is256x256">
+                    <FigureImage Source="@context.FotoUrl" />
+                    <FigureCaption>@context.FotoUrl</FigureCaption>
+                </Figure>
+            </DisplayTemplate>
+        </DataGridColumn>
+
+        <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.Descrição)" Caption="Descrição" />
+    </DataGrid>
+</row>
+
+
+
+@code{
+    [Inject] public IFerramentaRepository repository { get; set; }
+    List<Ferramenta> Ferramentas { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Ferramentas = repository.GetallFerramentas().ToList();
+    }
+
+
+    async Task OnDeleClicked(CommandContext<Ferramenta> context)
+    {
+        repository.DeletarFerramenta(context.Item);
+        await context.Clicked.InvokeAsync();
+    }
+
+}
