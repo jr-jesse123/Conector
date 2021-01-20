@@ -2,18 +2,83 @@
 @using Blazorise.DataGrid
 @using InfraEstrutura.Repositorios
 @using core
+@using System.IO
+@using Microsoft.AspNetCore.Hosting
+@using Data.Models
+@using AutoMapper
+@using Blazored.FluentValidation
 
 
+<Heading>Adicionar Nova Ferramenta</Heading>
+
+<EditForm Model="ferramentamodel" OnValidSubmit="OnValidSubmit">
+    <Blazored.FluentValidation.FluentValidationValidator/>
+    <Field>
+        <FieldLabel>Nome Abreviado:</FieldLabel>
+        <TextEdit @bind-Text="@ferramentamodel.NomeAbreviado"/>
+        <ValidationMessage For="() => ferramentamodel.NomeAbreviado"/>
+    </Field>
+    <Field>
+        <FieldLabel>Data de Compra:</FieldLabel>
+        <DateEdit @bind-Date="ferramentamodel.DataCompra"  TValue="DateTime" />
+        <ValidationMessage For="() => ferramentamodel.DataCompra" />
+    </Field>
+    <Field>
+        <FieldLabel>Foto:</FieldLabel>
+        <FileEdit Changed="@OnChanged" AutoReset="false" Filter="image/*"></FileEdit>
+        <ValidationMessage For="() => ferramentamodel.FotoUrl" />
+    </Field>
+    <Field>
+        <FieldLabel>Descrição:</FieldLabel>
+        <MemoEdit @bind-Text="ferramentamodel.Descrição" Rows="3"></MemoEdit>
+        <ValidationMessage For="() => ferramentamodel.Descrição" />
+    </Field>
+
+    <Button Type="ButtonType.Submit">Adicionar</Button>
+</EditForm>
 
 @code{
-   
+
+    FerramentaModel ferramentamodel = new() {  DataCompra = DateTime.Now};
+    [Inject] IFerramentaRepository repository { get; set; }
+    [Inject] IMapper mapper { get; set; }
+
+    void OnValidSubmit()
+    {
+
+
+        var ferramenta = mapper.Map<Ferramenta>(ferramentamodel);
+
+        repository.AdicionarFerramenta(ferramenta);
+        
+        Directory.CreateDirectory(Path.GetDirectoryName(ferramentamodel.FotoUrl));
+        File.WriteAllBytes(ferramentamodel.FotoUrl, fileContent);
+
+    }
+
+
+    byte[] fileContent;
+
+    async Task OnChanged(FileChangedEventArgs e)
+    {
+
+        // A stream is going to be the destination stream we're writing to.                
+        using (var stream = new MemoryStream())
+        {
+            // Here we're telling the FileEdit where to write the upload result
+            await e.Files.Single().WriteToStreamAsync(stream);
+
+            // Once we reach this line it means the file is fully uploaded.
+            // In this case we're going to offset to the beginning of file
+            // so we can read it.
+            //stream.Seek(0, SeekOrigin.Begin);
+            fileContent = stream.ToArray();
+            ferramentamodel.FotoUrl = Directory.GetCurrentDirectory() + $"\\fotos\\{DateTime.Now.ToFileTime()}";
+        }
+    }
+
 }
 <!-- todo:
-
-
-
-    criar página de cadastro de funcionário,
-    Cadastrar, Listar
 
 
     criar página de cadastro de ferramenta,
@@ -42,8 +107,4 @@
     Devolução,
 
  -->
-<!-- ferramenta:
-   Descrição  -
-    Data da Compra (precisa?) -
-       Imagem da Ferramenta
-    -->
+

@@ -10,6 +10,7 @@ namespace Almocherifado.InfraEstrutura
     public class AlmocherifadoContext : DbContext, IAlmocherifadoContext
     {
         public DbSet<Funcionario> Funcionarios { get; set; }
+        public DbSet<Ferramenta> Ferramentas { get; set; }
 
         public AlmocherifadoContext(DbContextOptions<AlmocherifadoContext> optionsBuilder) : base(optionsBuilder)
         {
@@ -30,6 +31,14 @@ namespace Almocherifado.InfraEstrutura
 
             modelBuilder.Entity<Funcionario>()
               .Property(f => f.Nome).HasConversion(p => p.Value, p => Nome.Create(p).Value);
+
+
+            modelBuilder.Entity<Ferramenta>().HasKey(f => f.Id);
+            modelBuilder.Entity<Ferramenta>().Property(f => f.NomeAbreviado);
+            modelBuilder.Entity<Ferramenta>().Property(f => f.Descrição);
+            modelBuilder.Entity<Ferramenta>().Property(f => f.DataCompra);
+            modelBuilder.Entity<Ferramenta>().Property(f => f.FotoUrl);
+            
 
             base.OnModelCreating(modelBuilder);
         }

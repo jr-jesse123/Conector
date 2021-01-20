@@ -12,7 +12,6 @@ namespace Almocherifado.InfraEstrutura.Tests
     public class FuncionariosRepositoryTests
     {
         
-
         [Fact]
         public void Com_Banco_Vazio_Conseguirmos_Adicionar_Funcionario_InMemory()
         {
@@ -69,7 +68,6 @@ namespace Almocherifado.InfraEstrutura.Tests
             protected override void OnModelCreating(ModelBuilder modelBuilder)
             {
                 base.OnModelCreating(modelBuilder);
-                modelBuilder.Entity<Funcionario>();
             }
         }
     }

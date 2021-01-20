@@ -2,6 +2,7 @@ using Almocherifado.InfraEstrutura;
 using Almocherifado.InfraEstrutura.Repositorios;
 using Almocherifado.ServerHosted.Areas.Identity;
 using Almocherifado.ServerHosted.Data;
+using AutoMapper;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
@@ -64,6 +65,8 @@ namespace Almocherifado.ServerHosted
             
             //services.AddTransient<IAlmocherifadoContext, AlmocherifadoContext>();
             services.AddTransient<IFuncionariosRepository, FuncionariosRepository>();
+            services.AddTransient<IFerramentaRepository, FerramentaRepository>();
+            services.AddAutoMapper(typeof(Startup));
 
         }
 
