@@ -1,10 +1,13 @@
 ﻿using Almocherifado.core;
 using Almocherifado.InfraEstrutura.Repositorios;
 using FluentAssertions;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Xunit;
@@ -17,9 +20,16 @@ namespace Almocherifado.InfraEstrutura.Tests
         public void Com_Banco_Vazio_Conseguirmos_Adicionar_Ferramenta_InMemory()
         {
 
-            DbContextOptions<AlmocherifadoContext> options = new DbContextOptionsBuilder<AlmocherifadoContext>().UseInMemoryDatabase("test").Options;
-
+            var caminho = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Teste.mdf");
+            var connMaster = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Teste;Integrated Security=True");
+            
+            
+            DbContextOptions<AlmocherifadoContext> options = new DbContextOptionsBuilder<AlmocherifadoContext>()
+                .UseSqlServer(connMaster).Options;
+            //Data Source = (localdb)\MSSQLLocalDB; Initial Catalog = master; ; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False
             AlmocherifadoContext memoryContext = new AlmocherifadoContext(options);
+            memoryContext.Database.EnsureDeleted();
+            memoryContext.Database.EnsureCreated();
 
             IFerramentaRepository repository = new FerramentaRepository(memoryContext);
 

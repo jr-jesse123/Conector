@@ -11,6 +11,7 @@ namespace Almocherifado.InfraEstrutura
     {
         public DbSet<Funcionario> Funcionarios { get; set; }
         public DbSet<Ferramenta> Ferramentas { get; set; }
+        public DbSet<Emprestimo> Emprestimos { get; set; }
 
         public AlmocherifadoContext(DbContextOptions<AlmocherifadoContext> optionsBuilder) : base(optionsBuilder)
         {
@@ -38,7 +39,21 @@ namespace Almocherifado.InfraEstrutura
             modelBuilder.Entity<Ferramenta>().Property(f => f.Descrição);
             modelBuilder.Entity<Ferramenta>().Property(f => f.DataCompra);
             modelBuilder.Entity<Ferramenta>().Property(f => f.FotoUrl);
-            
+
+
+            modelBuilder.Entity<Emprestimo>().HasKey(e => e.Id);
+            modelBuilder.Entity<Emprestimo>().HasOne(e => e.Funcionario).WithMany().IsRequired();
+
+            modelBuilder.Entity<Emprestimo>().HasMany("_ferramentas") ;
+
+            modelBuilder.Entity<Emprestimo>().Property(e => e.Devolucao);
+            modelBuilder.Entity<Emprestimo>().Property(e => e.Entrega).IsRequired();
+            modelBuilder.Entity<Emprestimo>().Property(e => e.Obra).IsRequired();
+
+
+            modelBuilder.Entity<FerramentaEmprestada>().HasIndex(fe => fe.Id);
+
+
 
             base.OnModelCreating(modelBuilder);
         }

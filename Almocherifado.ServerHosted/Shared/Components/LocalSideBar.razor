@@ -40,6 +40,22 @@
                     </SidebarItem>
                 </SidebarSubItem>
             </SidebarItem>
+            <SidebarItem>
+                <SidebarLink Toggled="(isOpen)=> EmprestimoSubItems.Toggle(isOpen)" IsShow="true">
+                    <Icon Name="IconName.HandsHelping" Margin="Margin.Is3.FromRight" />Emprestimos
+                </SidebarLink>
+                <SidebarSubItem @ref="EmprestimoSubItems" IsShow="true">
+                    <SidebarItem>
+                        <SidebarLink To="AdicionarFerramenta">Cadastrar</SidebarLink>
+                    </SidebarItem>
+                    <SidebarItem>
+                        <SidebarLink To="/ListarFerramentas">Listar</SidebarLink>
+                    </SidebarItem>
+                    <SidebarItem>
+                        <SidebarLink To="apps/todo">Histórico</SidebarLink>
+                    </SidebarItem>
+                </SidebarSubItem>
+            </SidebarItem>
         </SidebarNavigation>
     </SidebarContent>
 </Sidebar>
@@ -48,6 +64,7 @@
     Sidebar sidebar;
     SidebarSubItem mailSidebarSubItems;
     SidebarSubItem appsSidebarSubItems;
+    SidebarSubItem EmprestimoSubItems;
 
     void ToggleSidebar()
     {

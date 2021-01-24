@@ -1,39 +1,58 @@
-﻿@page "/ListarFerramentas"
+﻿@page "/"
 @using Blazorise.DataGrid
 @using InfraEstrutura.Repositorios
 @using core
 
 
-<row style="max-height:50px">
 
-    <DataGrid TItem="Ferramenta" Editable="true" Data="Ferramentas" Filterable="true">
-        <DataGridCommandColumn TItem="Ferramenta">
-            <DeleteCommandTemplate>
-                <Button Color="Color.Danger" Clicked="() => OnDeleClicked(context)">Deletar</Button>
-            </DeleteCommandTemplate>
-        </DataGridCommandColumn>
-        <DataGridCheckColumn TItem="Ferramenta" Field="@nameof(Ferramenta.Id)" Caption="#" />
-        <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.NomeAbreviado)" Caption="Nome" />
-        <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.DataCompra)" Caption="Comprado em" />
 
-        <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.FotoUrl)" Caption="Foto">
-            <DisplayTemplate>
-                <Figure Size="FigureSize.Is256x256">
-                    <FigureImage Source="@context.FotoUrl" />
-                    <FigureCaption>@context.FotoUrl</FigureCaption>
-                </Figure>
-            </DisplayTemplate>
-        </DataGridColumn>
 
-        <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.Descrição)" Caption="Descrição" />
-    </DataGrid>
-</row>
+    <Row>
+        <Button Color="Color.Info" Disabled="Eh_Emprestavel()" Clicked="teste">Alocar Ferramenta</Button>
+    </Row>
+
+
+    <Row>
+        <DataGrid TItem="Ferramenta"  Data="Ferramentas" Filterable="true"  @bind-SelectedRow="@SelectedFerramenta">
+            <DataGridCommandColumn TItem="Ferramenta">
+                <DeleteCommandTemplate>
+                    <Button Color="Color.Danger" Clicked="() => OnDeleClicked(context)">Deletar Ferramenta</Button>
+                </DeleteCommandTemplate>
+            </DataGridCommandColumn>
+
+
+            <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.Id)" Caption="Nome">
+                <Button>Teste</Button>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.NomeAbreviado)" Caption="Nome" />
+            <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.DataCompra)" Caption="Comprado em" />
+
+            <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.FotoUrl)" Caption="Foto">
+                <DisplayTemplate>
+                    <Figure Size="FigureSize.Is128x128">
+                        <FigureImage Source="@context.FotoUrl" />
+                    </Figure>
+                </DisplayTemplate>
+            </DataGridColumn>
+
+            <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.Descrição)" Caption="Descrição" />
+        </DataGrid>
+    </Row>
 
 
 
 @code{
     [Inject] public IFerramentaRepository repository { get; set; }
     List<Ferramenta> Ferramentas { get; set; }
+
+    private Ferramenta ferramenta;
+
+    public Ferramenta SelectedFerramenta
+    {
+        get { return ferramenta; }
+        set { ferramenta = value; StateHasChanged(); }
+    }
 
     protected override void OnInitialized()
     {
@@ -47,4 +66,19 @@
         await context.Clicked.InvokeAsync();
     }
 
+    bool Eh_Emprestavel()
+    {
+        if (SelectedFerramenta is null)
+            return false;
+
+        
+
+        return true;
+
+    }
+
+    void teste()
+    {
+
+    }
 }

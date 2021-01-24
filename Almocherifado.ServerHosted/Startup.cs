@@ -55,7 +55,9 @@ namespace Almocherifado.ServerHosted
             .AddFontAwesomeIcons();
             //{Environment.GetEnvironmentVariable("ApplicationBasePath") }\
             services.AddDbContext<AlmocherifadoContext>(x =>
-            x.UseSqlite(@$"Data Source = almocherifado.db;"));
+                x.UseSqlite(@$"Data Source = almocherifado.db;")
+                .UseLazyLoadingProxies()
+            );
 
 
             //services.AddTransient<DbContextOptions<AlmocherifadoContext>>(sp =>
