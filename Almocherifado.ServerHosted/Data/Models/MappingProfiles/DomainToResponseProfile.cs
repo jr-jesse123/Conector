@@ -12,6 +12,7 @@ namespace Almocherifado.ServerHosted.Data.Models.MappingProfiles
         public DomainToResponseProfile()
         {
             CreateMap<FerramentaModel, Ferramenta>();
+            CreateMap< Ferramenta, FerramentaModel>();
         }
     }
 }

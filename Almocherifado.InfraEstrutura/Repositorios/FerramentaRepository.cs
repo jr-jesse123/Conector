@@ -1,4 +1,5 @@
 ﻿using Almocherifado.core;
+using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,11 @@ namespace Almocherifado.InfraEstrutura.Repositorios
             context.SaveChanges();
         }
 
-
+        public Maybe<Ferramenta> Procurar(Ferramenta ferramenta)
+        {
+            var ferramentaEncontrada = context.Ferramentas.Find(ferramenta.Id);
+            return ferramentaEncontrada is null ? Maybe<Ferramenta>.None: ferramentaEncontrada ;
+        }
 
     }
 }

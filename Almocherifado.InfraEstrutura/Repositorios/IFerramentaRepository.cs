@@ -1,4 +1,5 @@
 ﻿using Almocherifado.core;
+using CSharpFunctionalExtensions;
 using System.Collections.Generic;
 
 namespace Almocherifado.InfraEstrutura.Repositorios
@@ -8,5 +9,6 @@ namespace Almocherifado.InfraEstrutura.Repositorios
         void AdicionarFerramenta(Ferramenta ferramenta);
         void DeletarFerramenta(Ferramenta ferramenta);
         IEnumerable<Ferramenta> GetallFerramentas();
+        Maybe<Ferramenta> Procurar(Ferramenta ferramenta);
     }
 }

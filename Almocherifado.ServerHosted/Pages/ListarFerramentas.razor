@@ -1,10 +1,7 @@
 ﻿@page "/"
 @using Blazorise.DataGrid
 @using InfraEstrutura.Repositorios
-@using core
-
-
-
+@using Almocherifado.core
 
 
     <Row>
@@ -13,7 +10,7 @@
 
 
     <Row>
-        <DataGrid TItem="Ferramenta"  Data="Ferramentas" Filterable="true"  @bind-SelectedRow="@SelectedFerramenta">
+        <DataGrid TItem="Ferramenta"  Data="Ferramentas" Filterable="true"  @bind-SelectedRow="@SelectedFerramenta" >
             <DataGridCommandColumn TItem="Ferramenta">
                 <DeleteCommandTemplate>
                     <Button Color="Color.Danger" Clicked="() => OnDeleClicked(context)">Deletar Ferramenta</Button>

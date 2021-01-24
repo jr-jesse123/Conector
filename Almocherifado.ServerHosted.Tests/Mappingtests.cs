@@ -18,7 +18,7 @@ namespace Almocherifado.ServerHosted.Tests
         }
         
         [Fact]
-        public void Conversao_De_Ferramenta_Para_Model_eh_Valida()
+        public void Conversao_De_FerramentaModel_Para_Ferramenta_eh_Valida()
         {
             var ferramentaModel = new FerramentaModel { DataCompra = DateTime.Now, Descrição = "Ferramenta boa", FotoUrl = "\\fotos\\foto1", NomeAbreviado = "Ferramenta1" };
             
@@ -35,6 +35,24 @@ namespace Almocherifado.ServerHosted.Tests
             
         }
 
+
+
+        [Fact]
+        public void Conversao_De_Ferramenta_Para_FerramentaModel_eh_Valida()
+        {
+            var ferramenta = new Ferramenta("Ferramenta1", "Ferramenta boa", DateTime.Now, "\\fotos\\foto1");
+
+            var config = new MapperConfiguration(cfg => cfg.AddProfile<DomainToResponseProfile>());
+            var mapper = config.CreateMapper();
+            var FerramentModel = mapper.Map< Ferramenta, FerramentaModel>(ferramenta);
+
+            FerramentModel.NomeAbreviado.Should().BeEquivalentTo(ferramenta.NomeAbreviado);
+            FerramentModel.DataCompra.Should().BeSameDateAs(ferramenta.DataCompra);
+            FerramentModel.Descrição.Should().BeEquivalentTo(ferramenta.Descrição);
+
+            FerramentModel.FotoUrl.Should().BeEquivalentTo(ferramenta.FotoUrl);
+
+        }
 
     }
 }

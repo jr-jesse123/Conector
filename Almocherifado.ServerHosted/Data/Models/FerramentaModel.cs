@@ -12,6 +12,8 @@ namespace Almocherifado.ServerHosted.Data.Models
         public string Descrição { get; set; }
         public DateTime DataCompra { get; set; }
         public string FotoUrl { get; set; }
+        
+
     }
 
 
@@ -31,10 +33,6 @@ namespace Almocherifado.ServerHosted.Data.Models
                 .LessThan(DateTime.Today.AddDays(1)).WithMessage("A data de compra da ferramenta é posterior ao dia de hoje");
 
             RuleFor(f => f.FotoUrl).NotEmpty().WithMessage("A foto é obrigatória");
-            
-            
-
-
         }
     }
 

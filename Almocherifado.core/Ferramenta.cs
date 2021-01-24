@@ -1,13 +1,14 @@
 ﻿using CSharpFunctionalExtensions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Almocherifado.core
 {
-
+    [DebuggerDisplay("id:{Id},Nome:{NomeAbreviado}")]
     public class Ferramenta : ValueObject<Ferramenta>
     {
         protected Ferramenta() { }
@@ -25,6 +26,10 @@ namespace Almocherifado.core
         public string Descrição { get;  }
         public DateTime DataCompra { get;  }
         public string FotoUrl { get;  }
+
+     
+
+        public bool Emprestada { get; }
 
         protected override bool EqualsCore(Ferramenta other)
         {

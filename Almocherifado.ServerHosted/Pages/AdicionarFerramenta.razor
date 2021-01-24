@@ -65,7 +65,6 @@
     void OnValidSubmit()
     {
 
-
         var ferramenta = mapper.Map<Ferramenta>(ferramentamodel);
 
         repository.AdicionarFerramenta(ferramenta);
@@ -73,8 +72,6 @@
         Directory.CreateDirectory(Path.GetDirectoryName(environment.WebRootPath + ferramentamodel.FotoUrl));
         File.WriteAllBytes(environment.WebRootPath + ferramentamodel.FotoUrl, fileContent);
 
-
-        
         mensagem = "Ferrramenta Criada Com sucesso!";
         Cor = Color.Success;
         AlertRef.Show();
