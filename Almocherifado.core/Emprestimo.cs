@@ -12,43 +12,17 @@ namespace Almocherifado.core
         {
             Entrega = entrega;
             Funcionario = funcionario;
-            this._ferramentas = ferramentas.Select(ferramenta => new FerramentaEmprestada(ferramenta)).ToList();
+            this._ferramentasEmprestas = ferramentas.Select(ferramenta => new FerramentaEmprestada(ferramenta)).ToList();
             Obra = obra;
         }
 
         public int Id { get; set; }
         public DateTime Entrega { get; }
         public virtual Funcionario Funcionario { get; }
-        protected virtual ICollection<FerramentaEmprestada> _ferramentas {get;set;}
-
-
-
-        public virtual IReadOnlyList<FerramentaEmprestada> Ferramentas { get => _ferramentas.ToList(); }
+        private readonly List<FerramentaEmprestada> _ferramentasEmprestas = new List<FerramentaEmprestada>();
+        public virtual List<FerramentaEmprestada> FerramentasEmprestas { get => _ferramentasEmprestas.ToList(); }
         public string Obra { get; set; }
+        public bool Finalizado { get => FerramentasEmprestas.Any(f => f.DataDevolucao is null) ? false : true; }
 
-        public bool Finalizado { get => Ferramentas.Any(f => f.DataDevolucao is null) ? false : true; }
-
-    }
-
-    public class FerramentaEmprestada
-    {
-        private FerramentaEmprestada()
-        {
-
-        }
-        public FerramentaEmprestada(Ferramenta ferramenta)
-        {
-            Ferramenta = ferramenta;
-        }
-
-        public void AcusarRecebimento()
-        {
-            DataDevolucao = DateTime.Now;
-        }
-
-        public int Id { get; }
-        public virtual Emprestimo Emprestimo { get; set; }
-        public DateTime? DataDevolucao { get; private set; }
-        public virtual Ferramenta Ferramenta { get; }
     }
 }

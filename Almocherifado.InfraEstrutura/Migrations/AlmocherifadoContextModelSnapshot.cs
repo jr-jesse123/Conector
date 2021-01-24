@@ -75,17 +75,12 @@ namespace Almocherifado.InfraEstrutura.Migrations
                     b.Property<int?>("EmprestimoId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("EmprestimoId1")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int?>("FerramentaId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("EmprestimoId");
-
-                    b.HasIndex("EmprestimoId1");
 
                     b.HasIndex("FerramentaId");
 
@@ -124,12 +119,8 @@ namespace Almocherifado.InfraEstrutura.Migrations
             modelBuilder.Entity("Almocherifado.core.FerramentaEmprestada", b =>
                 {
                     b.HasOne("Almocherifado.core.Emprestimo", "Emprestimo")
-                        .WithMany("Ferramentas")
+                        .WithMany("FerramentasEmprestas")
                         .HasForeignKey("EmprestimoId");
-
-                    b.HasOne("Almocherifado.core.Emprestimo", null)
-                        .WithMany("_ferramentas")
-                        .HasForeignKey("EmprestimoId1");
 
                     b.HasOne("Almocherifado.core.Ferramenta", "Ferramenta")
                         .WithMany("HistoricoEmprestimos")
@@ -142,9 +133,7 @@ namespace Almocherifado.InfraEstrutura.Migrations
 
             modelBuilder.Entity("Almocherifado.core.Emprestimo", b =>
                 {
-                    b.Navigation("_ferramentas");
-
-                    b.Navigation("Ferramentas");
+                    b.Navigation("FerramentasEmprestas");
                 });
 
             modelBuilder.Entity("Almocherifado.core.Ferramenta", b =>

@@ -11,7 +11,8 @@ namespace Almocherifado.ServerHosted.Data.Models.MappingProfiles
     {
         public DomainToResponseProfile()
         {
-            CreateMap<FerramentaModel, Ferramenta>();
+            CreateMap<FerramentaModel, Ferramenta>()
+                .ForMember(dest=> dest.HistoricoEmprestimos, opt => opt.Ignore());
             CreateMap< Ferramenta, FerramentaModel>();
         }
     }

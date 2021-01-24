@@ -64,7 +64,7 @@ namespace Almocherifado.InfraEstrutura.Tests.TestesEmprestimoRepositoy
 
             emprestimo.Finalizado.Should().BeFalse(" O emprestimo ainda tem ferramentas alocadas");
 
-            emprestimo.Ferramentas.First().AcusarRecebimento();
+            emprestimo.FerramentasEmprestas.First().AcusarRecebimento();
 
             repository.EditarEmprestimo(emprestimo);
 
@@ -77,32 +77,10 @@ namespace Almocherifado.InfraEstrutura.Tests.TestesEmprestimoRepositoy
 
         }
 
-        [Fact]
-        public void Emprestimo_Eh_Ddeletado_Com_Sucesso()
-        {
-
-            var repository = new EmprestimosRepository(memoryContext);
-            repository.SalvarNovoEmprestimo(emprestimo);
-            //var ferramenta = new Ferramenta("Ferramenta1", "Pense numa ferramenta da boa", DateTime.Today.AddDays(-7), @"/fotos/foto");
-            
-
-            emprestimo.Finalizado.Should().BeFalse(" O emprestimo ainda tem ferramentas alocadas");
-
-            emprestimo.Ferramentas.First().AcusarRecebimento();
-
-            repository.EditarEmprestimo(emprestimo);
-
-            repository.GetAllEmprestimos().Count().Should().BeGreaterThan(0, "Um funcionário foi adicionado na memmória");
-
-            var emprestimoPersistido = repository.GetAllEmprestimos().First();
-            emprestimo.Should().BeEquivalentTo(emprestimo, "este foi o funcionário adicionado");
-
-            emprestimoPersistido.Finalizado.Should().BeTrue(" a única ferramenta alocada foi devolvida");
-
-        }
+        
         public void Dispose()
         {
-//            memoryContext.Database.EnsureDeleted();
+            memoryContext.Database.EnsureDeleted();
             memoryContext.Dispose();
         }
 

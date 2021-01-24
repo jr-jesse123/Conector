@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Almocherifado.InfraEstrutura.Migrations
 {
     [DbContext(typeof(AlmocherifadoContext))]
-    [Migration("20210124195816_initial1")]
+    [Migration("20210124231607_initial1")]
     partial class initial1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -77,17 +77,12 @@ namespace Almocherifado.InfraEstrutura.Migrations
                     b.Property<int?>("EmprestimoId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("EmprestimoId1")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int?>("FerramentaId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("EmprestimoId");
-
-                    b.HasIndex("EmprestimoId1");
 
                     b.HasIndex("FerramentaId");
 
@@ -126,12 +121,8 @@ namespace Almocherifado.InfraEstrutura.Migrations
             modelBuilder.Entity("Almocherifado.core.FerramentaEmprestada", b =>
                 {
                     b.HasOne("Almocherifado.core.Emprestimo", "Emprestimo")
-                        .WithMany("Ferramentas")
+                        .WithMany("FerramentasEmprestas")
                         .HasForeignKey("EmprestimoId");
-
-                    b.HasOne("Almocherifado.core.Emprestimo", null)
-                        .WithMany("_ferramentas")
-                        .HasForeignKey("EmprestimoId1");
 
                     b.HasOne("Almocherifado.core.Ferramenta", "Ferramenta")
                         .WithMany("HistoricoEmprestimos")
@@ -144,9 +135,7 @@ namespace Almocherifado.InfraEstrutura.Migrations
 
             modelBuilder.Entity("Almocherifado.core.Emprestimo", b =>
                 {
-                    b.Navigation("_ferramentas");
-
-                    b.Navigation("Ferramentas");
+                    b.Navigation("FerramentasEmprestas");
                 });
 
             modelBuilder.Entity("Almocherifado.core.Ferramenta", b =>
