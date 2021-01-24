@@ -21,13 +21,15 @@ namespace Almocherifado.core
             FotoUrl = fotoUrl;
         }
 
+
+
         public int Id { get;  }
         public string NomeAbreviado { get;  }
         public string Descrição { get;  }
         public DateTime DataCompra { get;  }
         public string FotoUrl { get;  }
+        public virtual ICollection<FerramentaEmprestada> Emprestimos { get; }
 
-     
 
         public bool Emprestada { get; }
 

@@ -21,10 +21,15 @@ namespace Almocherifado.InfraEstrutura
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //modelBuilder.Entity<Funcionario>().Property (ExpressionHelper.GetMember<Funcionario,string>("_cpf"));
+            //modelBuilder.Entity<Funcionario>().Property(f => f._cpf);
+            //modelBuilder.Entity<Funcionario>().HasKey("_cpf");
+
             modelBuilder.Entity<Funcionario>()
                 .Property(f => f.CPF).HasConversion(p => p.Value, p => CPF.Create(p).Value);
 
-            modelBuilder.Entity<Funcionario>().HasKey(f => f.CPF);
+            modelBuilder.Entity<Funcionario>()
+                .HasKey(f => f.CPF);
 
 
             modelBuilder.Entity<Funcionario>()
@@ -49,6 +54,7 @@ namespace Almocherifado.InfraEstrutura
             //modelBuilder.Entity<Emprestimo>().HasMany(e => e.Ferramentas).WithOne().Metadata.PrincipalToDependent.SetPropertyAccessMode(PropertyAccessMode.Field);
 
 
+            modelBuilder.Entity<Emprestimo>().HasKey(e => e.Id);
             modelBuilder.Entity<Emprestimo>().Property(e => e.Entrega).IsRequired();
             modelBuilder.Entity<Emprestimo>().Property(e => e.Obra).IsRequired();
 

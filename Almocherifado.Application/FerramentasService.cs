@@ -6,7 +6,7 @@ using System;
 
 namespace Almocherifado.Application
 {
-    public class FerramentasService
+    public class FerramentasService : IFerramentasService
     {
         private readonly IFerramentaRepository repo;
 
@@ -17,8 +17,8 @@ namespace Almocherifado.Application
 
         public bool VerificarSeFerramentaEstaEmprestada(Ferramenta ferramenta)
         {
-            return repo.Procurar(ferramenta).HasValue ? true: false;
+            return repo.Procurar(ferramenta).HasValue ? true : false;
         }
-        
+
     }
 }

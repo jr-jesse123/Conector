@@ -75,9 +75,14 @@ namespace Almocherifado.InfraEstrutura.Migrations
                     b.Property<int?>("EmprestimoId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("FerramentaId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EmprestimoId");
+
+                    b.HasIndex("FerramentaId");
 
                     b.HasIndex("Id");
 
@@ -116,11 +121,20 @@ namespace Almocherifado.InfraEstrutura.Migrations
                     b.HasOne("Almocherifado.core.Emprestimo", null)
                         .WithMany("ferramentas")
                         .HasForeignKey("EmprestimoId");
+
+                    b.HasOne("Almocherifado.core.Ferramenta", null)
+                        .WithMany("Emprestimos")
+                        .HasForeignKey("FerramentaId");
                 });
 
             modelBuilder.Entity("Almocherifado.core.Emprestimo", b =>
                 {
                     b.Navigation("ferramentas");
+                });
+
+            modelBuilder.Entity("Almocherifado.core.Ferramenta", b =>
+                {
+                    b.Navigation("Emprestimos");
                 });
 #pragma warning restore 612, 618
         }

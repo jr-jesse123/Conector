@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Almocherifado.InfraEstrutura.Migrations
 {
     [DbContext(typeof(AlmocherifadoContext))]
-    [Migration("20210124143125_initial")]
-    partial class initial
+    [Migration("20210124192927_initial1")]
+    partial class initial1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -77,9 +77,14 @@ namespace Almocherifado.InfraEstrutura.Migrations
                     b.Property<int?>("EmprestimoId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("FerramentaId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EmprestimoId");
+
+                    b.HasIndex("FerramentaId");
 
                     b.HasIndex("Id");
 
@@ -118,11 +123,20 @@ namespace Almocherifado.InfraEstrutura.Migrations
                     b.HasOne("Almocherifado.core.Emprestimo", null)
                         .WithMany("ferramentas")
                         .HasForeignKey("EmprestimoId");
+
+                    b.HasOne("Almocherifado.core.Ferramenta", null)
+                        .WithMany("Emprestimos")
+                        .HasForeignKey("FerramentaId");
                 });
 
             modelBuilder.Entity("Almocherifado.core.Emprestimo", b =>
                 {
                     b.Navigation("ferramentas");
+                });
+
+            modelBuilder.Entity("Almocherifado.core.Ferramenta", b =>
+                {
+                    b.Navigation("Emprestimos");
                 });
 #pragma warning restore 612, 618
         }

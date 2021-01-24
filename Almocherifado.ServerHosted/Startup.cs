@@ -1,3 +1,4 @@
+using Almocherifado.Application;
 using Almocherifado.InfraEstrutura;
 using Almocherifado.InfraEstrutura.Repositorios;
 using Almocherifado.ServerHosted.Areas.Identity;
@@ -64,10 +65,22 @@ namespace Almocherifado.ServerHosted
             //    new DbContextOptionsBuilder<AlmocherifadoContext>().UseSqlite().Options
             //);
             //services.AddDbContext<AlmocherifadoContext>(optionsBuildr => optionsBuildr.UseSqlite(@"Data Source=almocherifado.db;"));
-            
+
             //services.AddTransient<IAlmocherifadoContext, AlmocherifadoContext>();
-            services.AddTransient<IFuncionariosRepository, FuncionariosRepository>();
-            services.AddTransient<IFerramentaRepository, FerramentaRepository>();
+
+            //infraestrutura
+            services.Scan(scan => scan.FromAssembliesOf(typeof(FuncionariosRepository))
+                .AddClasses()
+                .AsImplementedInterfaces()
+            );
+
+            //application
+            services.Scan(scan => scan.FromAssembliesOf(typeof(FerramentasService))
+                .AddClasses()
+                .AsImplementedInterfaces()
+            );
+            //services.AddTransient<IFuncionariosRepository, FuncionariosRepository>();
+            //services.AddTransient<IFerramentaRepository, FerramentaRepository>();
             services.AddAutoMapper(typeof(Startup));
 
         }

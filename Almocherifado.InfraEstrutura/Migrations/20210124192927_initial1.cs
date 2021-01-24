@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Almocherifado.InfraEstrutura.Migrations
 {
-    public partial class initial : Migration
+    public partial class initial1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -64,7 +64,8 @@ namespace Almocherifado.InfraEstrutura.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     DataDevolucao = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    EmprestimoId = table.Column<int>(type: "INTEGER", nullable: true)
+                    EmprestimoId = table.Column<int>(type: "INTEGER", nullable: true),
+                    FerramentaId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -73,6 +74,12 @@ namespace Almocherifado.InfraEstrutura.Migrations
                         name: "FK_FerramentaEmprestada_Emprestimos_EmprestimoId",
                         column: x => x.EmprestimoId,
                         principalTable: "Emprestimos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_FerramentaEmprestada_Ferramentas_FerramentaId",
+                        column: x => x.FerramentaId,
+                        principalTable: "Ferramentas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -88,6 +95,11 @@ namespace Almocherifado.InfraEstrutura.Migrations
                 column: "EmprestimoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_FerramentaEmprestada_FerramentaId",
+                table: "FerramentaEmprestada",
+                column: "FerramentaId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FerramentaEmprestada_Id",
                 table: "FerramentaEmprestada",
                 column: "Id");
@@ -99,10 +111,10 @@ namespace Almocherifado.InfraEstrutura.Migrations
                 name: "FerramentaEmprestada");
 
             migrationBuilder.DropTable(
-                name: "Ferramentas");
+                name: "Emprestimos");
 
             migrationBuilder.DropTable(
-                name: "Emprestimos");
+                name: "Ferramentas");
 
             migrationBuilder.DropTable(
                 name: "Funcionarios");

@@ -21,7 +21,9 @@ namespace Almocherifado.InfraEstrutura.Tests.TestesEmprestimoRepositoy
 
         public TestesComBancoVazio()
         {
+            var con = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TesteEmprestimo;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             DbContextOptions<AlmocherifadoContext> options = new DbContextOptionsBuilder<AlmocherifadoContext>()
+                //.UseSqlServer(con).Options;
                 .UseSqlite(@$"Data Source = Testesalmocherifado.db;").Options;
 
 
@@ -100,7 +102,7 @@ namespace Almocherifado.InfraEstrutura.Tests.TestesEmprestimoRepositoy
         }
         public void Dispose()
         {
-            memoryContext.Database.EnsureDeleted();
+//            memoryContext.Database.EnsureDeleted();
             memoryContext.Dispose();
         }
 

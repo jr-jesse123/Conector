@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Almocherifado.core
 {
@@ -7,7 +8,8 @@ namespace Almocherifado.core
     {
         public Nome Nome { get; }
 
-        private string _cpf { get; }
+        public string _cpf { get; }
+        [NotMapped]
         public CPF CPF { get; }
         public Email Email { get; }
         public Funcionario(Nome nome, CPF cpf, Email email)

@@ -2,6 +2,7 @@
 @using Blazorise.DataGrid
 @using InfraEstrutura.Repositorios
 @using Almocherifado.core
+@using Almocherifado.Application
 
 
     <Row>
@@ -24,7 +25,7 @@
 
             <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.NomeAbreviado)" Caption="Nome" />
             <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.DataCompra)" Caption="Comprado em" />
-
+            
             <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.FotoUrl)" Caption="Foto">
                 <DisplayTemplate>
                     <Figure Size="FigureSize.Is128x128">
@@ -41,11 +42,13 @@
 
 @code{
     [Inject] public IFerramentaRepository repository { get; set; }
+    [Inject] public IFerramentasService ferramentasService { get; set; }
+
     List<Ferramenta> Ferramentas { get; set; }
+    
+    private Ferramenta  ferramenta;
 
-    private Ferramenta ferramenta;
-
-    public Ferramenta SelectedFerramenta
+    public Ferramenta  SelectedFerramenta
     {
         get { return ferramenta; }
         set { ferramenta = value; StateHasChanged(); }
@@ -53,7 +56,8 @@
 
     protected override void OnInitialized()
     {
-        Ferramentas = repository.GetallFerramentas().ToList();
+        Ferramentas = repository.GetallFerramentas()
+            .ToList();
     }
 
 
