@@ -63,9 +63,10 @@ namespace Almocherifado.InfraEstrutura.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    DataDevolucao = table.Column<DateTime>(type: "TEXT", nullable: true),
                     EmprestimoId = table.Column<int>(type: "INTEGER", nullable: true),
-                    FerramentaId = table.Column<int>(type: "INTEGER", nullable: true)
+                    DataDevolucao = table.Column<DateTime>(type: "TEXT", nullable: true),
+                    FerramentaId = table.Column<int>(type: "INTEGER", nullable: true),
+                    EmprestimoId1 = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -73,6 +74,12 @@ namespace Almocherifado.InfraEstrutura.Migrations
                     table.ForeignKey(
                         name: "FK_FerramentaEmprestada_Emprestimos_EmprestimoId",
                         column: x => x.EmprestimoId,
+                        principalTable: "Emprestimos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_FerramentaEmprestada_Emprestimos_EmprestimoId1",
+                        column: x => x.EmprestimoId1,
                         principalTable: "Emprestimos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -93,6 +100,11 @@ namespace Almocherifado.InfraEstrutura.Migrations
                 name: "IX_FerramentaEmprestada_EmprestimoId",
                 table: "FerramentaEmprestada",
                 column: "EmprestimoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FerramentaEmprestada_EmprestimoId1",
+                table: "FerramentaEmprestada",
+                column: "EmprestimoId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FerramentaEmprestada_FerramentaId",

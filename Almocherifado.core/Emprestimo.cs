@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Almocherifado.core
@@ -11,15 +12,18 @@ namespace Almocherifado.core
         {
             Entrega = entrega;
             Funcionario = funcionario;
-            this.ferramentas = ferramentas.Select(ferramenta => new FerramentaEmprestada(ferramenta)).ToList();
+            this._ferramentas = ferramentas.Select(ferramenta => new FerramentaEmprestada(ferramenta)).ToList();
             Obra = obra;
         }
 
         public int Id { get; set; }
         public DateTime Entrega { get; }
         public virtual Funcionario Funcionario { get; }
-        protected virtual List<FerramentaEmprestada> ferramentas {get;set;}
-        public virtual IReadOnlyList<FerramentaEmprestada> Ferramentas { get => ferramentas.ToList(); }
+        protected virtual ICollection<FerramentaEmprestada> _ferramentas {get;set;}
+
+
+
+        public virtual IReadOnlyList<FerramentaEmprestada> Ferramentas { get => _ferramentas.ToList(); }
         public string Obra { get; set; }
 
         public bool Finalizado { get => Ferramentas.Any(f => f.DataDevolucao is null) ? false : true; }
@@ -43,8 +47,8 @@ namespace Almocherifado.core
         }
 
         public int Id { get; }
-
+        public virtual Emprestimo Emprestimo { get; set; }
         public DateTime? DataDevolucao { get; private set; }
-        public Ferramenta Ferramenta { get; }
+        public virtual Ferramenta Ferramenta { get; }
     }
 }

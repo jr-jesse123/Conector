@@ -25,6 +25,8 @@ namespace Almocherifado.InfraEstrutura
             //modelBuilder.Entity<Funcionario>().Property(f => f._cpf);
             //modelBuilder.Entity<Funcionario>().HasKey("_cpf");
 
+            
+
             modelBuilder.Entity<Funcionario>()
                 .Property(f => f.CPF).HasConversion(p => p.Value, p => CPF.Create(p).Value);
 
@@ -44,24 +46,25 @@ namespace Almocherifado.InfraEstrutura
             modelBuilder.Entity<Ferramenta>().Property(f => f.Descrição);
             modelBuilder.Entity<Ferramenta>().Property(f => f.DataCompra);
             modelBuilder.Entity<Ferramenta>().Property(f => f.FotoUrl);
+            modelBuilder.Entity<Ferramenta>().HasMany(f => f.HistoricoEmprestimos).WithOne(e => e.Ferramenta);
 
 
+            modelBuilder.Entity<Emprestimo>().Ignore(e => e.Ferramentas);
             modelBuilder.Entity<Emprestimo>().HasKey(e => e.Id);
             modelBuilder.Entity<Emprestimo>().HasOne(e => e.Funcionario).WithMany().IsRequired();
-
-            modelBuilder.Entity<Emprestimo>().HasMany("ferramentas");
-            modelBuilder.Entity<Emprestimo>().Ignore(e => e.Ferramentas);
-            //modelBuilder.Entity<Emprestimo>().HasMany(e => e.Ferramentas).WithOne().Metadata.PrincipalToDependent.SetPropertyAccessMode(PropertyAccessMode.Field);
-
-
-            modelBuilder.Entity<Emprestimo>().HasKey(e => e.Id);
+            //modelBuilder.Entity<Emprestimo>().HasOne(ExpressionHelper.GetMember<Emprestimo, FerramentaEmprestada>("ferramentas"));
+            modelBuilder.Entity<Emprestimo>().HasMany("_ferramentas").WithOne();
+            
             modelBuilder.Entity<Emprestimo>().Property(e => e.Entrega).IsRequired();
             modelBuilder.Entity<Emprestimo>().Property(e => e.Obra).IsRequired();
 
 
             modelBuilder.Entity<FerramentaEmprestada>().HasIndex(fe => fe.Id);
+            modelBuilder.Entity<FerramentaEmprestada>().HasOne(fe => fe.Ferramenta).WithMany(f => f.HistoricoEmprestimos);
+            modelBuilder.Entity<FerramentaEmprestada>().HasOne(fe => fe.Emprestimo).WithMany(f => f.Ferramentas);
 
 
+            //modelBuilder.Entity<Ferramenta>().HasData();
 
             base.OnModelCreating(modelBuilder);
         }

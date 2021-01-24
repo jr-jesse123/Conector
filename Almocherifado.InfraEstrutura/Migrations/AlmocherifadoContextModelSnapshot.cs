@@ -75,12 +75,17 @@ namespace Almocherifado.InfraEstrutura.Migrations
                     b.Property<int?>("EmprestimoId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("EmprestimoId1")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int?>("FerramentaId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("EmprestimoId");
+
+                    b.HasIndex("EmprestimoId1");
 
                     b.HasIndex("FerramentaId");
 
@@ -118,23 +123,33 @@ namespace Almocherifado.InfraEstrutura.Migrations
 
             modelBuilder.Entity("Almocherifado.core.FerramentaEmprestada", b =>
                 {
-                    b.HasOne("Almocherifado.core.Emprestimo", null)
-                        .WithMany("ferramentas")
+                    b.HasOne("Almocherifado.core.Emprestimo", "Emprestimo")
+                        .WithMany("Ferramentas")
                         .HasForeignKey("EmprestimoId");
 
-                    b.HasOne("Almocherifado.core.Ferramenta", null)
-                        .WithMany("Emprestimos")
+                    b.HasOne("Almocherifado.core.Emprestimo", null)
+                        .WithMany("_ferramentas")
+                        .HasForeignKey("EmprestimoId1");
+
+                    b.HasOne("Almocherifado.core.Ferramenta", "Ferramenta")
+                        .WithMany("HistoricoEmprestimos")
                         .HasForeignKey("FerramentaId");
+
+                    b.Navigation("Emprestimo");
+
+                    b.Navigation("Ferramenta");
                 });
 
             modelBuilder.Entity("Almocherifado.core.Emprestimo", b =>
                 {
-                    b.Navigation("ferramentas");
+                    b.Navigation("_ferramentas");
+
+                    b.Navigation("Ferramentas");
                 });
 
             modelBuilder.Entity("Almocherifado.core.Ferramenta", b =>
                 {
-                    b.Navigation("Emprestimos");
+                    b.Navigation("HistoricoEmprestimos");
                 });
 #pragma warning restore 612, 618
         }
