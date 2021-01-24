@@ -10,7 +10,7 @@ namespace Almocherifado.core
 
     public class Ferramenta : ValueObject<Ferramenta>
     {
-        private Ferramenta() { }
+        protected Ferramenta() { }
 
         public Ferramenta(string nomeAbreviado, string descrição, DateTime dataCompra, string fotoUrl)
         {

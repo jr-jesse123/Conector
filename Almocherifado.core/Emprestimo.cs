@@ -6,21 +6,20 @@ namespace Almocherifado.core
 {
     public class Emprestimo
     {
-        private Emprestimo() { }
+        protected Emprestimo() { }
         public Emprestimo(DateTime entrega, Funcionario funcionario, string obra, params Ferramenta[] ferramentas)
         {
             Entrega = entrega;
             Funcionario = funcionario;
-            _ferramentas = ferramentas.Select(ferramenta => new FerramentaEmprestada(ferramenta)).ToList();
+            this.ferramentas = ferramentas.Select(ferramenta => new FerramentaEmprestada(ferramenta)).ToList();
             Obra = obra;
         }
 
         public int Id { get; set; }
         public DateTime Entrega { get; }
-        public DateTime? Devolucao { get; }
-        public Funcionario Funcionario { get; }
-        private ICollection<FerramentaEmprestada> _ferramentas {get;set;}
-        public IReadOnlyList<FerramentaEmprestada> Ferramentas { get => _ferramentas.ToList(); }
+        public virtual Funcionario Funcionario { get; }
+        protected virtual List<FerramentaEmprestada> ferramentas {get;set;}
+        public virtual IReadOnlyList<FerramentaEmprestada> Ferramentas { get => ferramentas.ToList(); }
         public string Obra { get; set; }
 
         public bool Finalizado { get => Ferramentas.Any(f => f.DataDevolucao is null) ? false : true; }

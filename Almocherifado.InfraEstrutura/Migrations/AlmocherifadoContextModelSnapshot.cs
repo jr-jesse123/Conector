@@ -22,14 +22,8 @@ namespace Almocherifado.InfraEstrutura.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime?>("Devolucao")
-                        .HasColumnType("TEXT");
-
                     b.Property<DateTime>("Entrega")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("FerramentaId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<string>("FuncionarioCPF")
                         .IsRequired()
@@ -40,8 +34,6 @@ namespace Almocherifado.InfraEstrutura.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FerramentaId");
 
                     b.HasIndex("FuncionarioCPF");
 
@@ -71,6 +63,27 @@ namespace Almocherifado.InfraEstrutura.Migrations
                     b.ToTable("Ferramentas");
                 });
 
+            modelBuilder.Entity("Almocherifado.core.FerramentaEmprestada", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("DataDevolucao")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("EmprestimoId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmprestimoId");
+
+                    b.HasIndex("Id");
+
+                    b.ToTable("FerramentaEmprestada");
+                });
+
             modelBuilder.Entity("Almocherifado.core.Funcionario", b =>
                 {
                     b.Property<string>("CPF")
@@ -89,21 +102,25 @@ namespace Almocherifado.InfraEstrutura.Migrations
 
             modelBuilder.Entity("Almocherifado.core.Emprestimo", b =>
                 {
-                    b.HasOne("Almocherifado.core.Ferramenta", "Ferramenta")
-                        .WithMany()
-                        .HasForeignKey("FerramentaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Almocherifado.core.Funcionario", "Funcionario")
                         .WithMany()
                         .HasForeignKey("FuncionarioCPF")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Ferramenta");
-
                     b.Navigation("Funcionario");
+                });
+
+            modelBuilder.Entity("Almocherifado.core.FerramentaEmprestada", b =>
+                {
+                    b.HasOne("Almocherifado.core.Emprestimo", null)
+                        .WithMany("ferramentas")
+                        .HasForeignKey("EmprestimoId");
+                });
+
+            modelBuilder.Entity("Almocherifado.core.Emprestimo", b =>
+                {
+                    b.Navigation("ferramentas");
                 });
 #pragma warning restore 612, 618
         }

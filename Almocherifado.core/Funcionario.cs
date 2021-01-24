@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Almocherifado.core
 {
-    public sealed  class Funcionario : ValueObject<Funcionario>
+    public  class Funcionario : ValueObject<Funcionario>
     {
         public Nome Nome { get; }
 
@@ -17,7 +17,7 @@ namespace Almocherifado.core
             _cpf = cpf;
             Email = email;
         }
-        private Funcionario() { }
+        protected Funcionario() { }
 
         protected override bool EqualsCore(Funcionario other) => other.CPF == CPF;
 

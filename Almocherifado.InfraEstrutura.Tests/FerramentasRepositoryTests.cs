@@ -14,20 +14,22 @@ using Xunit;
 
 namespace Almocherifado.InfraEstrutura.Tests
 {
-    public class FerramentasRepositoryTests
+    public class FerramentasRepositoryTests : IDisposable
     {
-        [Fact]
-        public void Com_Banco_Vazio_Conseguirmos_Adicionar_Ferramenta_InMemory()
-        {
+        private AlmocherifadoContext memoryContext;
 
-            var caminho = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Teste.mdf");
-            var connMaster = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Teste;Integrated Security=True");
-            
-            
+        public FerramentasRepositoryTests()
+        {
             DbContextOptions<AlmocherifadoContext> options = new DbContextOptionsBuilder<AlmocherifadoContext>()
-                .UseSqlServer(connMaster).Options;
+           .UseSqlite(@"Data Source=Testes Ferramentas").Options;
             //Data Source = (localdb)\MSSQLLocalDB; Initial Catalog = master; ; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False
-            AlmocherifadoContext memoryContext = new AlmocherifadoContext(options);
+            memoryContext = new AlmocherifadoContext(options);
+        }
+
+        [Fact]
+        public void Com_Banco_Vazio_Conseguirmos_Adicionar_Ferramenta_InMemory() 
+        {   
+        
             memoryContext.Database.EnsureDeleted();
             memoryContext.Database.EnsureCreated();
 
@@ -42,6 +44,12 @@ namespace Almocherifado.InfraEstrutura.Tests
             var ferramentapersistida = repository.GetallFerramentas().First();
             ferramentapersistida.Should().BeEquivalentTo(ferramenta, "este foi o funcionário adicionado");
             
+        }
+
+        public void Dispose()
+        {
+            memoryContext.Database.EnsureDeleted();
+            memoryContext.Dispose();
         }
 
         [Fact]
