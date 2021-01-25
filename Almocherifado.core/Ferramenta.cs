@@ -28,7 +28,7 @@ namespace Almocherifado.core
         public string Descrição { get;  }
         public DateTime DataCompra { get;  }
         public string FotoUrl { get;  }
-        public virtual ICollection<FerramentaEmprestada> HistoricoEmprestimos { get; }
+        public virtual IReadOnlyCollection<FerramentaEmprestada> HistoricoEmprestimos { get; }
 
 
         public bool Emprestada { get; }
