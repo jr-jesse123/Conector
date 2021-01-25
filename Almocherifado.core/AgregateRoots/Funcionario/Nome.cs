@@ -1,12 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
 using static CSharpFunctionalExtensions.Result;
 
-namespace Almocherifado.core
+namespace Almocherifado.core.AgregateRoots.FuncionarioNm
 {
     public sealed class Nome : ValueObject<Nome>
     {
         public string Value;
-        
+
         private Nome() { }
 
         private Nome(string nomeStr)
@@ -20,10 +20,10 @@ namespace Almocherifado.core
         {
             if (string.IsNullOrWhiteSpace(NomeStr))
                 return Failure<Nome>("Nome não pode ser fazio");
-            
+
             if (NomeStr.Split(' ').Length < 2)
                 return Failure<Nome>("Insira o nome Completo");
-            
+
             return new Nome(NomeStr);
         }
 
@@ -36,10 +36,10 @@ namespace Almocherifado.core
             return Value;
         }
 
-        
+
     }
 
-    
+
 
 
 }

@@ -1,4 +1,4 @@
-﻿using Almocherifado.core.Entitys;
+﻿using Almocherifado.core.AgregateRoots.FerramentaNm;
 using CSharpFunctionalExtensions;
 using System.Collections.Generic;
 

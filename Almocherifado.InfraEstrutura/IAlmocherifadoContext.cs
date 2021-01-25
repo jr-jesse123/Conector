@@ -1,4 +1,6 @@
-﻿using Almocherifado.core.Entitys;
+﻿using Almocherifado.core.AgregateRoots.EmprestimoNm;
+using Almocherifado.core.AgregateRoots.FerramentaNm;
+using Almocherifado.core.AgregateRoots.FuncionarioNm;
 using Microsoft.EntityFrameworkCore;
 
 namespace Almocherifado.InfraEstrutura

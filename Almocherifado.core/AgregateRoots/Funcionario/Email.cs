@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using System;
 
-namespace Almocherifado.core
+namespace Almocherifado.core.AgregateRoots.FuncionarioNm
 {
     public class Email : ValueObject<Email>
     {
@@ -9,7 +9,7 @@ namespace Almocherifado.core
 
         private Email(string emailStr = null)
         {
-            this.Value = emailStr;
+            Value = emailStr;
         }
 
         private Email() { }
@@ -26,7 +26,7 @@ namespace Almocherifado.core
                 return Result.Failure<Email>("O email é muito curto");
 
             return new Email(emailStr);
-            
+
         }
 
         public static implicit operator string(Email email) => email.Value;

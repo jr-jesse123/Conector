@@ -1,14 +1,16 @@
-﻿using System;
+﻿using Almocherifado.core.AgregateRoots.FerramentaNm;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using Almocherifado.core.AgregateRoots.FuncionarioNm;
+using Almocherifado.core.AgregateRoots.FerramentaNm;
 
-namespace Almocherifado.core.Entitys
+namespace Almocherifado.core.AgregateRoots.EmprestimoNm
 {
     public class Emprestimo
     {
         protected Emprestimo() { }
-        public Emprestimo(DateTime entrega, Funcionario funcionario, string obra, params Ferramenta[] ferramentas)
+        public Emprestimo(DateTime entrega, Funcionario  funcionario, string obra, params Ferramenta[] ferramentas)
         {
             Entrega = entrega;
             Funcionario = funcionario;

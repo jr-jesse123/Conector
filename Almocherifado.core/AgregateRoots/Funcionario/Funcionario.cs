@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Almocherifado.core.Entitys
+namespace Almocherifado.core.AgregateRoots.FuncionarioNm
 {
     public class Funcionario : ValueObject<Funcionario>
     {

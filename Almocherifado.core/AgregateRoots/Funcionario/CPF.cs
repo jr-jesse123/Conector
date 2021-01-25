@@ -2,11 +2,11 @@
 using CSharpFunctionalExtensions;
 using System;
 
-namespace Almocherifado.core
+namespace Almocherifado.core.AgregateRoots.FuncionarioNm
 {
     public sealed class CPF : ValueObject<CPF>
     {
-        public string Value { get;}
+        public string Value { get; }
 
         private CPF(string value)
         {
@@ -15,10 +15,10 @@ namespace Almocherifado.core
 
         private CPF() { }
 
-        public static implicit operator string(CPF Cpf) =>Cpf.Value;
-        
+        public static implicit operator string(CPF Cpf) => Cpf.Value;
 
-        
+
+
         public static implicit operator CPF(string CpfStr)
         {
             return Create(CpfStr).Value;
@@ -32,8 +32,8 @@ namespace Almocherifado.core
 
             if (!Cpf.Check(cpfStr))
                 return Result.Failure<CPF>("Número de cpf Inválido");
-                
-            
+
+
             return new CPF(cpfStr.SomenteNumeros());
         }
 
@@ -42,11 +42,11 @@ namespace Almocherifado.core
 
         protected override int GetHashCodeCore() => Value.GetHashCode();
 
-        public override string ToString()=> Cpf.Format(Value);
-        
+        public override string ToString() => Cpf.Format(Value);
+
     }
 
-    
+
 
 
 }

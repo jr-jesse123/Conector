@@ -1,4 +1,5 @@
-﻿using Almocherifado.core.Entitys;
+﻿using Almocherifado.core.AgregateRoots.FerramentaNm;
+using Almocherifado.core.AgregateRoots.FuncionarioNm;
 using AutoMapper;
 using System;
 using System.Collections.Generic;

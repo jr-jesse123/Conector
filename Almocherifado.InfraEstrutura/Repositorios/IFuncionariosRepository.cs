@@ -1,4 +1,4 @@
-﻿using Almocherifado.core.Entitys;
+﻿using Almocherifado.core.AgregateRoots.FuncionarioNm;
 using System.Collections.Generic;
 
 namespace Almocherifado.InfraEstrutura.Repositorios

@@ -1,5 +1,4 @@
-﻿using Almocherifado.core;
-using Almocherifado.core.Entitys;
+﻿using Almocherifado.core.AgregateRoots.FuncionarioNm;
 using CSharpFunctionalExtensions;
 using FluentValidation;
 using System;

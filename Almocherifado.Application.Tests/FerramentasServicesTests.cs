@@ -1,5 +1,6 @@
-using Almocherifado.Application;
-using Almocherifado.core.Entitys;
+using Almocherifado.core.AgregateRoots.FuncionarioNm;
+using Almocherifado.core.AgregateRoots.EmprestimoNm;
+using Almocherifado.core.AgregateRoots.FerramentaNm;
 using Almocherifado.InfraEstrutura;
 using Almocherifado.InfraEstrutura.Repositorios;
 using FluentAssertions;

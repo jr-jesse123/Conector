@@ -1,4 +1,4 @@
-﻿using Almocherifado.core.Entitys;
+﻿using Almocherifado.core.AgregateRoots.EmprestimoNm;
 using System;
 using System.Collections.Generic;
 using System.Linq;

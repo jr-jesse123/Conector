@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Almocherifado.core.Entitys
+namespace Almocherifado.core.AgregateRoots.FerramentaNm
 {
     [DebuggerDisplay("id:{Id},Nome:{NomeAbreviado}")]
     public class Ferramenta : ValueObject<Ferramenta>

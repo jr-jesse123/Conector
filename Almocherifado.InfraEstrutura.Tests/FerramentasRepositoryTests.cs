@@ -1,4 +1,4 @@
-﻿using Almocherifado.core.Entitys;
+﻿using Almocherifado.core.AgregateRoots.FerramentaNm;
 using Almocherifado.InfraEstrutura.Repositorios;
 using FluentAssertions;
 using Microsoft.Data.SqlClient;

@@ -1,7 +1,7 @@
-﻿using Almocherifado.core.Entitys;
-using System;
+﻿using System;
+using Almocherifado.core.AgregateRoots.EmprestimoNm;
 
-namespace Almocherifado.core
+namespace Almocherifado.core.AgregateRoots.FerramentaNm
 {
     public class FerramentaEmprestada
     {
@@ -20,7 +20,7 @@ namespace Almocherifado.core
         }
 
 
-        public bool Recebido 
+        public bool Recebido
         {
             get => DataDevolucao is null ? false : true;
         }
