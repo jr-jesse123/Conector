@@ -19,8 +19,6 @@ namespace Almocherifado.InfraEstrutura.Tests
         private readonly ITestOutputHelper testOutputHelper;
         private AlmocherifadoContext testContext;
 
-
-
         public FerramentasRepositoryTests(ITestOutputHelper testOutputHelper)
         {
             DbContextOptions<AlmocherifadoContext> options = new DbContextOptionsBuilder<AlmocherifadoContext>()
@@ -28,6 +26,7 @@ namespace Almocherifado.InfraEstrutura.Tests
            .UseLazyLoadingProxies().Options;
            
             testContext = new AlmocherifadoContext(options);
+            testContext.Database.EnsureDeleted();
 
             testContext.Database.Migrate();
             
@@ -37,9 +36,7 @@ namespace Almocherifado.InfraEstrutura.Tests
         [Theory]
         [AutoMoqData()]
         public void Com_Banco_Vazio_Conseguirmos_Adicionar_Ferramenta(Ferramenta ferramenta)
-        {
-            var teste = new Fixture().Create<Ferramenta>();
-            //Funcionario
+        {   
             FerramentaRepository sut = new (testContext);
 
             sut.AdicionarFerramenta(ferramenta);
@@ -66,9 +63,6 @@ namespace Almocherifado.InfraEstrutura.Tests
             sut.AdicionarFerramenta(ferramenta2);
             sut.AdicionarFerramenta(ferramenta1);
             
-
-            var qtdInicial = sut.GetallFerramentas().Count();
-
             sut.DeletarFerramenta(ferramenta2);
 
             sut.GetallFerramentas().Count().Should().Be(1, "haviam dois funcionários e um foi dleetado");

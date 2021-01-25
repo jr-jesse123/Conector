@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DocX" Version="1.7.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="5.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.2" />
@@ -12,6 +13,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Almocherifado.core\Almocherifado.core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Services\Modelo de Responsabilidade de equipamentos.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

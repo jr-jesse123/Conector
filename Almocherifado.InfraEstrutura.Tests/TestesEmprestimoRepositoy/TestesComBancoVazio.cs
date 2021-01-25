@@ -4,7 +4,6 @@ using Almocherifado.core.AgregateRoots.FuncionarioNm;
 using Almocherifado.InfraEstrutura.Repositorios;
 using AutoFixture;
 using AutoFixture.Kernel;
-using AutoFixture.Xunit2;
 using Bogus;
 using Bogus.Extensions.Brazil;
 using FluentAssertions;
@@ -18,7 +17,7 @@ using Xunit;
 
 namespace Almocherifado.InfraEstrutura.Tests.TestesEmprestimoRepositoy
 {
-    public class TestesComBancoVazio :  IDisposable
+    public partial class TestesComBancoVazio :  IDisposable
     {
         
         
@@ -44,7 +43,7 @@ namespace Almocherifado.InfraEstrutura.Tests.TestesEmprestimoRepositoy
         }
 
 
-        [Theory, _DomainAutoData]
+        [Theory, DomainAutoData]
         public void Emprestimo_Eh_Adicionado_Com_Sucesso(Emprestimo emprestimo)
         {
             EmprestimosRepository sut = new EmprestimosRepository(TestContext);
@@ -60,7 +59,7 @@ namespace Almocherifado.InfraEstrutura.Tests.TestesEmprestimoRepositoy
             emprestimo.Should().BeEquivalentTo(emprestimo, "este foi o funcionário adicionado");
         }
 
-        [Theory, _DomainAutoData]
+        [Theory, DomainAutoData]
         public void Emprestimo_Eh_Editado_Finalizado_E_Persistido_Com_Sucesso(Fixture fixture)
         {
             var emprestimo = fixture.Create<Emprestimo>() ;
@@ -95,49 +94,7 @@ namespace Almocherifado.InfraEstrutura.Tests.TestesEmprestimoRepositoy
             TestContext.Dispose();
         }
 
-        class _DomainAutoDataAttribute : AutoDataAttribute
-        {
-            public _DomainAutoDataAttribute() : base(Customizar())
-            {
 
-            }
-
-            private static Func<IFixture> Customizar()
-            {
-                return () => { var fixture = new Fixture(); fixture.Customizations.Add(new DomainClassesGenerator()); return fixture; };
-            }
-        }
-
-
-        class DomainClassesGenerator : ISpecimenBuilder
-        {
-            public object Create(object request, ISpecimenContext context)
-            {
-                Type type = request as Type;
-                if (type is null)
-                {
-                    return new NoSpecimen();
-                }
-
-                if (type == typeof(Nome))
-                {
-                    return  (Nome)new Faker("pt_BR").Person.FullName;
-                }
-
-                if (type == typeof(CPF))
-                {
-                    return (CPF)new Faker("pt_BR").Person.Cpf();
-                }
-
-                if (type == typeof(Email))
-                {
-                    return (Email)new Faker("pt_BR").Person.Email;
-                }
-                
-                return new NoSpecimen();
-
-            }
-        }
 
     }
 

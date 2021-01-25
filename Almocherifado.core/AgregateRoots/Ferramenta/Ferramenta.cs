@@ -44,5 +44,11 @@ namespace Almocherifado.core.AgregateRoots.FerramentaNm
         {
             return Id.GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return $"{NomeAbreviado} | {Marca} | {Modelo}";
+        }
+
     }
 }

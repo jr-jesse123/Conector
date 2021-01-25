@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Almocherifado.core.Services
+namespace Almocherifado.InfraEstrutura.Tests
 {
-    public class TermoResponsabilidadeService
+    public class TermoResponsabilidadeTests
     {
-        
+
     }
 }
