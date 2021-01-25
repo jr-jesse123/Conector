@@ -17,11 +17,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{F1309122-8B34-
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Almocherifado.ServerHosted.Tests", "Almocherifado.ServerHosted.Tests\Almocherifado.ServerHosted.Tests.csproj", "{D9153778-1452-4568-8DD0-AF403A809AFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Almocherifado.Application", "Almocherifado.Application\Almocherifado.Application.csproj", "{28A670A8-5701-4B22-8872-E4E5B96A19A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Almocherifado.Application", "Almocherifado.Application\Almocherifado.Application.csproj", "{28A670A8-5701-4B22-8872-E4E5B96A19A3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{3C642CCB-9285-4E3F-ADF3-BED626B3DD0C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Almocherifado.Application.Tests", "Almocherifado.Application.Tests\Almocherifado.Application.Tests.csproj", "{4BC0D9B3-7CF0-4DB8-A51F-AABFA9868A31}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Almocherifado.Application.Tests", "Almocherifado.Application.Tests\Almocherifado.Application.Tests.csproj", "{4BC0D9B3-7CF0-4DB8-A51F-AABFA9868A31}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

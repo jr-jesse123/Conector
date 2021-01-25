@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿@page "/ListarFerramentas"
 @using Blazorise.DataGrid
 @using InfraEstrutura.Repositorios
 @using Almocherifado.core
@@ -6,46 +6,64 @@
 
 
     <Row>
-        <Button Color="Color.Info" Disabled="Eh_Emprestavel()" Clicked="teste">Alocar Ferramenta</Button>
+        <Button Color="Color.Info" Disabled="NovoEmprestimo()" >Alocar Ferramentas Selecionadas</Button>
     </Row>
 
 
     <Row>
-        <DataGrid TItem="Ferramenta"  Data="Ferramentas" Filterable="true"  @bind-SelectedRow="@SelectedFerramenta" >
-            <DataGridCommandColumn TItem="Ferramenta">
-                <DeleteCommandTemplate>
-                    <Button Color="Color.Danger" Clicked="() => OnDeleClicked(context)">Deletar Ferramenta</Button>
-                </DeleteCommandTemplate>
-            </DataGridCommandColumn>
+        <DataGrid TItem="Ferramenta" Data="Ferramentas" Filterable="true" @bind-SelectedRow="@SelectedFerramenta" 
+                  SelectedRowStyling="(Ferramenta, styling) => styling.Background = Background.None"
+                  RowStyling="OnRowStyling">
+            <DataGridColumns>
+                <DataGridCommandColumn TItem="Ferramenta">
+                    <DeleteCommandTemplate>
+                        <Button Color="Color.Danger" Clicked="() => OnDeleClicked(context)">Deletar Ferramenta</Button>
+                    </DeleteCommandTemplate>
+                </DataGridCommandColumn>
+
+                <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.NomeAbreviado)" Caption="Nome" />
+                <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.DataCompra)" Caption="Comprado em" />
+
+                <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.FotoUrl)" Caption="Foto" Filterable="false">
+                    <DisplayTemplate>
+                        <Figure Size="FigureSize.Is128x128">
+                            <FigureImage Source="@context.FotoUrl" />
+                        </Figure>
+                    </DisplayTemplate>
+                </DataGridColumn>
 
 
-            <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.Id)" Caption="Nome">
-                <Button>Teste</Button>
-            </DataGridColumn>
+                <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.Descrição)" Caption="Descrição" />
 
-            <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.NomeAbreviado)" Caption="Nome" />
-            <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.DataCompra)" Caption="Comprado em" />
-            
-            <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.FotoUrl)" Caption="Foto">
-                <DisplayTemplate>
-                    <Figure Size="FigureSize.Is128x128">
-                        <FigureImage Source="@context.FotoUrl" />
-                    </Figure>
-                </DisplayTemplate>
-            </DataGridColumn>
 
-            <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.Descrição)" Caption="Descrição" />
+                <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.Descrição)" Caption="Alocada?">
+                    <DisplayTemplate>
+                        @if (context.Emprestada)
+                        {
+                            @context.HistoricoEmprestimos.Where(fe => fe.DataDevolucao is null).Single().Emprestimo.Obra;
+                        }
+                        else
+                        {
+                            <Switch CheckedChanged="() => AdicionarOuRemoverFerramenta(context)"  
+                                    Margin="Margin.IsAuto" Size="Size.Large" TValue="bool">Selecionar Para Nova Alocação</Switch>
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGridColumns>
         </DataGrid>
     </Row>
 
 
 
 @code{
+
+    List<Ferramenta> FerramentasParaEmprestar = new();
+
     [Inject] public IFerramentaRepository repository { get; set; }
     [Inject] public IFerramentasService ferramentasService { get; set; }
 
     List<Ferramenta> Ferramentas { get; set; }
-    
+
     private Ferramenta  ferramenta;
 
     public Ferramenta  SelectedFerramenta
@@ -67,19 +85,38 @@
         await context.Clicked.InvokeAsync();
     }
 
-    bool Eh_Emprestavel()
+    bool NovoEmprestimo()
     {
         if (SelectedFerramenta is null)
             return false;
-
-        
 
         return true;
 
     }
 
-    void teste()
+    void OnRowStyling(Ferramenta ferramenta, DataGridRowStyling styling)
+    {
+        if (ferramenta.Emprestada)
+            styling.Background = Background.Info;
+        else
+            styling.Background = Background.Light;
+    }
+
+    void AdicionarOuRemoverFerramenta(Ferramenta ferramenta )
+    {
+        if (FerramentasParaEmprestar.Contains(ferramenta))
+        {
+            FerramentasParaEmprestar.Remove(ferramenta);
+        }
+        else
+        {
+            FerramentasParaEmprestar.Add(ferramenta);
+        }
+    }
+
+    void teste(Ferramenta ferramenta)
     {
 
     }
+
 }
