@@ -3,21 +3,31 @@ using Almocherifado.InfraEstrutura;
 using Almocherifado.InfraEstrutura.Repositorios;
 using CSharpFunctionalExtensions;
 using System;
+using System.Linq;
 
 namespace Almocherifado.Application
 {
     public class FerramentasService : IFerramentasService
     {
-        private readonly IFerramentaRepository repo;
-
-        public FerramentasService(IFerramentaRepository context)
+        public AlmocherifadoContext Context { get; }
+        
+        public FerramentasService(AlmocherifadoContext context)
         {
-            this.repo = context;
+            Context = context;
         }
+
 
         public bool VerificarSeFerramentaEstaEmprestada(Ferramenta ferramenta)
         {
-            return repo.Procurar(ferramenta).HasValue ? true : false;
+
+            var ferramentasemprestadas = Context.Set<FerramentaEmprestada>().ToList();
+
+            var emprestimoEmAndamento = Context.Set<FerramentaEmprestada>()
+                .Where(fe => fe.Ferramenta == ferramenta)
+                .Where(fe => !fe.DataDevolucao.HasValue).SingleOrDefault();
+
+            return   
+                 emprestimoEmAndamento is null ? false : true;
         }
 
     }
