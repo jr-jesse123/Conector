@@ -9,7 +9,7 @@ namespace Almocherifado.ServerHosted.Data.Models
     public class FerramentaModel
     {
         public string NomeAbreviado { get; set; }
-        public string Descrição { get; set; }
+        public string Descricao { get; set; }
         public DateTime DataCompra { get; set; }
         public string FotoUrl { get; set; }
         public string Marca { get; set; }
@@ -24,7 +24,7 @@ namespace Almocherifado.ServerHosted.Data.Models
             RuleFor(f => f.NomeAbreviado)
                 .NotEmpty().WithMessage("O nome é obrigatório");
 
-            RuleFor(f => f.Descrição)
+            RuleFor(f => f.Descricao)
                 .NotEmpty().WithMessage("A descrição é obrigatória");
 
             RuleFor(f => f.DataCompra)

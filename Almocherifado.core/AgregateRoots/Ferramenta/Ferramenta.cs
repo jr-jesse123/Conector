@@ -13,23 +13,21 @@ namespace Almocherifado.core.AgregateRoots.FerramentaNm
     {
         protected Ferramenta() { }
 
-        public Ferramenta(string nomeAbreviado, string descrição, DateTime dataCompra, string fotoUrl, string marca, string modelo)
+        public Ferramenta(string nomeAbreviado, string descricao, DateTime dataCompra, string fotoUrl, string marca, string modelo)
         {
             NomeAbreviado = nomeAbreviado;
-            Descrição = descrição;
+            Descricao = descricao;
             DataCompra = dataCompra;
             FotoUrl = fotoUrl;
             Marca = marca;
             Modelo = modelo;
         }
 
-
-
         public int Id { get; }
         public string NomeAbreviado { get; }
-        public string Marca { get; set; }
-        public string Modelo { get; set; }
-        public string Descrição { get; }
+        public string Marca { get;  }
+        public string Modelo { get; }
+        public string Descricao { get; }
         public DateTime DataCompra { get; }
         public string FotoUrl { get; }
         public virtual IReadOnlyCollection<FerramentaEmprestada> HistoricoEmprestimos { get; }

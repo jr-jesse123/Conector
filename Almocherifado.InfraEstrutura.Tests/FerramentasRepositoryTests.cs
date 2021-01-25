@@ -1,92 +1,79 @@
 ﻿using Almocherifado.core.AgregateRoots.FerramentaNm;
-using Almocherifado.InfraEstrutura.Repositorios;
-using FluentAssertions;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
+using Almocherifado.InfraEstrutura.Tests.Fixtures;
+using Almocherifado.InfraEstrutura.Repositorios;
+using System.Linq;
+using FluentAssertions;
+using Moq;
+using AutoFixture.Xunit2;
+using AutoFixture;
+using Almocherifado.core.AgregateRoots.FuncionarioNm;
 
 namespace Almocherifado.InfraEstrutura.Tests
 {
     public class FerramentasRepositoryTests : IDisposable
     {
-        private AlmocherifadoContext memoryContext;
+        private readonly ITestOutputHelper testOutputHelper;
+        private AlmocherifadoContext testContext;
 
-        public FerramentasRepositoryTests()
+
+
+        public FerramentasRepositoryTests(ITestOutputHelper testOutputHelper)
         {
             DbContextOptions<AlmocherifadoContext> options = new DbContextOptionsBuilder<AlmocherifadoContext>()
-           .UseSqlite(@"Data Source=Testes Ferramentas").Options;
-            //Data Source = (localdb)\MSSQLLocalDB; Initial Catalog = master; ; Connect Timeout = 30; Encrypt = False; TrustServerCertificate = False; ApplicationIntent = ReadWrite; MultiSubnetFailover = False
-            memoryContext = new AlmocherifadoContext(options);
+           .UseSqlite(@"Data Source=TestesFerramentas.db")
+           .UseLazyLoadingProxies().Options;
+           
+            testContext = new AlmocherifadoContext(options);
+
+            testContext.Database.Migrate();
+            
+            // this.testOutputHelper = testOutputHelper;
         }
 
-        [Fact]
-        public void Com_Banco_Vazio_Conseguirmos_Adicionar_Ferramenta_InMemory() 
-        {   
-        
-            memoryContext.Database.EnsureDeleted();
-            memoryContext.Database.EnsureCreated();
+        [Theory]
+        [AutoMoqData()]
+        public void Com_Banco_Vazio_Conseguirmos_Adicionar_Ferramenta(Ferramenta ferramenta)
+        {
+            var teste = new Fixture().Create<Ferramenta>();
+            //Funcionario
+            FerramentaRepository sut = new (testContext);
 
-            IFerramentaRepository repository = new FerramentaRepository(memoryContext);
+            sut.AdicionarFerramenta(ferramenta);
 
-            var ferramenta = new Ferramenta("Ferramenta1","Pense numa ferramenta da boa", DateTime.Today.AddDays(-7),@"/fotos/foto");
+            sut.GetallFerramentas().Count().Should().Be(1);
+            //var fixture = new Fixture();
 
-            repository.AdicionarFerramenta(ferramenta);
-
-            repository.GetallFerramentas().Count().Should().BeGreaterThan(0, "Um funcionário foi adicionado na memmória");
-
-            var ferramentapersistida = repository.GetallFerramentas().First();
+            var ferramentapersistida = sut.GetallFerramentas().First();
             ferramentapersistida.Should().BeEquivalentTo(ferramenta, "este foi o funcionário adicionado");
-            
+
         }
 
         public void Dispose()
         {
-            memoryContext.Database.EnsureDeleted();
-            memoryContext.Dispose();
+            testContext.Database.EnsureDeleted();
+            testContext.Dispose();
         }
 
-        [Fact]
-        public void Ferramenta_Deve_Ser_Deletado()
+        [Theory]
+        [AutoData]
+        public void Ferramenta_Deve_Ser_Deletado(Ferramenta ferramenta1, Ferramenta ferramenta2)
         {
+            IFerramentaRepository sut = new FerramentaRepository(testContext);
+            sut.AdicionarFerramenta(ferramenta2);
+            sut.AdicionarFerramenta(ferramenta1);
+            
 
-            DbContextOptions<AlmocherifadoContext> options = new DbContextOptionsBuilder<AlmocherifadoContext>().UseInMemoryDatabase("test").Options;
+            var qtdInicial = sut.GetallFerramentas().Count();
 
-            BancoDeDadosComFerramenta memoryContext = new BancoDeDadosComFerramenta(options);
+            sut.DeletarFerramenta(ferramenta2);
 
-
-            IFerramentaRepository repository = new FerramentaRepository(memoryContext);
-
-            var qtdInicial = repository.GetallFerramentas().Count();
-
-            repository.DeletarFerramenta(memoryContext.ferramentaSedd1);
-
-            repository.GetallFerramentas().Count().Should().Be(1, "haviam dois funcionários e um foi dleetado");
+            sut.GetallFerramentas().Count().Should().Be(1, "haviam dois funcionários e um foi dleetado");
 
         }
 
-        class BancoDeDadosComFerramenta : AlmocherifadoContext
-        {
-            public Ferramenta ferramentaSedd1 = new Ferramenta("Ferramenta2", "FerramentaRuim1", DateTime.Today,"\\foto\\foto2");
-
-
-            public BancoDeDadosComFerramenta(DbContextOptions<AlmocherifadoContext> optionsBuilder) : base(optionsBuilder)
-            {
-                this.Add(ferramentaSedd1);
-                this.Add(new Ferramenta("Ferramenta1", "FerramentaBoa1", DateTime.Today,"\\foto\\foto"));
-
-            }
-
-            protected override void OnModelCreating(ModelBuilder modelBuilder)
-            {
-                base.OnModelCreating(modelBuilder);
-            }
-        }
     }
 }

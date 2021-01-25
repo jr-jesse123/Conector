@@ -16,6 +16,7 @@ namespace Almocherifado.core.AgregateRoots.FerramentaNm
 
         public void AcusarRecebimento()
         {
+            if(!DataDevolucao.HasValue)
             DataDevolucao = DateTime.Now;
         }
 

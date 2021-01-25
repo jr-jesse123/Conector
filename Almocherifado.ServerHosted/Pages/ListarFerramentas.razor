@@ -51,10 +51,10 @@
                 </DataGridColumn>
 
 
-                <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.Descrição)" Caption="Descrição" />
+                <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.Descricao)" Caption="Descrição" />
 
 
-                <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.Descrição)" Caption="Alocada?">
+                <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.Descricao)" Caption="Alocada?">
                     <DisplayTemplate>
                         @if (context.Emprestada)
                         {

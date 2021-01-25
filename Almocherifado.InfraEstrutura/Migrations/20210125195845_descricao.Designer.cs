@@ -3,14 +3,16 @@ using System;
 using Almocherifado.InfraEstrutura;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Almocherifado.InfraEstrutura.Migrations
 {
     [DbContext(typeof(AlmocherifadoContext))]
-    partial class AlmocherifadoContextModelSnapshot : ModelSnapshot
+    [Migration("20210125195845_descricao")]
+    partial class descricao
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

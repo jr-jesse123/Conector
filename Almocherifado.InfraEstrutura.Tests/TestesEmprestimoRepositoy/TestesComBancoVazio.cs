@@ -2,6 +2,11 @@
 using Almocherifado.core.AgregateRoots.FerramentaNm;
 using Almocherifado.core.AgregateRoots.FuncionarioNm;
 using Almocherifado.InfraEstrutura.Repositorios;
+using AutoFixture;
+using AutoFixture.Kernel;
+using AutoFixture.Xunit2;
+using Bogus;
+using Bogus.Extensions.Brazil;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,79 +18,126 @@ using Xunit;
 
 namespace Almocherifado.InfraEstrutura.Tests.TestesEmprestimoRepositoy
 {
-    public class TestesComBancoVazio : IDisposable
+    public class TestesComBancoVazio :  IDisposable
     {
         
-        private Funcionario funcionario;
-        private Ferramenta ferramenta;
-        private Emprestimo emprestimo;
-        private AlmocherifadoContext memoryContext;
+        
+        private AlmocherifadoContext TestContext;
+        //private Fixture Fixture;
 
         public TestesComBancoVazio()
         {
             var con = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TesteEmprestimo;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             DbContextOptions<AlmocherifadoContext> options = new DbContextOptionsBuilder<AlmocherifadoContext>()
-                //.UseSqlServer(con).Options;
+                
                 .UseSqlite(@$"Data Source = Testesalmocherifado.db;").Options;
 
 
-            memoryContext = new AlmocherifadoContext(options);
-            memoryContext.Database.EnsureDeleted();
-            
-            memoryContext.Database.Migrate();
+            TestContext = new AlmocherifadoContext(options);
+            TestContext.Database.EnsureDeleted();
 
-            funcionario = new Funcionario("jessé Junior", "01724125109", "g@mgail.com");
+            TestContext.Database.Migrate();
 
-            ferramenta = new Ferramenta("Ferramenta1", "ela é da boa", DateTime.Now.AddDays(-7), "/foto/url");
+            var Fixture = new Fixture();
 
-            emprestimo = new Emprestimo(DateTime.Now, funcionario, "Obra 1", ferramenta);
+
         }
 
-   
-        [Fact]
-        public void Emprestimo_Eh_Adicionado_Com_Sucesso()
+
+        [Theory, _DomainAutoData]
+        public void Emprestimo_Eh_Adicionado_Com_Sucesso(Emprestimo emprestimo)
         {
-            EmprestimosRepository repository = new EmprestimosRepository(memoryContext);
-        //var ferramenta = new Ferramenta("Ferramenta1", "Pense numa ferramenta da boa", DateTime.Today.AddDays(-7), @"/fotos/foto");
+            EmprestimosRepository sut = new EmprestimosRepository(TestContext);
+            //var ferramenta = new Ferramenta("Ferramenta1", "Pense numa ferramenta da boa", DateTime.Today.AddDays(-7), @"/fotos/foto");
 
-            repository.SalvarNovoEmprestimo(emprestimo);
+            sut.SalvarNovoEmprestimo(emprestimo);
 
-            repository.GetAllEmprestimos().Count().Should().BeGreaterThan(0, "Um funcionário foi adicionado na memmória");
+            sut.GetAllEmprestimos().Count().Should().BeGreaterThan(0, "Um funcionário foi adicionado na memmória");
 
-            var emprestimoPersistido = repository.GetAllEmprestimos().First();
+            var emprestimoPersistido = sut.GetAllEmprestimos().First();
+
+
             emprestimo.Should().BeEquivalentTo(emprestimo, "este foi o funcionário adicionado");
         }
-        
-        [Fact]
-        public void Emprestimo_Eh_Editado_Finalizado_E_Persistido_Com_Sucesso()
-        {
 
-            var repository = new EmprestimosRepository(memoryContext);
-            repository.SalvarNovoEmprestimo(emprestimo);
+        [Theory, _DomainAutoData]
+        public void Emprestimo_Eh_Editado_Finalizado_E_Persistido_Com_Sucesso(Fixture fixture)
+        {
+            var emprestimo = fixture.Create<Emprestimo>() ;
+
+            EmprestimosRepository sut = new (TestContext);
+            sut.SalvarNovoEmprestimo(emprestimo);
             //var ferramenta = new Ferramenta("Ferramenta1", "Pense numa ferramenta da boa", DateTime.Today.AddDays(-7), @"/fotos/foto");
 
             emprestimo.Finalizado.Should().BeFalse(" O emprestimo ainda tem ferramentas alocadas");
 
             emprestimo.FerramentasEmprestas.First().AcusarRecebimento();
 
-            repository.EditarEmprestimo(emprestimo);
+            emprestimo.Finalizado.Should().BeFalse(" O emprestimo ainda tem ferramentas alocadas");
 
-            repository.GetAllEmprestimos().Count().Should().BeGreaterThan(0, "Um funcionário foi adicionado na memmória");
+            emprestimo.FerramentasEmprestas.ForEach(e => e.AcusarRecebimento());
 
-            var emprestimoPersistido = repository.GetAllEmprestimos().First();
+            sut.EditarEmprestimo(emprestimo);
+
+            sut.GetAllEmprestimos().Count().Should().BeGreaterThan(0, "Um funcionário foi adicionado na memmória");
+
+            var emprestimoPersistido = sut.GetAllEmprestimos().First();
             emprestimo.Should().BeEquivalentTo(emprestimo, "este foi o funcionário adicionado");
 
             emprestimoPersistido.Finalizado.Should().BeTrue(" a única ferramenta alocada foi devolvida");
 
         }
 
-        
+
         public void Dispose()
         {
-            memoryContext.Database.EnsureDeleted();
-            memoryContext.Dispose();
+            TestContext.Database.EnsureDeleted();
+            TestContext.Dispose();
         }
 
+        class _DomainAutoDataAttribute : AutoDataAttribute
+        {
+            public _DomainAutoDataAttribute() : base(Customizar())
+            {
+
+            }
+
+            private static Func<IFixture> Customizar()
+            {
+                return () => { var fixture = new Fixture(); fixture.Customizations.Add(new DomainClassesGenerator()); return fixture; };
+            }
+        }
+
+
+        class DomainClassesGenerator : ISpecimenBuilder
+        {
+            public object Create(object request, ISpecimenContext context)
+            {
+                Type type = request as Type;
+                if (type is null)
+                {
+                    return new NoSpecimen();
+                }
+
+                if (type == typeof(Nome))
+                {
+                    return  (Nome)new Faker("pt_BR").Person.FullName;
+                }
+
+                if (type == typeof(CPF))
+                {
+                    return (CPF)new Faker("pt_BR").Person.Cpf();
+                }
+
+                if (type == typeof(Email))
+                {
+                    return (Email)new Faker("pt_BR").Person.Email;
+                }
+                
+                return new NoSpecimen();
+
+            }
+        }
 
     }
 

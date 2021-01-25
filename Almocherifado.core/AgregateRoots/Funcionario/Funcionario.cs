@@ -7,7 +7,7 @@ namespace Almocherifado.core.AgregateRoots.FuncionarioNm
     public class Funcionario : ValueObject<Funcionario>
     {
         public Nome Nome { get; }
-
+        //TODO: RETIRAR
         public string _cpf { get; }
         [NotMapped]
         public CPF CPF { get; }
