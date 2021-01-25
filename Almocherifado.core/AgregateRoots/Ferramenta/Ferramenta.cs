@@ -25,6 +25,8 @@ namespace Almocherifado.core.AgregateRoots.FerramentaNm
 
         public int Id { get; }
         public string NomeAbreviado { get; }
+        public string Marca { get; set; }
+        public string Modelo { get; set; }
         public string Descrição { get; }
         public DateTime DataCompra { get; }
         public string FotoUrl { get; }

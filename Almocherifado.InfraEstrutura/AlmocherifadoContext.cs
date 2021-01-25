@@ -44,6 +44,8 @@ namespace Almocherifado.InfraEstrutura
             modelBuilder.Entity<Ferramenta>().Property(f => f.Descrição);
             modelBuilder.Entity<Ferramenta>().Property(f => f.DataCompra);
             modelBuilder.Entity<Ferramenta>().Property(f => f.FotoUrl);
+            modelBuilder.Entity<Ferramenta>().Property(f => f.Marca);
+            modelBuilder.Entity<Ferramenta>().Property(f => f.Modelo);
             modelBuilder.Entity<Ferramenta>().HasMany(f => f.HistoricoEmprestimos).WithOne(h => h.Ferramenta);
 
 
