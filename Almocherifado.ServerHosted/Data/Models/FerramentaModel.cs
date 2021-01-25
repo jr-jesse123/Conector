@@ -12,6 +12,8 @@ namespace Almocherifado.ServerHosted.Data.Models
         public string Descrição { get; set; }
         public DateTime DataCompra { get; set; }
         public string FotoUrl { get; set; }
+        public string Marca { get; set; }
+        public string Modelo { get; set; }
     }
 
 

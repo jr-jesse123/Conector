@@ -19,6 +19,16 @@
         <ValidationMessage For="() => ferramentamodel.NomeAbreviado" />
     </Field>
     <Field>
+        <FieldLabel>Marca:</FieldLabel>
+        <TextEdit @bind-Text="@ferramentamodel.Marca" />
+        <ValidationMessage For="() => ferramentamodel.Marca" />
+    </Field>
+    <Field>
+        <FieldLabel>Modelo:</FieldLabel>
+        <TextEdit @bind-Text="@ferramentamodel.Modelo" />
+        <ValidationMessage For="() => ferramentamodel.Modelo" />
+    </Field>
+    <Field>
         <FieldLabel>Data de Compra:</FieldLabel>
         <DateEdit @bind-Date="ferramentamodel.DataCompra" TValue="DateTime" />
         <ValidationMessage For="() => ferramentamodel.DataCompra" />

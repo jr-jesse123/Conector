@@ -40,7 +40,7 @@ namespace Almocherifado.ServerHosted.Tests
         [Fact]
         public void Conversao_De_Ferramenta_Para_FerramentaModel_eh_Valida()
         {
-            var ferramenta = new Ferramenta("Ferramenta1", "Ferramenta boa", DateTime.Now, "\\fotos\\foto1");
+            var ferramenta = new Ferramenta("Ferramenta1", "Ferramenta boa", DateTime.Now, "\\fotos\\foto1","brastemp","chave");
 
             var config = new MapperConfiguration(cfg => cfg.AddProfile<DomainToResponseProfile>());
             var mapper = config.CreateMapper();

@@ -21,8 +21,26 @@
                     </DeleteCommandTemplate>
                 </DataGridCommandColumn>
 
-                <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.NomeAbreviado)" Caption="Nome" />
-                <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.DataCompra)" Caption="Comprado em" />
+                <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.NomeAbreviado)" Caption="Nome">
+                    <DisplayTemplate>
+                        <Text>@context.NomeAbreviado</Text>
+                        <Heading Size="HeadingSize.Is6" Margin="Margin.Is2">Adquirida Em</Heading>
+                        <Text>@context.DataCompra</Text>
+                    </DisplayTemplate>
+                </DataGridColumn>
+                
+                
+                <DataGridColumn TItem="Ferramenta">
+                    <DisplayTemplate>
+                        <Text>Marca: @context.Marca</Text>
+                        <Text>Modelo: @context.Modelo</Text>
+                    </DisplayTemplate>
+                </DataGridColumn>
+
+
+                <DataGridColumn TItem="Ferramenta" Field="@nameof(ferramenta.Marca)" Caption="Marca/Modelo">
+
+                </DataGridColumn>
 
                 <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.FotoUrl)" Caption="Foto" Filterable="false">
                     <DisplayTemplate>
@@ -44,7 +62,7 @@
                         }
                         else
                         {
-                            <Switch CheckedChanged="() => AdicionarOuRemoverFerramenta(context)"  
+                            <Switch CheckedChanged="() => AdicionarOuRemoverFerramenta(context)"
                                     Margin="Margin.IsAuto" Size="Size.Large" TValue="bool">Selecionar Para Nova Alocação</Switch>
                         }
                     </DisplayTemplate>
