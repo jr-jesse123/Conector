@@ -1,6 +1,86 @@
 ﻿@page "/"
+<EditForm Model="Model">
+    <FluentValidationValidator />
+    <Field Horizontal="true">
+        <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop">Entregue Em</FieldLabel>
+        <FieldBody ColumnSize="ColumnSize.IsAuto">
+            <DateEdit TValue="DateTime" @bind-Date="Model.Entrega"></DateEdit>
+        </FieldBody>
+    </Field>
+    <ValidationMessage For="() =>Model.Entrega"></ValidationMessage>
 
-@code {
+    <Field Horizontal="true">
+        <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop">Responsável:</FieldLabel>
+        <FieldBody>
+            <Select @bind-SelectedValue="Model.FuncionarioCpf" TValue="string">
+                @if (Funcionarios is not null)
+                {
+                    
+                    @foreach (var funcionario in Funcionarios)
+                    {
+                        <SelectItem TValue="string" Value="funcionario.CPF">
+                            <div> @funcionario.Nome</div>
+                            <small>@funcionario.CPF</small>
+                        </SelectItem>
+                    }
+                }
+            </Select>
 
-    
+        </FieldBody>
+    </Field>
+    <ValidationMessage For="() =>Model.FuncionarioCpf"></ValidationMessage>
+
+    <Field Horizontal="true">
+        <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop">Obra/Locacao:</FieldLabel>
+        <FieldBody>
+            <TextEdit @bind-Text="Model.Obra"></TextEdit>
+        </FieldBody>
+    </Field>
+    <ValidationMessage For="() =>Model.Obra"></ValidationMessage>
+
+    <Field Horizontal="true">
+        <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop">Termo de Responsabilidade:</FieldLabel>
+        <FieldBody>
+            <Addons>
+                <Addon AddonType="AddonType.Body">
+                    <Addon AddonType="AddonType.Start">
+                        <Button Color="Color.Secondary">Gerar Termo</Button>
+                    </Addon>
+                    <FileEdit  Changed="NovaFoto"></FileEdit>
+
+                </Addon>
+            </Addons>
+        </FieldBody>
+    </Field>
+    <ValidationMessage For="() =>Model.TermoResponsabilidade"></ValidationMessage>
+
+    <Button Type="ButtonType.Submit" Color="Color.Primary">Alocar Ferramentas</Button>
+    <Button Type="ButtonType.Reset" Color="Color.Light">Cancelar</Button>
+
+</EditForm>
+
+
+
+
+
+        @code {
+            EmprestimoModel Model=new() { Entrega=DateTime.Now};
+            [Inject] IFuncionariosRepository repository { get; set; }
+            public List<Funcionario> Funcionarios { get; set; }
+
+            protected override void OnInitialized()
+            {
+                Funcionarios = repository.GetFuncionarios().ToList();
+            }
+
+            byte[] fileContent;
+            async void NovaFoto(FileChangedEventArgs fileArgs)
+            {
+                using var stram = new MemoryStream();
+                await fileArgs.Files.Single().WriteToStreamAsync(stram);
+
+                fileContent = stram.ToArray();
+                Model.TermoResponsabilidade = $"\\termos\\{DateTime.Now.ToFileTime()}.jpg";
+
+            }
 }

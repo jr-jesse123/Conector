@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Almocherifado.core
+namespace Almocherifado.core.Entitys
 {
     [DebuggerDisplay("id:{Id},Nome:{NomeAbreviado}")]
     public class Ferramenta : ValueObject<Ferramenta>
@@ -23,11 +23,11 @@ namespace Almocherifado.core
 
 
 
-        public int Id { get;  }
-        public string NomeAbreviado { get;  }
-        public string Descrição { get;  }
-        public DateTime DataCompra { get;  }
-        public string FotoUrl { get;  }
+        public int Id { get; }
+        public string NomeAbreviado { get; }
+        public string Descrição { get; }
+        public DateTime DataCompra { get; }
+        public string FotoUrl { get; }
         public virtual IReadOnlyCollection<FerramentaEmprestada> HistoricoEmprestimos { get; }
 
 

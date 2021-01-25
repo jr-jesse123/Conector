@@ -1,4 +1,4 @@
-﻿using Almocherifado.core;
+﻿using Almocherifado.core.Entitys;
 
 namespace Almocherifado.Application
 {

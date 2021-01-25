@@ -1,5 +1,5 @@
 using Almocherifado.Application;
-using Almocherifado.core;
+using Almocherifado.core.Entitys;
 using Almocherifado.InfraEstrutura;
 using Almocherifado.InfraEstrutura.Repositorios;
 using FluentAssertions;

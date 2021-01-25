@@ -1,4 +1,5 @@
 ﻿using Almocherifado.core;
+using Almocherifado.core.Entitys;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -49,14 +50,13 @@ namespace Almocherifado.InfraEstrutura
             modelBuilder.Entity<Emprestimo>().HasKey(e => e.Id);
             modelBuilder.Entity<Emprestimo>().HasOne(e => e.Funcionario).WithMany().IsRequired();
             modelBuilder.Entity<Emprestimo>().HasMany(e => e.FerramentasEmprestas).WithOne(fe => fe.Emprestimo)
-                .Metadata.PrincipalToDependent.SetPropertyAccessMode(PropertyAccessMode.Field)
-                ;
-            
+                .Metadata.PrincipalToDependent.SetPropertyAccessMode(PropertyAccessMode.Field);
             
             modelBuilder.Entity<Emprestimo>().Property(e => e.Entrega).IsRequired();
             modelBuilder.Entity<Emprestimo>().Property(e => e.Obra).IsRequired();
             modelBuilder.Entity<Emprestimo>().HasOne(e => e.Funcionario);
             modelBuilder.Entity<Emprestimo>().HasMany(e => e.FerramentasEmprestas).WithOne(f => f.Emprestimo);
+            modelBuilder.Entity<Emprestimo>().Property(e => e.TermoResponsabilidade);
 
 
 

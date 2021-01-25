@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Almocherifado.core
+namespace Almocherifado.core.Entitys
 {
-    public  class Funcionario : ValueObject<Funcionario>
+    public class Funcionario : ValueObject<Funcionario>
     {
         public Nome Nome { get; }
 
@@ -15,7 +15,7 @@ namespace Almocherifado.core
         public Funcionario(Nome nome, CPF cpf, Email email)
         {
             Nome = nome;
-            this.CPF = cpf;
+            CPF = cpf;
             _cpf = cpf;
             Email = email;
         }

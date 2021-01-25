@@ -1,4 +1,4 @@
-﻿using Almocherifado.core;
+﻿using Almocherifado.core.Entitys;
 using AutoMapper;
 using System;
 using System.Collections.Generic;
@@ -14,6 +14,10 @@ namespace Almocherifado.ServerHosted.Data.Models.MappingProfiles
             CreateMap<FerramentaModel, Ferramenta>()
                 .ForMember(dest=> dest.HistoricoEmprestimos, opt => opt.Ignore());
             CreateMap< Ferramenta, FerramentaModel>();
+
+            CreateMap<FuncionarioModel, Funcionario>();
+            
+
         }
     }
 }

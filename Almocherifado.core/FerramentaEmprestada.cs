@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Almocherifado.core.Entitys;
+using System;
 
 namespace Almocherifado.core
 {

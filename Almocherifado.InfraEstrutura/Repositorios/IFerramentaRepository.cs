@@ -1,4 +1,4 @@
-﻿using Almocherifado.core;
+﻿using Almocherifado.core.Entitys;
 using CSharpFunctionalExtensions;
 using System.Collections.Generic;
 

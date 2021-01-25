@@ -6,7 +6,7 @@
 
 
     <Row>
-        <Button Color="Color.Info" Disabled="NovoEmprestimo()" >Alocar Ferramentas Selecionadas</Button>
+        <Button Color="Color.Info" Disabled="PodeAlocar()" >Alocar Ferramentas Selecionadas</Button>
     </Row>
 
 
@@ -56,7 +56,7 @@
 
 
 @code{
-
+       
     List<Ferramenta> FerramentasParaEmprestar = new();
 
     [Inject] public IFerramentaRepository repository { get; set; }
@@ -68,8 +68,13 @@
 
     public Ferramenta  SelectedFerramenta
     {
-        get { return ferramenta; }
-        set { ferramenta = value; StateHasChanged(); }
+        get
+        {
+            return ferramenta;
+        }
+        set {
+            ferramenta = value;
+        }
     }
 
     protected override void OnInitialized()
@@ -85,13 +90,12 @@
         await context.Clicked.InvokeAsync();
     }
 
-    bool NovoEmprestimo()
+    bool PodeAlocar()
     {
-        if (SelectedFerramenta is null)
+        if (FerramentasParaEmprestar.Count > 0)
+            return true;
+        else
             return false;
-
-        return true;
-
     }
 
     void OnRowStyling(Ferramenta ferramenta, DataGridRowStyling styling)

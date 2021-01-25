@@ -42,13 +42,16 @@
 @code{
     FuncionarioModel Model { get; set; } = new FuncionarioModel();
     [Inject] public IFuncionariosRepository repo { get; set; }
+    [Inject] IMapper mapper { get; set; }
     Alert AlertRef;
     string mensagem;
     Color Cor;
 
     void AdicionarFuncionario(EditContext editContext)
     {
-        var novoFunc = Model.GetFuncionario();
+        //var novoFunc = Model.GetFuncionario();
+
+        var novoFunc = mapper.Map<Funcionario>(Model);
 
         var fucionarios = repo.GetFuncionarios();
 
@@ -56,7 +59,7 @@
 
         if (funcExsitente is null)
         {
-            repo.AdicionarFuncionario(Model.GetFuncionario());
+            repo.AdicionarFuncionario(mapper.Map<Funcionario>(Model));
             mensagem = "Funcionário Salvo Com sucesso!";
             Cor = Color.Success;
             AlertRef.Show();

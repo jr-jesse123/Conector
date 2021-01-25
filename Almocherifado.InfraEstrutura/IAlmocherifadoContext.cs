@@ -1,4 +1,4 @@
-﻿using Almocherifado.core;
+﻿using Almocherifado.core.Entitys;
 using Microsoft.EntityFrameworkCore;
 
 namespace Almocherifado.InfraEstrutura

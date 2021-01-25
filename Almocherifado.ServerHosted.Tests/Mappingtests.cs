@@ -1,4 +1,4 @@
-using Almocherifado.core;
+using Almocherifado.core.Entitys;
 using Almocherifado.ServerHosted.Data.Models;
 using Almocherifado.ServerHosted.Data.Models.MappingProfiles;
 using AutoMapper;
