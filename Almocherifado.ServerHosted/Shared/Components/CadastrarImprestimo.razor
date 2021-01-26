@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿@page "/teste"
 @using Almocherifado.ServerHosted.Shared.FormularioCadastroImprestimo
 
 <EditForm Model="Model">
@@ -6,7 +6,7 @@
     <DataDeEntrega  data="Model.Entrega" />
     <ValidationMessage For="() =>Model.Entrega"></ValidationMessage>
 
-    <FuncionarioSelect FuncionariosSource="Funcionarios" CpfEscolhido="@Model.FuncionarioCpf" />
+    <FuncionarioSelect FuncionariosSource="Funcionarios"   @bind-ParentsCPF="Model.FuncionarioCpf" />
     <Field Horizontal="true">
         <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop">Responsável:</FieldLabel>
         <FieldBody>
