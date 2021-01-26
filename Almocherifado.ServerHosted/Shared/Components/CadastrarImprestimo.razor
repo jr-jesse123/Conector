@@ -15,7 +15,6 @@
             <Select @bind-SelectedValue="Model.FuncionarioCpf" TValue="string">
                 @if (Funcionarios is not null)
                 {
-                    
                     @foreach (var funcionario in Funcionarios)
                     {
                         <SelectItem TValue="string" Value="funcionario.CPF">
@@ -59,8 +58,7 @@
 
 </EditForm>
 
-
-
+@* TODO: CONTINUAR DAQUI MOSTRANDO AS FERRAMENTAS E FINALIZANDO O EMPRESTIMO *@
 
 
         @code {

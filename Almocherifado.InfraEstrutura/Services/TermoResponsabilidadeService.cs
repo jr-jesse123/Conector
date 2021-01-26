@@ -13,12 +13,17 @@ namespace Almocherifado.core.Services
 {
     public class TermoResponsabilidadeService
     {
-        public DocX GetTermoResponsabilidade(Emprestimo emprestimo)
+        DocX documento;
+        public TermoResponsabilidadeService(ModeloTermoService modeloTermoService)
         {
-            using var documento = DocX.Load(Assembly.GetExecutingAssembly().Location + @"\Servicos\Modelo de Responsabilidade de equipamentos.docx");
+            documento = modeloTermoService.GetModelo();
+        }
 
+        public DocX GetTermo(Emprestimo emprestimo)
+        {
             documento.ReplaceText("#NomeCompleto", emprestimo.Funcionario.Nome);
             documento.ReplaceText("#cpf", emprestimo.Funcionario.CPF.ToString());
+            documento.ReplaceText("#Obra", emprestimo.Obra);
 
             var ferramentas = emprestimo.FerramentasEmprestas
                 .Select(fe => fe.Ferramenta.ToString())
@@ -26,18 +31,27 @@ namespace Almocherifado.core.Services
 
             documento.ReplaceText("#Ferramentas", ferramentas);
 
-            documento.ReplaceText("#dia", ferramentas);
-            documento.ReplaceText("#Mes", ferramentas);
-            documento.ReplaceText("#Ano", ferramentas);
+            documento.ReplaceText("#dia", emprestimo.Entrega.Day.ToString("00"));
+            documento.ReplaceText("#Mes", emprestimo.Entrega.Month.ToString("00"));
+            documento.ReplaceText("#Ano", emprestimo.Entrega.Year.ToString("0000"));
 
             return documento;
-
         }
 
-
-        
-       
     }
 
-    
+
+    public class ModeloTermoService
+    {
+        readonly string basepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        public DocX GetModelo()
+        {
+            lock (this)
+            {
+                using var documento = DocX.Load(basepath + @"\Services\Modelo de Responsabilidade de equipamentos.docx");
+                return documento.Copy();
+            }
+        }
+    }
+
 }

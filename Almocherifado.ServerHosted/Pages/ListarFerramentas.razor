@@ -1,4 +1,5 @@
 ﻿@page "/ListarFerramentas"
+
 @using Blazorise.DataGrid
 @using InfraEstrutura.Repositorios
 @using Almocherifado.core
@@ -30,17 +31,13 @@
                 </DataGridColumn>
                 
                 
-                <DataGridColumn TItem="Ferramenta">
+                <DataGridColumn TItem="Ferramenta" Field="@nameof(ferramenta.Marca)" Caption="Marca/Modelo">
                     <DisplayTemplate>
                         <Text>Marca: @context.Marca</Text>
                         <Text>Modelo: @context.Modelo</Text>
                     </DisplayTemplate>
                 </DataGridColumn>
 
-
-                <DataGridColumn TItem="Ferramenta" Field="@nameof(ferramenta.Marca)" Caption="Marca/Modelo">
-
-                </DataGridColumn>
 
                 <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.FotoUrl)" Caption="Foto" Filterable="false">
                     <DisplayTemplate>
@@ -70,6 +67,8 @@
             </DataGridColumns>
         </DataGrid>
     </Row>
+
+
 
 
 
