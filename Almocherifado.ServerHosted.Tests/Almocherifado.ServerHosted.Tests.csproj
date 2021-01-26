@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoFixture.Xunit2" Version="4.15.0" />
+    <PackageReference Include="bunit" Version="1.0.0-preview-01" />
     <PackageReference Include="FluentAssertions" Version="5.10.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
     <PackageReference Include="xunit" Version="2.4.1" />
@@ -22,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Almocherifado.core.Tests\Almocherifado.core.Tests.csproj" />
     <ProjectReference Include="..\Almocherifado.ServerHosted\Almocherifado.ServerHosted.csproj" />
   </ItemGroup>
 

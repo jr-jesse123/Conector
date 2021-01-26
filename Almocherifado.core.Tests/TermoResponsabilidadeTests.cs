@@ -1,6 +1,10 @@
 ﻿using Almocherifado.core.AgregateRoots.EmprestimoNm;
+using Almocherifado.core.AgregateRoots.FerramentaNm;
+using Almocherifado.core.AgregateRoots.FuncionarioNm;
 using Almocherifado.core.Services;
 using FluentAssertions;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace Almocherifado.core.Tests
@@ -16,20 +20,20 @@ namespace Almocherifado.core.Tests
         }
 
         [Theory, DomainAutoData]
-        public void Modelo_Eh_Editado_Corretamente(Emprestimo emprestimo, TermoResponsabilidadeService sut)
+        public void Modelo_Eh_Editado_Corretamente(DateTime entrega, Funcionario funcionario, List<Ferramenta> ferramentas, string Obra , TermoResponsabilidadeService sut)
         {
-            var termo = sut.GetTermo(emprestimo);
+            var termo = sut.GetTermo(entrega, funcionario, ferramentas,Obra);
             termo.Text.Should().Contain(@"CONNECTOR ENGENHARIA LTDA, CNPJ nº 01.114.245/0001-02");
 
-            termo.Text.Should().Contain(emprestimo.Funcionario.Nome);
-            termo.Text.Should().Contain(emprestimo.Funcionario.CPF.ToString());
-            termo.Text.Should().Contain(emprestimo.Obra);
+            termo.Text.Should().Contain(funcionario.Nome);
+            termo.Text.Should().Contain(funcionario.CPF.ToString());
+            termo.Text.Should().Contain(Obra);
 
-            emprestimo.FerramentasEmprestas.ForEach(fe => termo.Text.Should().Contain(fe.Ferramenta.ToString()));
+            ferramentas.ForEach(fe => termo.Text.Should().Contain(fe.ToString()));
 
-            termo.Text.Should().Contain(emprestimo.Entrega.Day.ToString("00"));
-            termo.Text.Should().Contain(emprestimo.Entrega.Month.ToString("00"));
-            termo.Text.Should().Contain(emprestimo.Entrega.Year.ToString("0000"));
+            termo.Text.Should().Contain(entrega.Day.ToString("00"));
+            termo.Text.Should().Contain(entrega.Month.ToString("00"));
+            termo.Text.Should().Contain(entrega.Year.ToString("0000"));
         }
 
 

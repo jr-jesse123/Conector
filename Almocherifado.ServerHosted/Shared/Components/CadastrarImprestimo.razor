@@ -1,14 +1,12 @@
 ﻿@page "/"
+@using Almocherifado.ServerHosted.Shared.FormularioCadastroImprestimo
+
 <EditForm Model="Model">
     <FluentValidationValidator />
-    <Field Horizontal="true">
-        <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop">Entregue Em</FieldLabel>
-        <FieldBody ColumnSize="ColumnSize.IsAuto">
-            <DateEdit TValue="DateTime" @bind-Date="Model.Entrega"></DateEdit>
-        </FieldBody>
-    </Field>
+    <DataDeEntrega  data="Model.Entrega" />
     <ValidationMessage For="() =>Model.Entrega"></ValidationMessage>
 
+    <FuncionarioSelect FuncionariosSource="Funcionarios" CpfEscolhido="@Model.FuncionarioCpf" />
     <Field Horizontal="true">
         <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop">Responsável:</FieldLabel>
         <FieldBody>
@@ -19,7 +17,7 @@
                     {
                         <SelectItem TValue="string" Value="funcionario.CPF">
                             <div> @funcionario.Nome</div>
-                            <small>@funcionario.CPF</small>
+                            <small>cpf: @funcionario.CPF</small>
                         </SelectItem>
                     }
                 }

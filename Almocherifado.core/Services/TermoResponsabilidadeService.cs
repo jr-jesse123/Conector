@@ -1,4 +1,6 @@
 ﻿using Almocherifado.core.AgregateRoots.EmprestimoNm;
+using Almocherifado.core.AgregateRoots.FerramentaNm;
+using Almocherifado.core.AgregateRoots.FuncionarioNm;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -19,21 +21,21 @@ namespace Almocherifado.core.Services
             documento = modeloTermoService.GetModelo();
         }
 
-        public DocX GetTermo(Emprestimo emprestimo)
+        public DocX GetTermo(DateTime DataEntrega, Funcionario funcionario, List<Ferramenta> ferramentas, string Obra)
         {
-            documento.ReplaceText("#NomeCompleto", emprestimo.Funcionario.Nome);
-            documento.ReplaceText("#cpf", emprestimo.Funcionario.CPF.ToString());
-            documento.ReplaceText("#Obra", emprestimo.Obra);
+            documento.ReplaceText("#NomeCompleto", funcionario.Nome);
+            documento.ReplaceText("#cpf", funcionario.CPF.ToString());
+            documento.ReplaceText("#Obra", Obra);
 
-            var ferramentas = emprestimo.FerramentasEmprestas
-                .Select(fe => fe.Ferramenta.ToString())
+            var ferramentastext = ferramentas
+                .Select(f => f.ToString())
                 .Aggregate((a, b) => a + Environment.NewLine + b);
 
-            documento.ReplaceText("#Ferramentas", ferramentas);
+            documento.ReplaceText("#Ferramentas", ferramentastext);
 
-            documento.ReplaceText("#dia", emprestimo.Entrega.Day.ToString("00"));
-            documento.ReplaceText("#Mes", emprestimo.Entrega.Month.ToString("00"));
-            documento.ReplaceText("#Ano", emprestimo.Entrega.Year.ToString("0000"));
+            documento.ReplaceText("#dia", DataEntrega.Day.ToString("00"));
+            documento.ReplaceText("#Mes", DataEntrega.Month.ToString("00"));
+            documento.ReplaceText("#Ano", DataEntrega.Year.ToString("0000"));
 
             return documento;
         }

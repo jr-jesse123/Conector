@@ -1,0 +1,25 @@
+﻿
+<Field Horizontal="true">
+    <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop">Responsável:</FieldLabel>
+    <FieldBody>
+        <Select  @onchange="OnCpfEscolhido" TValue="string">
+            @if (FuncionariosSource is not null)
+            {
+                @foreach (var funcionario in FuncionariosSource)
+                {
+                    <SelectItem TValue="string" Value="funcionario.CPF">
+                        <div> @funcionario.Nome</div>
+                        <small>cpf: @funcionario.CPF</small>
+                    </SelectItem>
+                }
+            }
+        </Select>
+
+    </FieldBody>
+</Field>
+
+
+@code {
+    [Parameter] public List<Funcionario> FuncionariosSource { get; set; }
+    [Parameter] public EventCallback<ChangeEventArgs> OnCpfEscolhido  { get; set; }
+}
