@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Samples\Image\Resources\balloon.jpg" />
+    <None Remove="Samples\Miscellaneous\Resources\cupcake.png" />
+    <None Remove="Samples\Miscellaneous\Resources\Phone.png" />
+    <None Remove="Samples\Parallel\Resources\potato.jpg" />
+    <None Remove="Samples\Table\Resources\logo_xceed.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Samples\Image\Resources\balloon.jpg" />
+    <Content Include="Samples\Miscellaneous\Resources\cupcake.png" />
+    <Content Include="Samples\Miscellaneous\Resources\Phone.png" />
+    <Content Include="Samples\Parallel\Resources\potato.jpg" />
+    <Content Include="Samples\Table\Resources\logo_xceed.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Xceed.Words.NET.Standard\Xceed.Words.NET.Standard.csproj" />
+  </ItemGroup>
+
+</Project>

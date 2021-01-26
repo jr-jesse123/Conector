@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Xceed.Words.NET;
@@ -13,7 +15,7 @@ namespace Almocherifado.core.Services
     {
         public DocX GetTermoResponsabilidade(Emprestimo emprestimo)
         {
-            using var documento = DocX.Load("documento.docx");
+            using var documento = DocX.Load(Assembly.GetExecutingAssembly().Location + @"\Servicos\Modelo de Responsabilidade de equipamentos.docx");
 
             documento.ReplaceText("#NomeCompleto", emprestimo.Funcionario.Nome);
             documento.ReplaceText("#cpf", emprestimo.Funcionario.CPF.ToString());
