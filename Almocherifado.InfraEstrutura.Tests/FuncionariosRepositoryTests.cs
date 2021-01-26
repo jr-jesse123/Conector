@@ -1,4 +1,5 @@
 using Almocherifado.core.AgregateRoots.FuncionarioNm;
+using Almocherifado.core.Tests;
 using Almocherifado.InfraEstrutura.Repositorios;
 using Almocherifado.InfraEstrutura.Tests.TestesEmprestimoRepositoy;
 using AutoFixture.Xunit2;

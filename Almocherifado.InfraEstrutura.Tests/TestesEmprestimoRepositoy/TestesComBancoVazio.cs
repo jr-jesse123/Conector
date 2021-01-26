@@ -1,6 +1,7 @@
 ﻿using Almocherifado.core.AgregateRoots.EmprestimoNm;
 using Almocherifado.core.AgregateRoots.FerramentaNm;
 using Almocherifado.core.AgregateRoots.FuncionarioNm;
+using Almocherifado.core.Tests;
 using Almocherifado.InfraEstrutura.Repositorios;
 using AutoFixture;
 using AutoFixture.Kernel;

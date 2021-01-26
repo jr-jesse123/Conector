@@ -10,4 +10,14 @@
     <PackageReference Include="CSharpFunctionalExtensions" Version="2.14.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DocX-master\Xceed.Words.NET.Standard\Xceed.Words.NET.Standard.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Services\Modelo de Responsabilidade de equipamentos.docx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

@@ -38,4 +38,8 @@
     <ProjectReference Include="..\Almocherifado.Application\Almocherifado.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\termos\" />
+  </ItemGroup>
+
 </Project>

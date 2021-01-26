@@ -1,10 +1,9 @@
 ﻿using Almocherifado.core.AgregateRoots.EmprestimoNm;
 using Almocherifado.core.Services;
-using Almocherifado.InfraEstrutura.Tests.TestesEmprestimoRepositoy;
 using FluentAssertions;
 using Xunit;
 
-namespace Almocherifado.InfraEstrutura.Tests
+namespace Almocherifado.core.Tests
 {
     public class TermoResponsabilidadeTests
     {
@@ -13,7 +12,7 @@ namespace Almocherifado.InfraEstrutura.Tests
         {
             var termo = sut.GetModelo();
             termo.Text.Should().Contain(@"CONNECTOR ENGENHARIA LTDA, CNPJ nº 01.114.245/0001-02");
-            
+
         }
 
         [Theory, DomainAutoData]
