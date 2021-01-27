@@ -1,11 +1,19 @@
 ﻿<Field Horizontal="true">
     <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop">Entregue Em</FieldLabel>
     <FieldBody ColumnSize="ColumnSize.IsAuto">
-        <DateEdit TValue="DateTime" @bind-Date="data"></DateEdit>
+        <DateEdit TValue="DateTime" @bind-Date="Data" @onchange="updateData"></DateEdit>
     </FieldBody>
 </Field>
 
 
 @code {
-    [Parameter] public DateTime data { get; set; }
+    [Parameter] public DateTime Data { get; set; }
+
+    [Parameter] public EventCallback<DateTime> DataChanged { get; set; }
+
+
+    private async void updateData(ChangeEventArgs args)
+    {
+      await  DataChanged.InvokeAsync( Convert.ToDateTime(args.Value));
+    }
 }

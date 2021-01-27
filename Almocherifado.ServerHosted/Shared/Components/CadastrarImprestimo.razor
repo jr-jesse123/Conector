@@ -3,7 +3,7 @@
 
 <EditForm Model="Model">
     <FluentValidationValidator />
-    <DataDeEntrega  data="Model.Entrega" />
+    <DataDeEntrega  @bind-Data="Model.Entrega" />
     <ValidationMessage For="() =>Model.Entrega"></ValidationMessage>
 
     <FuncionarioSelect FuncionariosSource="Funcionarios"   @bind-ParentsCPF="Model.FuncionarioCpf" />
