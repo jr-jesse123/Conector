@@ -2,7 +2,7 @@
 <Field Horizontal="true">
     <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop">Responsável:</FieldLabel>
     <FieldBody>
-        <Select @ref="@select" SelectedValue="ParentsCPF"  @onchange="UpdateParentsCPF" TValue="string">
+        <Select SelectedValue="ParentsCPF"  @onchange="UpdateParentsCPF" TValue="string">
             @if (FuncionariosSource is not null)
             {
                 @foreach (var funcionario in FuncionariosSource)
@@ -21,25 +21,13 @@
 
 @code {
     [Parameter] public string ParentsCPF { get; set; }
-
-
-    private string myVar;
-
-    public string MyProperty
-    {
-        get { return myVar; }
-        set { myVar = value; }
-    }
-
-
     [Parameter] public EventCallback<string> ParentsCPFChanged  { get; set; }
-    Select<string> select;
-
+    
+    [Parameter] public List<Funcionario> FuncionariosSource { get; set; }
 
     private async Task UpdateParentsCPF(ChangeEventArgs args)
     {
         await ParentsCPFChanged.InvokeAsync(args.Value.ToString());
     }
 
-    [Parameter] public List<Funcionario> FuncionariosSource { get; set; }
 }

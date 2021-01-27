@@ -3,25 +3,19 @@ using Almocherifado.InfraEstrutura;
 using Almocherifado.InfraEstrutura.Repositorios;
 using Almocherifado.ServerHosted.Areas.Identity;
 using Almocherifado.ServerHosted.Data;
+using Almocherifado.ServerHosted.Helpers.FileHelpers;
 using AutoMapper;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Almocherifado.ServerHosted
 {
@@ -60,6 +54,7 @@ namespace Almocherifado.ServerHosted
                 .UseLazyLoadingProxies()
             );
 
+            services.AddTransient<PathHelper>();
 
             //services.AddTransient<DbContextOptions<AlmocherifadoContext>>(sp =>
             //    new DbContextOptionsBuilder<AlmocherifadoContext>().UseSqlite().Options

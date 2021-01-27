@@ -42,7 +42,8 @@
                 <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.FotoUrl)" Caption="Foto" Filterable="false">
                     <DisplayTemplate>
                         <Figure Size="FigureSize.Is128x128">
-                            <FigureImage Source="@context.FotoUrl" />
+                            <FigureImage Source="\fotosFerramentas\132562147416772572.jpg" />
+                            <FigureCaption>"D:/repos/Almocherifado/Conector/Almocherifado.ServerHosted/fotosFerramentas/132562147416772572.jpg"</FigureCaption>>
                         </Figure>
                     </DisplayTemplate>
                 </DataGridColumn>
@@ -68,17 +69,13 @@
         </DataGrid>
     </Row>
 
-
-
-
-
 @code{
-       
+
     List<Ferramenta> FerramentasParaEmprestar = new();
 
     [Inject] public IFerramentaRepository repository { get; set; }
     [Inject] public IFerramentasService ferramentasService { get; set; }
-
+    [Inject] public PathHelper pathHelper { get; set; }
     List<Ferramenta> Ferramentas { get; set; }
 
     private Ferramenta  ferramenta;
@@ -135,9 +132,9 @@
         }
     }
 
-    void teste(Ferramenta ferramenta)
+    string getUrl(Ferramenta ferramenta)
     {
-
+        return pathHelper.Ferramentas + ferramenta.FotoUrl;
     }
 
 }

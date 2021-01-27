@@ -1,0 +1,33 @@
+﻿
+
+<Field Horizontal="true">
+    <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop">Termo de Responsabilidade:</FieldLabel>
+    <FieldBody>
+        <Addons>
+            <Addon AddonType="AddonType.Body">
+                <Addon AddonType="AddonType.Start">
+                    <Button Color="Color.Secondary">Gerar Termo</Button>
+                </Addon>
+                <FileEdit Changed="NovaFoto"></FileEdit>
+
+            </Addon>
+        </Addons>
+    </FieldBody>
+</Field>
+
+@code {
+    [Parameter] public string Url { get; set; }
+    [Parameter] public EventCallback<string> UrlChange { get; set; }
+
+    byte[] fileContent;
+    async Task NovaFoto(FileChangedEventArgs fileArgs)
+    {
+        using var stram = new MemoryStream();
+        await fileArgs.Files.Single().WriteToStreamAsync(stram);
+
+        fileContent = stram.ToArray();
+
+       await UrlChange.InvokeAsync($"\\termos\\{DateTime.Now.ToFileTime()}.jpg");
+    }
+
+}

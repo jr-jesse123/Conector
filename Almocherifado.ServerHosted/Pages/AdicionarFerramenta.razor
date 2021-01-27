@@ -71,16 +71,17 @@
     [Inject] IFerramentaRepository repository { get; set; }
     [Inject] IMapper mapper { get; set; }
     [Inject] IWebHostEnvironment environment { get; set; }
+    [Inject] PathHelper pathHelper { get; set; }
 
     void OnValidSubmit()
     {
 
         var ferramenta = mapper.Map<Ferramenta>(ferramentamodel);
 
-        repository.AdicionarFerramenta(ferramenta);
+        var path =  pathHelper.Ferramentas + ferramentamodel.FotoUrl;
+        File.WriteAllBytes(path, fileContent);
 
-        Directory.CreateDirectory(Path.GetDirectoryName(environment.WebRootPath + ferramentamodel.FotoUrl));
-        File.WriteAllBytes(environment.WebRootPath + ferramentamodel.FotoUrl, fileContent);
+        repository.AdicionarFerramenta(ferramenta);
 
         mensagem = "Ferrramenta Criada Com sucesso!";
         Cor = Color.Success;
@@ -104,7 +105,7 @@
             // so we can read it.
             //stream.Seek(0, SeekOrigin.Begin);
             fileContent = stream.ToArray();
-            ferramentamodel.FotoUrl = $"\\fotos\\{DateTime.Now.ToFileTime()}.jpg";
+            ferramentamodel.FotoUrl = $"{DateTime.Now.ToFileTime()}.jpg";
         }
     }
 
