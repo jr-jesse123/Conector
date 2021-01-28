@@ -29,9 +29,15 @@ namespace Almocherifado.ServerHosted.Helpers.FileHelpers
 
             DocumentosTermos = basePath + "\\Termos\\";
             Directory.CreateDirectory(DocumentosTermos);
-            Console.WriteLine(DocumentosTermos);
+            File.WriteAllText(Ferramentas + "teste.txt", " ");
         }
-     
+
+
+        static PathHelper()
+        {
+
+        }
+
         
     }
 }

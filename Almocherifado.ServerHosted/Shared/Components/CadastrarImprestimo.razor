@@ -1,33 +1,19 @@
-﻿@page "/teste"
+﻿@page "/"
 
 @using Almocherifado.ServerHosted.Shared.FormularioCadastroImprestimo
 
 <EditForm Model="Model">
     <FluentValidationValidator />
-    <DataDeEntrega @bind-Data="Model.Entrega" />
-    <ValidationMessage For="() =>Model.Entrega"></ValidationMessage>
+    <DataDeEntrega @bind-Data="Model.entrega" />
+    <ValidationMessage For="() =>Model.entrega"></ValidationMessage>
 
     <FuncionarioSelect FuncionariosSource="Funcionarios" @bind-ParentsCPF="Model.FuncionarioCpf" />
     <ValidationMessage For="() =>Model.FuncionarioCpf"></ValidationMessage>
 
     <ObraInput  @bind-Obra="Model.Obra"/>
     <ValidationMessage For="() =>Model.Obra"></ValidationMessage>
-
-
-    <Field Horizontal="true">
-        <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop">Termo de Responsabilidade:</FieldLabel>
-        <FieldBody>
-            <Addons>
-                <Addon AddonType="AddonType.Body">
-                    <Addon AddonType="AddonType.Start">
-                        <Button Color="Color.Secondary">Gerar Termo</Button>
-                    </Addon>
-                    <FileEdit ></FileEdit>
-
-                </Addon>
-            </Addons>
-        </FieldBody>
-    </Field>
+    
+    <TermoResponsabilidade  @bind-Url="@Model.TermoResponsabilidade" />
     <ValidationMessage For="() =>Model.TermoResponsabilidade"></ValidationMessage>
 
     <Button Type="ButtonType.Submit" Color="Color.Primary">Alocar Ferramentas</Button>
@@ -35,10 +21,14 @@
 
 </EditForm>
 
+
+<p>@Model.TermoResponsabilidade</p>
+
 @code {
-    EmprestimoModel Model = new() { Entrega = DateTime.Now };
+    EmprestimoModel Model = new() { entrega = DateTime.Now };
     [Inject] IFuncionariosRepository repository { get; set; }
     public List<Funcionario> Funcionarios { get; set; }
+    [Inject] IMapper mapper { get; set; }
 
     protected override void OnInitialized()
     {
@@ -47,7 +37,7 @@
 
     void OnValidSubmit()
     {
-        //var ferramenta = mapper.Map<Ferramenta>(ferramentamodel);
+        var emprestimo = mapper.Map<Ferramenta>(Model);
         //repository.AdicionarFerramenta(ferramenta);
 
         //Directory.CreateDirectory(Path.GetDirectoryName(environment.WebRootPath + ferramentamodel.FotoUrl));

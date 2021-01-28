@@ -1,4 +1,5 @@
-﻿using Almocherifado.core.AgregateRoots.FerramentaNm;
+﻿using Almocherifado.core.AgregateRoots.EmprestimoNm;
+using Almocherifado.core.AgregateRoots.FerramentaNm;
 using Almocherifado.core.AgregateRoots.FuncionarioNm;
 using AutoMapper;
 using System;
@@ -17,7 +18,12 @@ namespace Almocherifado.ServerHosted.Data.Models.MappingProfiles
             CreateMap< Ferramenta, FerramentaModel>();
 
             CreateMap<FuncionarioModel, Funcionario>();
-            
+
+
+
+            CreateMap<EmprestimoModel, Emprestimo>()
+                .ConstructUsing(mod => new Emprestimo(mod.entrega, new Funcionario(mod.FuncionarioCpf), mod.Obra, mod.Ferramentas));
+            //CreateMap<EmprestimoModel, Emprestimo>().ForCtorParam("funcionario", mod => mod.MapFrom(opt => opt.FuncionarioCpf     ));
 
         }
     }

@@ -9,6 +9,15 @@ namespace Almocherifado.core.AgregateRoots.FuncionarioNm
         public Nome Nome { get; }
         public CPF CPF { get; }
         public Email Email { get; }
+
+        public Funcionario( CPF cpf)
+        {
+            
+            CPF = cpf;
+
+            
+        }
+
         public Funcionario(Nome nome, CPF cpf, Email email)
         {
             Nome = nome;

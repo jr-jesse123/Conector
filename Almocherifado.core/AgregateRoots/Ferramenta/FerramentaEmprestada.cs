@@ -27,7 +27,7 @@ namespace Almocherifado.core.AgregateRoots.FerramentaNm
         }
 
         public int Id { get; }
-        public virtual Emprestimo Emprestimo { get; set; }
+        public virtual Emprestimo Emprestimo { get; }
         public DateTime? DataDevolucao { get; private set; }
         public virtual Ferramenta Ferramenta { get; }
 

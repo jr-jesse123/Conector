@@ -9,8 +9,8 @@ namespace Almocherifado.ServerHosted.Data.Models
 {
     public class EmprestimoModel
     {
-        public DateTime Entrega { get; set; }
-        public string FuncionarioCpf { get; set; }
+        public DateTime entrega { get; set; }
+        public funcionairomo FuncionarioCpf { get; set; }
         public List<Ferramenta> Ferramentas { get; set; }
         public string   Obra { get; set; }
         public string TermoResponsabilidade { get; set; }
@@ -21,7 +21,7 @@ namespace Almocherifado.ServerHosted.Data.Models
     {
         public EmprestimoValidator()
         {
-            RuleFor(e => e.Entrega).InclusiveBetween(DateTime.Now.AddDays(-7), DateTime.Now)
+            RuleFor(e => e.entrega).InclusiveBetween(DateTime.Now.AddDays(-7), DateTime.Now)
                 .WithMessage("A data da entrega precisa estar dentro dos últimos 7 dias");
 
             RuleFor(e => e.FuncionarioCpf).NotNull().WithMessage("Escolha a quem a(s) ferramenta(s) foram entregues");

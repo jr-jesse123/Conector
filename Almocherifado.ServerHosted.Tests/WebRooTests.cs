@@ -27,14 +27,8 @@ namespace Almocherifado.ServerHosted.Tests
         [Fact]
         public async Task TestePathAsync()
         {
-
-            
-
-            var result = await client.GetAsync("/teste/teste.txt");
+            var result = await client.GetAsync("/fotosFerramentas/teste.txt");
             result.EnsureSuccessStatusCode();
-
-
-
         }
 
     }
