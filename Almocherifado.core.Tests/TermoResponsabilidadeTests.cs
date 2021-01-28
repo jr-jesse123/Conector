@@ -5,6 +5,7 @@ using Almocherifado.core.Services;
 using FluentAssertions;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Xunit;
 
 namespace Almocherifado.core.Tests
@@ -22,6 +23,9 @@ namespace Almocherifado.core.Tests
         [Theory, DomainAutoData]
         public void Modelo_Eh_Editado_Corretamente(DateTime entrega, Funcionario funcionario, List<Ferramenta> ferramentas, string Obra , TermoResponsabilidadeService sut)
         {
+
+            Debugger.Break();
+
             var termo = sut.GetTermo(entrega, funcionario, ferramentas,Obra);
             termo.Text.Should().Contain(@"CONNECTOR ENGENHARIA LTDA, CNPJ nº 01.114.245/0001-02");
 

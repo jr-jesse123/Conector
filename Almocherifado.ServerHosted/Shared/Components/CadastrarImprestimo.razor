@@ -7,8 +7,10 @@
     <DataDeEntrega @bind-Data="Model.entrega" />
     <ValidationMessage For="() =>Model.entrega"></ValidationMessage>
 
-    <FuncionarioSelect FuncionariosSource="Funcionarios" @bind-ParentsCPF="Model.FuncionarioCpf" />
-    <ValidationMessage For="() =>Model.FuncionarioCpf"></ValidationMessage>
+    <p>@Model.Funcionario</p>
+
+    <FuncionarioSelect FuncionariosSource="Funcionarios" @bind-ParentsCPF="Model.Funcionario" />
+    <ValidationMessage For="() =>Model.Funcionario"></ValidationMessage>
 
     <ObraInput  @bind-Obra="Model.Obra"/>
     <ValidationMessage For="() =>Model.Obra"></ValidationMessage>
@@ -27,12 +29,13 @@
 @code {
     EmprestimoModel Model = new() { entrega = DateTime.Now };
     [Inject] IFuncionariosRepository repository { get; set; }
-    public List<Funcionario> Funcionarios { get; set; }
+    public List<FuncionarioModel> Funcionarios { get; set; }
     [Inject] IMapper mapper { get; set; }
 
     protected override void OnInitialized()
     {
-        Funcionarios = repository.GetFuncionarios().ToList();
+        var funcionarios = repository.GetFuncionarios().ToList();
+        Funcionarios = mapper.Map<List<FuncionarioModel>>(funcionarios) ;
     }
 
     void OnValidSubmit()

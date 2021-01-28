@@ -14,6 +14,11 @@ namespace Almocherifado.ServerHosted.Data.Models
         public string CPF { get; set; }
         public string Email { get; set; }
 
+        public override string ToString()
+        {
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this);
+        }
+
 
         public Funcionario GetFuncionario()
         {

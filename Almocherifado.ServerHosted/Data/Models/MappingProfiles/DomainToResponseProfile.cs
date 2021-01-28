@@ -18,12 +18,15 @@ namespace Almocherifado.ServerHosted.Data.Models.MappingProfiles
             CreateMap< Ferramenta, FerramentaModel>();
 
             CreateMap<FuncionarioModel, Funcionario>();
-
+            CreateMap<Funcionario, FuncionarioModel>();
 
 
             CreateMap<EmprestimoModel, Emprestimo>()
-                .ConstructUsing(mod => new Emprestimo(mod.entrega, new Funcionario(mod.FuncionarioCpf), mod.Obra, mod.Ferramentas));
-            //CreateMap<EmprestimoModel, Emprestimo>().ForCtorParam("funcionario", mod => mod.MapFrom(opt => opt.FuncionarioCpf     ));
+                .ConstructUsing(mod => new Emprestimo(mod.entrega, 
+                new Funcionario(mod.Funcionario.Nome, mod.Funcionario.CPF, mod.Funcionario.Email),
+                mod.Obra, mod.Ferramentas))
+                .ForMember(e => e.FerramentasEmprestas, opt => opt.Ignore());
+            
 
         }
     }

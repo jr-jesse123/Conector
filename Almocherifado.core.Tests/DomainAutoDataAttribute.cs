@@ -8,6 +8,15 @@ using System;
 
 namespace Almocherifado.core.Tests
 {
+
+    public class DomainFixture : Fixture
+    {
+        public DomainFixture()
+        {
+            Customizations.Add(new DomainClassesGenerator());
+        }
+    }
+
     public class DomainAutoDataAttribute : AutoDataAttribute
     {
         public DomainAutoDataAttribute() : base(Customizar())
@@ -17,7 +26,7 @@ namespace Almocherifado.core.Tests
 
         private static Func<IFixture> Customizar()
         {
-            return () => { var fixture = new Fixture(); fixture.Customizations.Add(new DomainClassesGenerator()); return fixture; };
+            return () => new DomainFixture();
         }
     }
 

@@ -15,6 +15,8 @@ using Xunit;
 
 using System.Threading.Tasks;
 using Xunit.Abstractions;
+using Almocherifado.ServerHosted.Data.Models;
+using System.Linq;
 
 namespace Almocherifado.ServerHosted.Tests
 {
@@ -33,22 +35,30 @@ namespace Almocherifado.ServerHosted.Tests
             this.testOutputHelper = testOutputHelper;
         }
 
-        
+
 
         [Theory, DomainAutoData]
         public void Mudancas_Do_Cpf_Sao_Refletidas_No_CallBakc(List<Funcionario> funcionarios)
         {
-            string MyProperty = "";
-            var ParentTitle = ComponentParameterFactory.Parameter(nameof(FuncionarioSelect.ParentsCPF), MyProperty);
 
-            var callback = ComponentParameterFactory.EventCallback<string>(nameof(FuncionarioSelect.ParentsCPFChanged),
-                args => MyProperty = args.ToString());
+            FuncionarioModel model = new();
+            var ParentTitle = ComponentParameterFactory.Parameter(nameof(FuncionarioSelect.ParentsCPF), model);
 
-            var cut = RenderComponent<FuncionarioSelect>(ParentTitle, callback);
+            var callback = ComponentParameterFactory.EventCallback<FuncionarioModel>(nameof(FuncionarioSelect.ParentsCPFChanged),
+                args => model = (args));
 
-            cut.Find("select").Change(new ChangeEventArgs() { Value = funcionarios[2].CPF });
+            var listaParam = ComponentParameterFactory.Parameter(nameof(FuncionarioSelect.FuncionariosSource), 
+                funcionarios.Select(f => new FuncionarioModel { CPF = f.CPF, Email = f.Email, Nome = f.Nome }).ToList());
 
-            MyProperty.Should().Be(funcionarios[2].CPF.ToString());
+            var cut = RenderComponent<FuncionarioSelect>(ParentTitle, callback,listaParam);
+
+            var func = funcionarios[2];
+
+            var value = new FuncionarioModel {  CPF= func.CPF, Email = func.Email, Nome = func.Nome};
+
+            cut.Find("select").Change(new ChangeEventArgs() { Value = value });
+
+            CpfLibrary.Cpf.Format(model.CPF).Should().Be(funcionarios[2].CPF.ToString());
         }
 
     }
