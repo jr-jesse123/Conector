@@ -8,15 +8,20 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\fotos\Modelo de Responsabilidade de equipamentos.docx" />
+    <Content Remove="wwwroot\termos\Modelo de Responsabilidade de equipamentos.pdf" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="wwwroot\fotos\Modelo de Responsabilidade de equipamentos.docx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="wwwroot\termos\Modelo de Responsabilidade de equipamentos.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Append.Blazor.Printing" Version="1.0.0" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
     <PackageReference Include="BlazorDownloadFile" Version="2.1.6" />
@@ -38,10 +43,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Almocherifado.Application\Almocherifado.Application.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\termos\" />
   </ItemGroup>
 
 </Project>

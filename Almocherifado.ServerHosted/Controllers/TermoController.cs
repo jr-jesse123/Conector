@@ -21,7 +21,7 @@ namespace Almocherifado.ServerHosted.Controllers
         }
         public IActionResult Get()
         {
-            var stream = new FileStream(environment.WebRootPath + @"\Modelo de Responsabilidade de equipamentos.pdf", FileMode.Open);
+            var stream = new FileStream(environment.WebRootPath + @"\termos\Modelo de Responsabilidade de equipamentos.pdf", FileMode.Open);
             return File(stream, "application/pdf", "FileDownloadName.pdf");
         }
     }

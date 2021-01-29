@@ -4,6 +4,7 @@ using Almocherifado.InfraEstrutura.Repositorios;
 using Almocherifado.ServerHosted.Areas.Identity;
 using Almocherifado.ServerHosted.Data;
 using Almocherifado.ServerHosted.Helpers.FileHelpers;
+using Append.Blazor.Printing;
 using AutoMapper;
 using BlazorDownloadFile;
 using Blazorise;
@@ -56,6 +57,7 @@ namespace Almocherifado.ServerHosted
             );
             
             services.AddBlazorDownloadFile();
+            services.AddScoped<IPrintingService, PrintingService>();
 
 
             services.AddTransient<IPathHelper,PathHelper>();

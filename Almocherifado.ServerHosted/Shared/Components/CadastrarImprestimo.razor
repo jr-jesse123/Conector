@@ -1,4 +1,5 @@
 ﻿@using BlazorDownloadFile
+@using Append.Blazor.Printing
 
 @using Almocherifado.ServerHosted.Shared.FormularioCadastroImprestimo
 
@@ -10,18 +11,22 @@
     <FuncionarioSelect FuncionariosSource="Funcionarios" @bind-ParentsCPF="Model.Funcionario" />
     <ValidationMessage For="() =>Model.Funcionario"></ValidationMessage>
 
-    <ObraInput  @bind-Obra="Model.Obra"/>
+    <ObraInput @bind-Obra="Model.Obra" />
     <ValidationMessage For="() =>Model.Obra"></ValidationMessage>
-    
-    @*<TermoResponsabilidade></TermoResponsabilidade>
-    <ValidationMessage For="() => Model.TermoResponsabilidade"></ValidationMessage>*@
 
-    <Button Type="ButtonType.Submit"  Color="Color.Info">Baixar Termo</Button>
-    
+    @*<TermoResponsabilidade></TermoResponsabilidade>
+        <ValidationMessage For="() => Model.TermoResponsabilidade"></ValidationMessage>*@
+
+    <Button Type="ButtonType.Button" Color="Color.Info" @onclick="@(() => PrintingService.Print("api/termo") )">
+        imprimir
+    </Button>
+
+    <Button Type="ButtonType.Submit" Color="Color.Success">Baixar Termo</Button>
+
 
 </EditForm>
 
-<a  href="/fotos/Modelo de Responsabilidade de equipamentos.docx">baixar</a>
+<a href="/fotos/Modelo de Responsabilidade de equipamentos.docx">baixar</a>
 
 
 @code {
@@ -41,7 +46,7 @@
 
     void OnValidSubmit()
     {
-       
+
     }
 
 
@@ -49,11 +54,13 @@
     [Inject] IFuncionariosRepository repository { get; set; }
     public List<FuncionarioModel> Funcionarios { get; set; }
     [Inject] IMapper mapper { get; set; }
+    [Inject] IPrintingService PrintingService { get; set; }
+
 
     protected override void OnInitialized()
     {
         var funcionarios = repository.GetFuncionarios().ToList();
-        Funcionarios = mapper.Map<List<FuncionarioModel>>(funcionarios) ;
+        Funcionarios = mapper.Map<List<FuncionarioModel>>(funcionarios);
     }
 
 
