@@ -24,7 +24,7 @@ namespace Almocherifado.ServerHosted.Data.Models.MappingProfiles
             CreateMap<EmprestimoModel, Emprestimo>()
                 .ConstructUsing(mod => new Emprestimo(mod.entrega, 
                 new Funcionario(mod.Funcionario.Nome, mod.Funcionario.CPF, mod.Funcionario.Email),
-                mod.Obra, mod.Ferramentas))
+                mod.Obra, mod.Ferramentas.ToArray()))
                 .ForMember(e => e.FerramentasEmprestas, opt => opt.Ignore());
         }
     }

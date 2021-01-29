@@ -26,7 +26,7 @@ namespace Almocherifado.InfraEstrutura.Repositorios
 
         public IEnumerable<Ferramenta> GetallFerramentas()
         {
-            return context.Ferramentas.AsNoTracking().ToList();
+            return context.Ferramentas.ToList();
         }
 
         public void DeletarFerramenta(Ferramenta ferramenta)

@@ -35,27 +35,29 @@ namespace Almocherifado.Application.Tests
 
 
         [Theory, DomainAutoData]
-        public void Ferramenta_Emprestada_Eh_Reconhecida_Corretamente(Ferramenta ferramenta1, Emprestimo emprestimo)
+        public void Ferramenta_Emprestada_Eh_Reconhecida_Corretamente(Ferramenta ferramenta1, DateTime dataentrega, string obra, Funcionario funcionario)
         {
             repository.AdicionarFerramenta(ferramenta1);
 
             service.VerificarSeFerramentaEstaEmprestada(ferramenta1).Should().BeFalse("Esta Ferramenta ainda não está emprestada");
+            var emprestimo = new Emprestimo(dataentrega, funcionario, obra, ferramenta1);
 
             var emprestimoRepository = new EmprestimosRepository(context);
-
             emprestimoRepository.SalvarNovoEmprestimo(emprestimo);
 
             service.VerificarSeFerramentaEstaEmprestada(ferramenta1).Should().BeTrue("Esta Ferramenta Foi Emprestada");
         }
 
         [Theory, DomainAutoData]
-        public void Ferramenta_Devolvida_Eh_Reconhecida_Corretamente(Ferramenta ferramenta1, Emprestimo emprestimo)
+        public void Ferramenta_Devolvida_Eh_Reconhecida_Corretamente(Ferramenta ferramenta1, DateTime dataentrega, string obra, Funcionario funcionario)
         {
             repository.AdicionarFerramenta(ferramenta1);
 
             service.VerificarSeFerramentaEstaEmprestada(ferramenta1).Should().BeFalse("Esta Ferramenta ainda não está emprestada");
 
             var emprestimoRepository = new EmprestimosRepository(context);
+
+            var emprestimo = new Emprestimo(dataentrega, funcionario, obra, ferramenta1);
 
             emprestimoRepository.SalvarNovoEmprestimo(emprestimo);
 
@@ -74,7 +76,7 @@ namespace Almocherifado.Application.Tests
 
 
         [Theory, DomainAutoData]
-        public void Teste_Com_Varias_Ferramentas_No_Mesmo_Emprestimo(Ferramenta ferramenta1, Ferramenta ferramenta2, Emprestimo emprestimo)
+        public void Teste_Com_Varias_Ferramentas_No_Mesmo_Emprestimo(Ferramenta ferramenta1, Ferramenta ferramenta2,  DateTime dataentrega, string obra, Funcionario funcionario)
         {
             repository.AdicionarFerramenta(ferramenta1);
             repository.AdicionarFerramenta(ferramenta2);
@@ -83,6 +85,8 @@ namespace Almocherifado.Application.Tests
             service.VerificarSeFerramentaEstaEmprestada(ferramenta2).Should().BeFalse("Esta Ferramenta ainda não está emprestada");
 
             var emprestimoRepository = new EmprestimosRepository(context);
+
+            var emprestimo = new Emprestimo(dataentrega, funcionario, obra, ferramenta1, ferramenta2);
 
             emprestimoRepository.SalvarNovoEmprestimo(emprestimo);
 

@@ -10,7 +10,7 @@ namespace Almocherifado.core.AgregateRoots.EmprestimoNm
     public class Emprestimo
     {
         protected Emprestimo() { }
-        public Emprestimo(DateTime entrega, Funcionario  funcionario, string obra, List<Ferramenta> ferramentas)
+        public Emprestimo(DateTime entrega, Funcionario  funcionario, string obra, params Ferramenta[] ferramentas)
         {
             if (string.IsNullOrEmpty(obra))
             {
