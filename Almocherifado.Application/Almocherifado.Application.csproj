@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="xunit.assert" Version="2.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Almocherifado.InfraEstrutura\Almocherifado.InfraEstrutura.csproj" />
   </ItemGroup>
 

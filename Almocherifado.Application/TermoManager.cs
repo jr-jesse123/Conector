@@ -6,14 +6,15 @@ using Almocherifado.ServerHosted.Helpers.FileHelpers;
 using CSharpFunctionalExtensions;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using Xunit;
 
 namespace Almocherifado.ServerHosted.Services
 {
-    public class TermoManager
+    public class TermoManager : ITermoManager
     {
         private readonly TermoResponsabilidadeService termoService;
         private readonly WordToPDFService pdfconversor;
-        private readonly IPathHelper pathHelper;
         private readonly string basepath;
 
         public TermoManager(TermoResponsabilidadeService termoService,
@@ -21,17 +22,23 @@ namespace Almocherifado.ServerHosted.Services
         {
             this.termoService = termoService;
             this.pdfconversor = pdfconversor;
-            this.pathHelper = pathHelper;
+            
 
             basepath = pathHelper.FotosTermos_Location;
         }
 
         public Result<string> BuildTermo(DateTime DataEntrega, Funcionario funcionario, List<Ferramenta> ferramentas, string Obra)
         {
-            try
+            //try
             {
                 var documento = termoService.GetTermoPreenchido(DataEntrega, funcionario, ferramentas, Obra);
+
+                Assert.NotEmpty(documento.Text);
+
                 var output = basepath + @"\" + DataEntrega.ToFileTime() + ".docx";
+
+
+                Directory.CreateDirectory( Path.GetDirectoryName(output));
 
                 documento.SaveAs(output);
 
@@ -41,11 +48,11 @@ namespace Almocherifado.ServerHosted.Services
 
                 return output;
             }
-            catch (Exception ex)
-            {
-                return Result.Failure<string>(ex.Message);
-            }
-             
+            //catch (Exception ex)
+            //{
+            //    return Result.Failure<string>(ex.Message);
+            //}
+
         }
     }
 }

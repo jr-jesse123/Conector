@@ -1,5 +1,6 @@
 ﻿@using BlazorDownloadFile
 @using Append.Blazor.Printing
+@using Almocherifado.ServerHosted.Services
 
 @using Almocherifado.ServerHosted.Shared.FormularioCadastroImprestimo
 
@@ -31,16 +32,24 @@
 
 @code {
     [Inject] IBlazorDownloadFileService fileService { get; set; }
+    [Inject] ITermoManager termoManager { get; set; }
 
 
-    void OnInvalidSubmit(EditContext editContext)
+    async Task  OnInvalidSubmit(EditContext editContext)
     {
         var mensagems = editContext.GetValidationMessages();
         bool FaltaSohTermo = mensagems.Where(m => !m.ToUpper().Contains("ferramenta".ToUpper())).All(m => m.ToUpper().Contains("responsabilidade".ToUpper()));
 
         if (FaltaSohTermo)
         {
-            //fileService.
+            var funcionario = mapper.Map<Funcionario>(Model.Funcionario);
+            var termopdf = termoManager.BuildTermo(Model.entrega, funcionario, Ferramentas, Model.Obra);
+
+            if (termopdf.IsSuccess)
+            {
+                await PrintingService.Print(termopdf.Value);
+            }
+
         }
     }
 
@@ -49,7 +58,7 @@
 
     }
 
-
+    [Parameter] public List<Ferramenta> Ferramentas { get; set; }
     EmprestimoModel Model = new() { entrega = DateTime.Now };
     [Inject] IFuncionariosRepository repository { get; set; }
     public List<FuncionarioModel> Funcionarios { get; set; }
