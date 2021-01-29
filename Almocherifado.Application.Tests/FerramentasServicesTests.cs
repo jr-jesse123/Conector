@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using Xunit;
+using Almocherifado.core.Tests;
 
 namespace Almocherifado.Application.Tests
 {
@@ -29,97 +30,83 @@ namespace Almocherifado.Application.Tests
             repository = new FerramentaRepository(context);
 
             service = new FerramentasService(context);
-
-            Funcionario = new Funcionario("Jessé Junior", "01724125109", "junior.jesse@gmail.com");
+ 
         }
 
-       
-        //[Fact]
-        //public void Ferramenta_Emprestada_Eh_Reconhecida_Corretamente()
-        //{
-        //    var ferramenta1 = new Ferramenta("Ferramenta1", "eh da boa", DateTime.Now, "foto/foto");
 
-        //    repository.AdicionarFerramenta(ferramenta1);
+        [Theory, DomainAutoData]
+        public void Ferramenta_Emprestada_Eh_Reconhecida_Corretamente(Ferramenta ferramenta1, Emprestimo emprestimo)
+        {
+            repository.AdicionarFerramenta(ferramenta1);
 
-        //    service.VerificarSeFerramentaEstaEmprestada(ferramenta1).Should().BeFalse("Esta Ferramenta ainda não está emprestada");
+            service.VerificarSeFerramentaEstaEmprestada(ferramenta1).Should().BeFalse("Esta Ferramenta ainda não está emprestada");
 
-        //    var emprestimo = new Emprestimo(DateTime.Now, Funcionario, "Obra1", ferramenta1);
+            var emprestimoRepository = new EmprestimosRepository(context);
 
-        //    var emprestimoRepository = new EmprestimosRepository(context);
-            
-        //    emprestimoRepository.SalvarNovoEmprestimo(emprestimo);
+            emprestimoRepository.SalvarNovoEmprestimo(emprestimo);
 
-        //    service.VerificarSeFerramentaEstaEmprestada(ferramenta1).Should().BeTrue("Esta Ferramenta Foi Emprestada");
-        //}
+            service.VerificarSeFerramentaEstaEmprestada(ferramenta1).Should().BeTrue("Esta Ferramenta Foi Emprestada");
+        }
 
-        //[Fact]
-        //public void Ferramenta_Devolvida_Eh_Reconhecida_Corretamente()
-        //{
-        //    var ferramenta1 = new Ferramenta("Ferramenta1", "eh da boa", DateTime.Now, "foto/foto");
+        [Theory, DomainAutoData]
+        public void Ferramenta_Devolvida_Eh_Reconhecida_Corretamente(Ferramenta ferramenta1, Emprestimo emprestimo)
+        {
+            repository.AdicionarFerramenta(ferramenta1);
 
-        //    repository.AdicionarFerramenta(ferramenta1);
+            service.VerificarSeFerramentaEstaEmprestada(ferramenta1).Should().BeFalse("Esta Ferramenta ainda não está emprestada");
 
-        //    service.VerificarSeFerramentaEstaEmprestada(ferramenta1).Should().BeFalse("Esta Ferramenta ainda não está emprestada");
+            var emprestimoRepository = new EmprestimosRepository(context);
 
-        //    var emprestimo = new Emprestimo(DateTime.Now, Funcionario, "Obra1", ferramenta1);
+            emprestimoRepository.SalvarNovoEmprestimo(emprestimo);
 
-        //    var emprestimoRepository = new EmprestimosRepository(context);
+            service.VerificarSeFerramentaEstaEmprestada(ferramenta1).Should().BeTrue("Esta Ferramenta Foi Emprestada");
 
-        //    emprestimoRepository.SalvarNovoEmprestimo(emprestimo);
+            emprestimo.Finalizado.Should().BeFalse("Este empréstimo ainda não está finalizado");
 
-        //    service.VerificarSeFerramentaEstaEmprestada(ferramenta1).Should().BeTrue("Esta Ferramenta Foi Emprestada");
+            emprestimo.FerramentasEmprestas.First().AcusarRecebimento();
 
-        //    emprestimo.Finalizado.Should().BeFalse("Este empréstimo ainda não está finalizado");
+            emprestimoRepository.EditarEmprestimo(emprestimo);
 
-        //    emprestimo.FerramentasEmprestas.First().AcusarRecebimento();
+            emprestimo.Finalizado.Should().BeTrue("Este Emprestimo Foi finalizado");
 
-        //    emprestimoRepository.EditarEmprestimo(emprestimo);
-
-        //    emprestimo.Finalizado.Should().BeTrue("Este Emprestimo Foi finalizado");
-
-        //    service.VerificarSeFerramentaEstaEmprestada(ferramenta1).Should().BeFalse("Esta Ferramenta Já está disponível novamente");
-        //}
+            service.VerificarSeFerramentaEstaEmprestada(ferramenta1).Should().BeFalse("Esta Ferramenta Já está disponível novamente");
+        }
 
 
-        //[Fact]
-        //public void Teste_Com_Varias_Ferramentas_No_Mesmo_Emprestimo()
-        //{
-        //    var ferramenta1 = new Ferramenta("Ferramenta1", "eh da boa", DateTime.Now, "foto/foto");
-        //    var ferramenta2 = new Ferramenta("Ferramenta2", "eh da ruim", DateTime.Now, "foto/foto");
+        [Theory, DomainAutoData]
+        public void Teste_Com_Varias_Ferramentas_No_Mesmo_Emprestimo(Ferramenta ferramenta1, Ferramenta ferramenta2, Emprestimo emprestimo)
+        {
+            repository.AdicionarFerramenta(ferramenta1);
+            repository.AdicionarFerramenta(ferramenta2);
 
-        //    repository.AdicionarFerramenta(ferramenta1);
-        //    repository.AdicionarFerramenta(ferramenta2);
+            service.VerificarSeFerramentaEstaEmprestada(ferramenta1).Should().BeFalse("Esta Ferramenta ainda não está emprestada");
+            service.VerificarSeFerramentaEstaEmprestada(ferramenta2).Should().BeFalse("Esta Ferramenta ainda não está emprestada");
 
-        //    service.VerificarSeFerramentaEstaEmprestada(ferramenta1).Should().BeFalse("Esta Ferramenta ainda não está emprestada");
-        //    service.VerificarSeFerramentaEstaEmprestada(ferramenta2).Should().BeFalse("Esta Ferramenta ainda não está emprestada");
+            var emprestimoRepository = new EmprestimosRepository(context);
 
-        //    var emprestimo = new Emprestimo(DateTime.Now, Funcionario, "Obra1", ferramenta1, ferramenta2);
+            emprestimoRepository.SalvarNovoEmprestimo(emprestimo);
 
-        //    var emprestimoRepository = new EmprestimosRepository(context);
-
-        //    emprestimoRepository.SalvarNovoEmprestimo(emprestimo);
-
-        //    service.VerificarSeFerramentaEstaEmprestada(ferramenta1).Should().BeTrue("Esta Ferramenta Foi Emprestada");
-            
-
-        //    emprestimo.Finalizado.Should().BeFalse("Este empréstimo ainda não está finalizado");
-
-        //    emprestimo.FerramentasEmprestas.First().AcusarRecebimento();
-        //    emprestimoRepository.EditarEmprestimo(emprestimo);
+            service.VerificarSeFerramentaEstaEmprestada(ferramenta1).Should().BeTrue("Esta Ferramenta Foi Emprestada");
 
 
-        //    emprestimo.Finalizado.Should().BeFalse("Este empréstimo ainda não está finalizado");
+            emprestimo.Finalizado.Should().BeFalse("Este empréstimo ainda não está finalizado");
 
-        //    service.VerificarSeFerramentaEstaEmprestada(ferramenta1).Should().BeFalse("Esta Ferramenta Foi Emprestada");
+            emprestimo.FerramentasEmprestas.First().AcusarRecebimento();
+            emprestimoRepository.EditarEmprestimo(emprestimo);
 
-        //    emprestimo.FerramentasEmprestas[1].AcusarRecebimento();
 
-        //    emprestimoRepository.EditarEmprestimo(emprestimo);
+            emprestimo.Finalizado.Should().BeFalse("Este empréstimo ainda não está finalizado");
 
-        //    emprestimo.Finalizado.Should().BeTrue("Este Emprestimo Foi finalizado");
+            service.VerificarSeFerramentaEstaEmprestada(ferramenta1).Should().BeFalse("Esta Ferramenta Foi Emprestada");
 
-        //    service.VerificarSeFerramentaEstaEmprestada(ferramenta1).Should().BeFalse("Esta Ferramenta Já está disponível novamente");
-        //}
+            emprestimo.FerramentasEmprestas[1].AcusarRecebimento();
+
+            emprestimoRepository.EditarEmprestimo(emprestimo);
+
+            emprestimo.Finalizado.Should().BeTrue("Este Emprestimo Foi finalizado");
+
+            service.VerificarSeFerramentaEstaEmprestada(ferramenta1).Should().BeFalse("Esta Ferramenta Já está disponível novamente");
+        }
 
 
         public void Dispose()

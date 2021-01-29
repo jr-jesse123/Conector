@@ -26,8 +26,6 @@ namespace Almocherifado.ServerHosted.Data.Models.MappingProfiles
                 new Funcionario(mod.Funcionario.Nome, mod.Funcionario.CPF, mod.Funcionario.Email),
                 mod.Obra, mod.Ferramentas))
                 .ForMember(e => e.FerramentasEmprestas, opt => opt.Ignore());
-            
-
         }
     }
 }

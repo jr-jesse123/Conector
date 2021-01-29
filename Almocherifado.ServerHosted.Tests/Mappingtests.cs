@@ -3,20 +3,16 @@ using Almocherifado.core.AgregateRoots.FerramentaNm;
 using Almocherifado.core.Tests;
 using Almocherifado.ServerHosted.Data.Models;
 using Almocherifado.ServerHosted.Data.Models.MappingProfiles;
-using AutoFixture.Kernel;
-using AutoFixture.Xunit2;
 using AutoMapper;
-using Bogus;
 using FluentAssertions;
 using System;
 using System.Collections.Generic;
 using Xunit;
-using Bogus.Extensions.Brazil;
 using Almocherifado.core.AgregateRoots.FuncionarioNm;
 
 namespace Almocherifado.ServerHosted.Tests
 {
-    public class Mappingtests
+    public partial class Mappingtests
     {
         MapperConfiguration config;
         private IMapper mapper;
@@ -76,59 +72,6 @@ namespace Almocherifado.ServerHosted.Tests
             emprestimoObject.Finalizado.Should().BeTrue();
 
         }
-
-        class UiAutoData : AutoDataAttribute
-        {
-            public UiAutoData() : base( () => new UIFixture())
-            {
-
-            }
-        }
-
-
-        class  UIFixture : DomainFixture
-        {
-            public UIFixture()
-            {
-                Customizations.Add(new UIClassGenerator());
-            }
-        }
-
-
-        class UIClassGenerator : ISpecimenBuilder
-        {
-            public object Create(object request, ISpecimenContext context)
-            {
-                Type type = request as Type;
-                if (type is null)
-                {
-                    return new NoSpecimen();
-                }
-
-                if (type == typeof(FuncionarioModel))
-                {
-                    var faker = new Faker<FuncionarioModel>()
-                        
-                        .RuleFor(f => f.Nome, eh => eh.Person.FullName)
-                        .RuleFor(f => f.Email, eh => eh.Person.Email);
-
-                    var fake= faker.Generate();
-                    fake.CPF = new Faker().Person.Cpf();
-                    return fake;
-                }
-
-                return new NoSpecimen();
-
-            }
-
-            
-
-        }
-
-
-    
-
-
     }
     
 }

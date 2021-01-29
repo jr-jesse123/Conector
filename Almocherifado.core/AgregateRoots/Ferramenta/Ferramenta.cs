@@ -33,7 +33,17 @@ namespace Almocherifado.core.AgregateRoots.FerramentaNm
         public virtual IReadOnlyCollection<FerramentaEmprestada> HistoricoEmprestimos { get; }
 
 
-        public bool Emprestada { get; }
+        public bool Emprestada 
+        { 
+            get  
+            {
+                if (HistoricoEmprestimos is not null)
+                    return HistoricoEmprestimos.Any(e => !e.DataDevolucao.HasValue);
+                else
+                    return false;
+                
+            } 
+        }
 
         protected override bool EqualsCore(Ferramenta other)
         {

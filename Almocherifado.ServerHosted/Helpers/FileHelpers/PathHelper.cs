@@ -8,28 +8,34 @@ using System.Threading.Tasks;
 
 namespace Almocherifado.ServerHosted.Helpers.FileHelpers
 {
-    public class PathHelper
+    public class PathHelper : IPathHelper
     {
         readonly string basePath;
+
+        public string Ferramentas_Location { get; }
+        public string FotosTermos_Location { get; }
+        public string DocumentosTermos_Location { get; }
+
         
-        public string Ferramentas { get; }
-        public string FotosTermos { get; }
-        public string DocumentosTermos { get; }
+
+        public string Ferramentas_Url { get; } = "\\fotosFerramentas\\";
+        public string FotosTermos_Url { get; } = "\\fotosTermos\\";
+        public string DocumentosTermos_Url { get; } = "\\Termos\\";
 
         public PathHelper(IWebHostEnvironment environment)
         {
             //basePath = Path.GetDirectoryName(Path.Combine( environment.WebRootPath, @"wwwroot\"));
             basePath = environment.WebRootPath;
-            
-            Ferramentas =  basePath + "\\fotosFerramentas\\";
-            Directory.CreateDirectory(Ferramentas);
 
-            FotosTermos = basePath + "\\fotosTermos\\";
-            Directory.CreateDirectory(FotosTermos);
+            Ferramentas_Location = basePath + Ferramentas_Url;
+            Directory.CreateDirectory(Ferramentas_Url);
 
-            DocumentosTermos = basePath + "\\Termos\\";
-            Directory.CreateDirectory(DocumentosTermos);
-            File.WriteAllText(Ferramentas + "teste.txt", " ");
+            FotosTermos_Location = basePath + FotosTermos_Url;
+            Directory.CreateDirectory(FotosTermos_Url);
+
+            DocumentosTermos_Location = basePath + DocumentosTermos_Url;
+            Directory.CreateDirectory(DocumentosTermos_Url);
+
         }
 
 
@@ -38,7 +44,7 @@ namespace Almocherifado.ServerHosted.Helpers.FileHelpers
 
         }
 
-        
+
     }
 }
 

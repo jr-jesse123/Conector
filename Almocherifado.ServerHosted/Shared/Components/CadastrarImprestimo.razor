@@ -1,13 +1,11 @@
-﻿@page "/"
+﻿@using BlazorDownloadFile
 
 @using Almocherifado.ServerHosted.Shared.FormularioCadastroImprestimo
 
-<EditForm Model="Model">
+<EditForm Model="Model" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
     <FluentValidationValidator />
     <DataDeEntrega @bind-Data="Model.entrega" />
     <ValidationMessage For="() =>Model.entrega"></ValidationMessage>
-
-    <p>@Model.Funcionario</p>
 
     <FuncionarioSelect FuncionariosSource="Funcionarios" @bind-ParentsCPF="Model.Funcionario" />
     <ValidationMessage For="() =>Model.Funcionario"></ValidationMessage>
@@ -15,18 +13,38 @@
     <ObraInput  @bind-Obra="Model.Obra"/>
     <ValidationMessage For="() =>Model.Obra"></ValidationMessage>
     
-    <TermoResponsabilidade  @bind-Url="@Model.TermoResponsabilidade" />
-    <ValidationMessage For="() =>Model.TermoResponsabilidade"></ValidationMessage>
+    @*<TermoResponsabilidade></TermoResponsabilidade>
+    <ValidationMessage For="() => Model.TermoResponsabilidade"></ValidationMessage>*@
 
-    <Button Type="ButtonType.Submit" Color="Color.Primary">Alocar Ferramentas</Button>
-    <Button Type="ButtonType.Reset" Color="Color.Light">Cancelar</Button>
+    <Button Type="ButtonType.Submit"  Color="Color.Info">Baixar Termo</Button>
+    
 
 </EditForm>
 
+<a  href="/fotos/Modelo de Responsabilidade de equipamentos.docx">baixar</a>
 
-<p>@Model.TermoResponsabilidade</p>
 
 @code {
+    [Inject] IBlazorDownloadFileService fileService { get; set; }
+
+
+    void OnInvalidSubmit(EditContext editContext)
+    {
+        var mensagems = editContext.GetValidationMessages();
+        bool FaltaSohTermo = mensagems.Where(m => !m.ToUpper().Contains("ferramenta".ToUpper())).All(m => m.ToUpper().Contains("responsabilidade".ToUpper()));
+
+        if (FaltaSohTermo)
+        {
+            //fileService.
+        }
+    }
+
+    void OnValidSubmit()
+    {
+       
+    }
+
+
     EmprestimoModel Model = new() { entrega = DateTime.Now };
     [Inject] IFuncionariosRepository repository { get; set; }
     public List<FuncionarioModel> Funcionarios { get; set; }
@@ -38,17 +56,6 @@
         Funcionarios = mapper.Map<List<FuncionarioModel>>(funcionarios) ;
     }
 
-    void OnValidSubmit()
-    {
-        var emprestimo = mapper.Map<Ferramenta>(Model);
-        //repository.AdicionarFerramenta(ferramenta);
 
-        //Directory.CreateDirectory(Path.GetDirectoryName(environment.WebRootPath + ferramentamodel.FotoUrl));
-        //File.WriteAllBytes(environment.WebRootPath + ferramentamodel.FotoUrl, fileContent);
-
-        //mensagem = "Ferrramenta Criada Com sucesso!";
-        //Cor = Color.Success;
-        //AlertRef.Show();
-    }
 
 }

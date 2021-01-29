@@ -62,7 +62,7 @@
 </Alert>
 
 @code{
-
+    
     Alert AlertRef;
     string mensagem;
     Color Cor;
@@ -71,14 +71,14 @@
     [Inject] IFerramentaRepository repository { get; set; }
     [Inject] IMapper mapper { get; set; }
     [Inject] IWebHostEnvironment environment { get; set; }
-    [Inject] PathHelper pathHelper { get; set; }
+    [Inject] IPathHelper pathHelper { get; set; }
 
     void OnValidSubmit()
     {
 
         var ferramenta = mapper.Map<Ferramenta>(ferramentamodel);
 
-        var path =  pathHelper.Ferramentas + ferramentamodel.FotoUrl;
+        var path =  pathHelper.Ferramentas_Location + ferramentamodel.FotoUrl;
         File.WriteAllBytes(path, fileContent);
 
         repository.AdicionarFerramenta(ferramenta);

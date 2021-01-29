@@ -5,6 +5,7 @@ using Almocherifado.ServerHosted.Areas.Identity;
 using Almocherifado.ServerHosted.Data;
 using Almocherifado.ServerHosted.Helpers.FileHelpers;
 using AutoMapper;
+using BlazorDownloadFile;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
@@ -53,8 +54,11 @@ namespace Almocherifado.ServerHosted
                 x.UseSqlite(@$"Data Source = almocherifado.db;")
                 .UseLazyLoadingProxies()
             );
+            
+            services.AddBlazorDownloadFile();
 
-            services.AddTransient<PathHelper>();
+
+            services.AddTransient<IPathHelper,PathHelper>();
 
             //services.AddTransient<DbContextOptions<AlmocherifadoContext>>(sp =>
             //    new DbContextOptionsBuilder<AlmocherifadoContext>().UseSqlite().Options
@@ -106,7 +110,7 @@ namespace Almocherifado.ServerHosted
                 .UseBootstrapProviders()
                 .UseFontAwesomeIcons();
 
-
+            //app.UseMvcWithDefaultRoute();
 
             app.UseAuthentication();
             app.UseAuthorization();

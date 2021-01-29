@@ -1,140 +1,79 @@
-﻿@page "/ListarFerramentas"
+﻿@page "/"
+@page "/ListarFerramentas"
 
 @using Blazorise.DataGrid
 @using InfraEstrutura.Repositorios
-@using Almocherifado.core
+
 @using Almocherifado.Application
+@using Almocherifado.ServerHosted.Shared.Components
+
+<Row>
+    <Button Color="Color.Info"   Disabled="PodeAlocar()" @onclick="ShowModal">
+        Alocar Ferramentas Selecionadas
+    </Button>
+</Row>
+
+<FerramentasGrid @bind-FerramentasChecadas="FerramentasSelecionadas"></FerramentasGrid>
 
 
-    <Row>
-        <Button Color="Color.Info" Disabled="PodeAlocar()" >Alocar Ferramentas Selecionadas</Button>
-    </Row>
+    <Modal @ref="modalRef"  Visible="true">
+        <ModalBackdrop />
+        <ModalContent Size="ModalSize.Large" IsCentered="true">
+            <ModalHeader>
+                <ModalTitle>Employee edit</ModalTitle>
+                <CloseButton Clicked="@HideModal" />
+            </ModalHeader>
+            <ModalBody>
+                <CadastrarImprestimo  />
+                @*<Field>
+                    <FieldLabel>Name</FieldLabel>
+                    <TextEdit Placeholder="Enter name..." />
+                </Field>
+                <Field>
+                    <FieldLabel>Surname</FieldLabel>
+                    <TextEdit Placeholder="Enter surname..." />
+                </Field>*@
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
+                <Button Color="Color.Primary" Clicked="@HideModal">Save Changes</Button>
+            </ModalFooter>
+        </ModalContent>
+    </Modal>
 
-
-    <Row>
-        <DataGrid TItem="Ferramenta" Data="Ferramentas" Filterable="true" @bind-SelectedRow="@SelectedFerramenta" 
-                  SelectedRowStyling="(Ferramenta, styling) => styling.Background = Background.None"
-                  RowStyling="OnRowStyling">
-            <DataGridColumns>
-                <DataGridCommandColumn TItem="Ferramenta">
-                    <DeleteCommandTemplate>
-                        <Button Color="Color.Danger" Clicked="() => OnDeleClicked(context)">Deletar Ferramenta</Button>
-                    </DeleteCommandTemplate>
-                </DataGridCommandColumn>
-
-                <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.NomeAbreviado)" Caption="Nome">
-                    <DisplayTemplate>
-                        <Text>@context.NomeAbreviado</Text>
-                        <Heading Size="HeadingSize.Is6" Margin="Margin.Is2">Adquirida Em</Heading>
-                        <Text>@context.DataCompra</Text>
-                    </DisplayTemplate>
-                </DataGridColumn>
-                
-                
-                <DataGridColumn TItem="Ferramenta" Field="@nameof(ferramenta.Marca)" Caption="Marca/Modelo">
-                    <DisplayTemplate>
-                        <Text>Marca: @context.Marca</Text>
-                        <Text>Modelo: @context.Modelo</Text>
-                    </DisplayTemplate>
-                </DataGridColumn>
-
-
-                <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.FotoUrl)" Caption="Foto" Filterable="false">
-                    <DisplayTemplate>
-                        <Figure Size="FigureSize.Is128x128">
-                            <FigureImage Source="\fotosFerramentas\132562147416772572.jpg" />
-                            <FigureCaption>"D:/repos/Almocherifado/Conector/Almocherifado.ServerHosted/fotosFerramentas/132562147416772572.jpg"</FigureCaption>>
-                        </Figure>
-                    </DisplayTemplate>
-                </DataGridColumn>
-
-
-                <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.Descricao)" Caption="Descrição" />
-
-
-                <DataGridColumn TItem="Ferramenta" Field="@nameof(Ferramenta.Descricao)" Caption="Alocada?">
-                    <DisplayTemplate>
-                        @if (context.Emprestada)
-                        {
-                            @context.HistoricoEmprestimos.Where(fe => fe.DataDevolucao is null).Single().Emprestimo.Obra;
-                        }
-                        else
-                        {
-                            <Switch CheckedChanged="() => AdicionarOuRemoverFerramenta(context)"
-                                    Margin="Margin.IsAuto" Size="Size.Large" TValue="bool">Selecionar Para Nova Alocação</Switch>
-                        }
-                    </DisplayTemplate>
-                </DataGridColumn>
-            </DataGridColumns>
-        </DataGrid>
-    </Row>
-
-@code{
-
-    List<Ferramenta> FerramentasParaEmprestar = new();
-
-    [Inject] public IFerramentaRepository repository { get; set; }
-    [Inject] public IFerramentasService ferramentasService { get; set; }
-    [Inject] public PathHelper pathHelper { get; set; }
-    List<Ferramenta> Ferramentas { get; set; }
-
-    private Ferramenta  ferramenta;
-
-    public Ferramenta  SelectedFerramenta
-    {
-        get
+    @code{
+        List<Ferramenta> FerramentasSelecionadas = new();
+        //[Inject] NavigationManager Navigation { get; set; }
+        bool PodeAlocar()
         {
-            return ferramenta;
+            return !(FerramentasSelecionadas?.Count > 0);
         }
-        set {
-            ferramenta = value;
-        }
-    }
 
-    protected override void OnInitialized()
-    {
-        Ferramentas = repository.GetallFerramentas()
-            .ToList();
-    }
-
-
-    async Task OnDeleClicked(CommandContext<Ferramenta> context)
-    {
-        repository.DeletarFerramenta(context.Item);
-        await context.Clicked.InvokeAsync();
-    }
-
-    bool PodeAlocar()
-    {
-        if (FerramentasParaEmprestar.Count > 0)
-            return true;
-        else
-            return false;
-    }
-
-    void OnRowStyling(Ferramenta ferramenta, DataGridRowStyling styling)
-    {
-        if (ferramenta.Emprestada)
-            styling.Background = Background.Info;
-        else
-            styling.Background = Background.Light;
-    }
-
-    void AdicionarOuRemoverFerramenta(Ferramenta ferramenta )
-    {
-        if (FerramentasParaEmprestar.Contains(ferramenta))
+        void AbrirModeal()
         {
-            FerramentasParaEmprestar.Remove(ferramenta);
+
         }
-        else
+
+        private Modal modalRef;
+
+        private void ShowModal()
         {
-            FerramentasParaEmprestar.Add(ferramenta);
+            modalRef.Show();
         }
-    }
 
-    string getUrl(Ferramenta ferramenta)
-    {
-        return pathHelper.Ferramentas + ferramenta.FotoUrl;
-    }
+        private void HideModal()
+        {
+            modalRef.Hide();
+        }
 
+        //protected override void OnInitialized()
+        //{
+        //    Navigation.NavigateTo("/fotos/Modelo de Responsabilidade de equipamentos.docx");
+        //}
+
+        //TODO: TERMINAR DE ERFATORAR AS RELAÇÕES DE BINDING ENTRE O COMPONENTE DE FERRAMENTAS GRID E ESTA PAGINA
+
+        //TODO: CONTINUAR CRIANDO MODAL PARA COMPLEMENTAR O TERMO DE RESPONSABILIDADE ENTRE O CADASTRO DO EMPRESTIMO E A FINALIZAÇÃO.
+
+        //PRIMEIRO ESCOLHER FERRAMENTAS //DEPOIS EM MODAL PREENCHER FORMULRIO // E ENTÃO EM NOVO CAMPO INSERIR FORMULARIO E FINALIZAR EMPRESTIMO
 }

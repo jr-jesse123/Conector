@@ -9,23 +9,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Almocherifado.core", "Almoc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Almocherifado.InfraEstrutura", "Almocherifado.InfraEstrutura\Almocherifado.InfraEstrutura.csproj", "{BDC1F76E-B414-42B3-B812-B84EC07A47E7}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InfraEstrutura", "InfraEstrutura", "{5FA9F605-7F77-460F-9EDF-46514671A95D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3- InfraEstrutura", "3- InfraEstrutura", "{5FA9F605-7F77-460F-9EDF-46514671A95D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Almocherifado.InfraEstrutura.Tests", "Almocherifado.InfraEstrutura.Tests\Almocherifado.InfraEstrutura.Tests.csproj", "{B4DB1FF7-30AA-4A5F-BDE5-B91D881C5322}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{F1309122-8B34-4E60-93CF-2A0F3085DD73}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1 - UI", "1 - UI", "{F1309122-8B34-4E60-93CF-2A0F3085DD73}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Almocherifado.ServerHosted.Tests", "Almocherifado.ServerHosted.Tests\Almocherifado.ServerHosted.Tests.csproj", "{D9153778-1452-4568-8DD0-AF403A809AFA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Almocherifado.Application", "Almocherifado.Application\Almocherifado.Application.csproj", "{28A670A8-5701-4B22-8872-E4E5B96A19A3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{3C642CCB-9285-4E3F-ADF3-BED626B3DD0C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2 - Application", "2 - Application", "{3C642CCB-9285-4E3F-ADF3-BED626B3DD0C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Almocherifado.Application.Tests", "Almocherifado.Application.Tests\Almocherifado.Application.Tests.csproj", "{4BC0D9B3-7CF0-4DB8-A51F-AABFA9868A31}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xceed.Words.NET.Standard", "DocX-master\Xceed.Words.NET.Standard\Xceed.Words.NET.Standard.csproj", "{C734AAFC-07D4-4D09-BE64-A1ABC9343837}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{511AFA74-77D9-477E-AF7C-DBD1E17B62BA}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Domain", "4 - Domain", "{511AFA74-77D9-477E-AF7C-DBD1E17B62BA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Almocherifado.core.Tests", "Almocherifado.core.Tests\Almocherifado.core.Tests.csproj", "{54C65C00-61B5-4D11-B32E-F1017B94AB36}"
 EndProject

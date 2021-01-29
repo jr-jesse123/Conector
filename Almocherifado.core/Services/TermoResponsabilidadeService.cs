@@ -21,7 +21,7 @@ namespace Almocherifado.core.Services
             documento = modeloTermoService.GetModelo();
         }
 
-        public DocX GetTermo(DateTime DataEntrega, Funcionario funcionario, List<Ferramenta> ferramentas, string Obra)
+        public DocX GetTermoPreenchido(DateTime DataEntrega, Funcionario funcionario, List<Ferramenta> ferramentas, string Obra)
         {
             documento.ReplaceText("#NomeCompleto", funcionario.Nome);
             documento.ReplaceText("#cpf", funcionario.CPF.ToString());

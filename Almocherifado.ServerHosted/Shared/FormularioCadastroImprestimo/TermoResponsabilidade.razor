@@ -3,21 +3,14 @@
 <Field Horizontal="true">
     <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop">Termo de Responsabilidade:</FieldLabel>
     <FieldBody>
-        <Addons>
-            <Addon AddonType="AddonType.Body">
-                <Addon AddonType="AddonType.Start">
-                    <Button Color="Color.Secondary">Gerar Termo</Button>
-                </Addon>
                 <FileEdit AutoReset="false"  Changed="NovaFoto" Filter="image/*"></FileEdit>
-
-            </Addon>
-        </Addons>
     </FieldBody>
 </Field>
 
 
 
 @code {
+
     [Parameter] public string Url { get; set; }
     [Parameter] public EventCallback<string> UrlChanged { get; set; }
 

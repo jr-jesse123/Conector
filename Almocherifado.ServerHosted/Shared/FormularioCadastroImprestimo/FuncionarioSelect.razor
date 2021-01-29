@@ -4,9 +4,10 @@
 <Field Horizontal="true">
     <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop">Responsável:</FieldLabel>
     <FieldBody>
-        <Select @bind-SelectedValue="ParentsCPF"  @onchange="UpdateParentsCPF"  TValue="FuncionarioModel">
+        <Select @bind-SelectedValue="ParentsCPF" @onchange="UpdateParentsCPF" TValue="FuncionarioModel">
             @if (FuncionariosSource is not null)
             {
+                <option selected="selected">Escolha um Responsável</option>
                 @foreach (var funcionario in FuncionariosSource)
                 {
                     <SelectItem TValue="FuncionarioModel" Value="funcionario">

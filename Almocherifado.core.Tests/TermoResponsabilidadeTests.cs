@@ -6,6 +6,7 @@ using FluentAssertions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using Xunit;
 
 namespace Almocherifado.core.Tests
@@ -18,15 +19,15 @@ namespace Almocherifado.core.Tests
             var termo = sut.GetModelo();
             termo.Text.Should().Contain(@"CONNECTOR ENGENHARIA LTDA, CNPJ nº 01.114.245/0001-02");
 
+            termo.SaveAs(@"D:\repos\Almocherifado\Conector\Almocherifado.core.Tests\bin\Debug\teste.docs");
         }
 
         [Theory, DomainAutoData]
         public void Modelo_Eh_Editado_Corretamente(DateTime entrega, Funcionario funcionario, List<Ferramenta> ferramentas, string Obra , TermoResponsabilidadeService sut)
         {
-
             Debugger.Break();
 
-            var termo = sut.GetTermo(entrega, funcionario, ferramentas,Obra);
+            var termo = sut.GetTermoPreenchido(entrega, funcionario, ferramentas,Obra);
             termo.Text.Should().Contain(@"CONNECTOR ENGENHARIA LTDA, CNPJ nº 01.114.245/0001-02");
 
             termo.Text.Should().Contain(funcionario.Nome);
@@ -40,8 +41,7 @@ namespace Almocherifado.core.Tests
             termo.Text.Should().Contain(entrega.Year.ToString("0000"));
         }
 
-
-
+        
 
     }
 }
