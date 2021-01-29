@@ -2,10 +2,10 @@
 
 namespace Almocherifado.InfraEstrutura
 {
-    public class WordToPDFService
+    public class WordToPDFService : IWordToPDFService
     {
         //string arqDoc = @"C:\Desenv\DocTeste.docx";
-//        string arqPdf = @"C:\Desenv\DocTeste.pdf";
+        //        string arqPdf = @"C:\Desenv\DocTeste.pdf";
         public void ExportarWordParaPdf(string arqDoc)
         {
             var output = arqDoc.Replace(".docx", ".pdf");

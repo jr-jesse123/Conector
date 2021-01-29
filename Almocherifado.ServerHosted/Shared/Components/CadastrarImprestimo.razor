@@ -4,7 +4,7 @@
 
 @using Almocherifado.ServerHosted.Shared.FormularioCadastroImprestimo
 
-<EditForm Model="Model" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+<EditForm @ref="formulario" Model="Model" OnValidSubmit="OnValidSubmit">
     <FluentValidationValidator />
     <DataDeEntrega @bind-Data="Model.entrega" />
     <ValidationMessage For="() =>Model.entrega"></ValidationMessage>
@@ -18,40 +18,46 @@
     @*<TermoResponsabilidade></TermoResponsabilidade>
         <ValidationMessage For="() => Model.TermoResponsabilidade"></ValidationMessage>*@
 
-    <Button Type="ButtonType.Button" Color="Color.Info" @onclick="@(() => PrintingService.Print("api/termo") )">
-        imprimir
+    <Button Type="ButtonType.Button" Disabled="!PodePegarTermo()"  Color="Color.Info" @onclick="GetTermo">
+        imprimir Termo
     </Button>
-
-    <Button Type="ButtonType.Submit" Color="Color.Success">Baixar Termo</Button>
-
-
 </EditForm>
-
-<a href="/fotos/Modelo de Responsabilidade de equipamentos.docx">baixar</a>
-
 
 @code {
     [Inject] IBlazorDownloadFileService fileService { get; set; }
     [Inject] ITermoManager termoManager { get; set; }
+    [Inject] IJSRuntime JSRuntime { get; set; }
 
+    EditForm formulario;
 
-    async Task  OnInvalidSubmit(EditContext editContext)
+    bool PodePegarTermo()
     {
-        var mensagems = editContext.GetValidationMessages();
-        bool FaltaSohTermo = mensagems.Where(m => !m.ToUpper().Contains("ferramenta".ToUpper())).All(m => m.ToUpper().Contains("responsabilidade".ToUpper()));
+        var mensagems = formulario.EditContext.GetValidationMessages();
+        bool FaltaSohTermo = mensagems.Where(m => !m.ToUpper().Contains("ferramenta".ToUpper()))
+            .All(m => m.ToUpper().Contains("responsabilidade".ToUpper()));
 
-        if (FaltaSohTermo)
-        {
-            var funcionario = mapper.Map<Funcionario>(Model.Funcionario);
-            var termopdf = termoManager.BuildTermo(Model.entrega, funcionario, Ferramentas, Model.Obra);
-
-            if (termopdf.IsSuccess)
-            {
-                await PrintingService.Print(termopdf.Value);
-            }
-
-        }
+        return FaltaSohTermo;
     }
+
+
+    //async Task OnInvalidSubmit(EditContext editContext)
+    //{
+
+
+    //    if (FaltaSohTermo)
+    //    {
+    //        var funcionario = mapper.Map<Funcionario>(Model.Funcionario);
+    //        var termopdf = termoManager.BuildTermo(Model.entrega, funcionario, Ferramentas, Model.Obra);
+
+    //        if (termopdf.IsSuccess)
+    //        {
+    //            await PrintingService.Print(termopdf.Value);
+    //        }
+
+    //    }
+    //}
+
+
 
     void OnValidSubmit()
     {
@@ -72,6 +78,16 @@
         Funcionarios = mapper.Map<List<FuncionarioModel>>(funcionarios);
     }
 
+    async Task GetTermo()
+    {
+        var funcionario = mapper.Map<Funcionario>(Model.Funcionario);
+        var termopdf = termoManager.BuildTermo(Model.entrega, funcionario, Ferramentas, Model.Obra);
 
+        if (termopdf.IsSuccess)
+            await PrintingService.Print(termopdf.Value);
+        else
+            await JSRuntime.InvokeAsync<object>("Alert", "Falha Na alocação das ferramentas: " + termopdf.Error);
+
+    }
 
 }

@@ -28,9 +28,11 @@ namespace Almocherifado.ServerHosted.Tests
         }
         [Theory, UiAutoData]
         public void Termo_Controle_Recebe_Parametros_E_Identifica_O_Arquivo_Corretamente(Mock<IWebHostEnvironment> HostMock,
-            TermoResponsabilidadeService responsabilidadeService, WordToPDFService toPDFService,
+             WordToPDFService toPDFService,
             Funcionario funcionario, List<Ferramenta> ferramentas, string obra, DateTime dataentrega)
         {
+
+            var responsabilidadeService = new TermoResponsabilidadeService(new ModeloTermoService());
 
             HostMock.Setup(h => h.WebRootPath).Returns(Directory.GetCurrentDirectory());
 

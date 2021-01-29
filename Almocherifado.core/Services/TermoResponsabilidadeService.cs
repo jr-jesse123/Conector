@@ -13,10 +13,12 @@ using Xceed.Words.NET;
 
 namespace Almocherifado.core.Services
 {
-    public class TermoResponsabilidadeService
+    public class TermoResponsabilidadeService : ITermoResponsabilidadeService
     {
         DocX documento;
-        public TermoResponsabilidadeService(ModeloTermoService modeloTermoService)
+        private TermoResponsabilidadeService() { }
+
+        public TermoResponsabilidadeService(IModeloTermoService modeloTermoService)
         {
             documento = modeloTermoService.GetModelo();
         }
@@ -43,7 +45,7 @@ namespace Almocherifado.core.Services
     }
 
 
-    public class ModeloTermoService
+    public class ModeloTermoService : IModeloTermoService
     {
         readonly string basepath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         public DocX GetModelo()

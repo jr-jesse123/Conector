@@ -28,13 +28,11 @@ namespace Almocherifado.ServerHosted.Data.Models
 
             RuleFor(e => e.Obra).NotEmpty().WithMessage("É necessário informar em qual obra/locação as ferramentas serão utilizadas");
 
-            RuleFor(e => e.Ferramentas).NotNull().NotEmpty().WithMessage("Informe as ferramentas que serão alocadas");
-
+            RuleFor(e => e.Ferramentas).NotEmpty().WithMessage("Informe as ferramentas que serão alocadas");
+            
             RuleFor(e => e.TermoResponsabilidade).NotNull().NotEmpty().WithMessage("Adicione imagem do termo de responsabilidade");
 
         }
     }
 
-    //TODO: CONTINUAR CRIANDO A VALIDAÇÃO DE EMPRÉSTIMO´E O FORMULÁRIO PARA ADICIONAR NOVO EMPRESTIMO
-    //TODO: IMPLEMENTAR identity, E PROPERTY TEST
 }

@@ -13,12 +13,12 @@ namespace Almocherifado.ServerHosted.Services
 {
     public class TermoManager : ITermoManager
     {
-        private readonly TermoResponsabilidadeService termoService;
-        private readonly WordToPDFService pdfconversor;
+        private readonly ITermoResponsabilidadeService termoService;
+        private readonly IWordToPDFService pdfconversor;
         private readonly string basepath;
 
-        public TermoManager(TermoResponsabilidadeService termoService,
-            WordToPDFService pdfconversor, IPathHelper pathHelper)
+        public TermoManager(ITermoResponsabilidadeService termoService,
+            IWordToPDFService pdfconversor, IPathHelper pathHelper)
         {
             this.termoService = termoService;
             this.pdfconversor = pdfconversor;

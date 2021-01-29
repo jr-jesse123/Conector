@@ -1,9 +1,11 @@
 using Almocherifado.Application;
+using Almocherifado.core.Services;
 using Almocherifado.InfraEstrutura;
 using Almocherifado.InfraEstrutura.Repositorios;
 using Almocherifado.ServerHosted.Areas.Identity;
 using Almocherifado.ServerHosted.Data;
 using Almocherifado.ServerHosted.Helpers.FileHelpers;
+using Almocherifado.ServerHosted.Services;
 using Append.Blazor.Printing;
 using AutoMapper;
 using BlazorDownloadFile;
@@ -62,26 +64,17 @@ namespace Almocherifado.ServerHosted
 
             services.AddTransient<IPathHelper,PathHelper>();
 
-            //services.AddTransient<DbContextOptions<AlmocherifadoContext>>(sp =>
-            //    new DbContextOptionsBuilder<AlmocherifadoContext>().UseSqlite().Options
-            //);
-            //services.AddDbContext<AlmocherifadoContext>(optionsBuildr => optionsBuildr.UseSqlite(@"Data Source=almocherifado.db;"));
-
-            //services.AddTransient<IAlmocherifadoContext, AlmocherifadoContext>();
-
-            //infraestrutura
             services.Scan(scan => scan.FromAssembliesOf(typeof(FuncionariosRepository))
                 .AddClasses()
                 .AsImplementedInterfaces()
             );
 
             //application
-            services.Scan(scan => scan.FromAssembliesOf(typeof(FerramentasService))
+            services.Scan(scan => scan.FromAssembliesOf(typeof(FerramentasService), typeof(TermoManager), typeof(ITermoResponsabilidadeService), typeof(ModeloTermoService))
                 .AddClasses()
                 .AsImplementedInterfaces()
             );
-            //services.AddTransient<IFuncionariosRepository, FuncionariosRepository>();
-            //services.AddTransient<IFerramentaRepository, FerramentaRepository>();
+            
             services.AddAutoMapper(typeof(Startup));
 
         }
