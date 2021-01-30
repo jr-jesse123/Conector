@@ -61,10 +61,8 @@ namespace Almocherifado.InfraEstrutura.Tests.TestesEmprestimoRepositoy
         }
 
         [Theory, DomainAutoData]
-        public void Emprestimo_Eh_Editado_Finalizado_E_Persistido_Com_Sucesso(Fixture fixture)
+        public void Emprestimo_Eh_Editado_Finalizado_E_Persistido_Com_Sucesso(Emprestimo emprestimo )
         {
-            var emprestimo = fixture.Create<Emprestimo>() ;
-
             EmprestimosRepository sut = new (TestContext);
             sut.SalvarNovoEmprestimo(emprestimo);
             //var ferramenta = new Ferramenta("Ferramenta1", "Pense numa ferramenta da boa", DateTime.Today.AddDays(-7), @"/fotos/foto");
@@ -87,8 +85,29 @@ namespace Almocherifado.InfraEstrutura.Tests.TestesEmprestimoRepositoy
             emprestimoPersistido.Finalizado.Should().BeTrue(" a única ferramenta alocada foi devolvida");
 
         }
+        
+        [Theory, DomainAutoData]
+        public void Emprestimo_Com_Ferramentas_E_Funcionario_Vindos_Do_Banco_Sao_Salvos_Corretamente(Funcionario funcionario, 
+            List<Ferramenta> ferramentas, string obra)
+        {
+            var funcRepository = new FuncionariosRepository(TestContext);
+            
+            funcRepository.AdicionarFuncionario(funcionario);
 
+            var FerRepository = new FerramentaRepository(TestContext);
 
+            foreach (var item in ferramentas)
+            {
+                FerRepository.AdicionarFerramenta(item);
+            }
+
+            var emprestimo = new Emprestimo(DateTime.Now, funcionario, obra, ferramentas.ToArray());
+
+            var empRespository = new EmprestimosRepository(TestContext);
+
+            empRespository.SalvarNovoEmprestimo(emprestimo);
+
+        }
         public void Dispose()
         {
             TestContext.Database.EnsureDeleted();

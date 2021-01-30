@@ -15,61 +15,75 @@
     <ObraInput @bind-Obra="Model.Obra" />
     <ValidationMessage For="() =>Model.Obra"></ValidationMessage>
 
-    @*<TermoResponsabilidade></TermoResponsabilidade>
-        <ValidationMessage For="() => Model.TermoResponsabilidade"></ValidationMessage>*@
+    <TermoResponsabilidade Visible="TermoUrlVisivel()" @bind-Url="Model.TermoResponsabilidade"></TermoResponsabilidade>
+    <ValidationMessage For="() => Model.TermoResponsabilidade"></ValidationMessage>
 
-    <Button Type="ButtonType.Button" Disabled="!PodePegarTermo()"  Color="Color.Info" @onclick="GetTermo">
+    <Button Type="ButtonType.Button" Loading="carregandoTermo" Disabled="!PodePegarTermo()" Color="Color.Info" @onclick="@(() => { carregandoTermo = true;  GetTermo(); })">
         imprimir Termo
     </Button>
+
+    
+    <Button Type="ButtonType.Button" class="@classbtnfinalizar" @ref="btnFinalizar" Float="Float.Right" Color="Color.Success" @onclick="SalvarEmprestimo">
+        Finalizar Alocação
+    </Button>
+
+
 </EditForm>
 
 @code {
     [Inject] IBlazorDownloadFileService fileService { get; set; }
     [Inject] ITermoManager termoManager { get; set; }
     [Inject] IJSRuntime JSRuntime { get; set; }
-
-    EditForm formulario;
-
-    bool PodePegarTermo()
-    {
-        var mensagems = formulario.EditContext.GetValidationMessages();
-        bool FaltaSohTermo = mensagems.Where(m => !m.ToUpper().Contains("ferramenta".ToUpper()))
-            .All(m => m.ToUpper().Contains("responsabilidade".ToUpper()));
-
-        return FaltaSohTermo;
-    }
-
-
-    //async Task OnInvalidSubmit(EditContext editContext)
-    //{
-
-
-    //    if (FaltaSohTermo)
-    //    {
-    //        var funcionario = mapper.Map<Funcionario>(Model.Funcionario);
-    //        var termopdf = termoManager.BuildTermo(Model.entrega, funcionario, Ferramentas, Model.Obra);
-
-    //        if (termopdf.IsSuccess)
-    //        {
-    //            await PrintingService.Print(termopdf.Value);
-    //        }
-
-    //    }
-    //}
-
-
-
-    void OnValidSubmit()
-    {
-
-    }
-
     [Parameter] public List<Ferramenta> Ferramentas { get; set; }
     EmprestimoModel Model = new() { entrega = DateTime.Now };
     [Inject] IFuncionariosRepository repository { get; set; }
     public List<FuncionarioModel> Funcionarios { get; set; }
     [Inject] IMapper mapper { get; set; }
     [Inject] IPrintingService PrintingService { get; set; }
+    [Inject] IEmprestimosRepository EmprestimosRepository { get; set; }
+
+    Button btnFinalizar;
+
+    string classbtnfinalizar = "collapse";
+
+    bool carregandoTermo;
+
+    async Task SalvarEmprestimo()
+    {
+        Model.Ferramentas = Ferramentas;
+        var emprestimo =mapper.Map<Emprestimo>(Model);
+        EmprestimosRepository.SalvarNovoEmprestimo(emprestimo);
+
+        await OnEmprestimoSalvo.InvokeAsync();
+    }
+
+    EditForm formulario;
+
+    bool PodePegarTermo()
+    {
+        var funcionarioEscolhido = Model.Funcionario != null;
+        var ObraDigitada = Model.Obra != null;
+
+        return funcionarioEscolhido && ObraDigitada;
+
+    }
+
+
+    bool TermoRecebido;
+
+    bool TermoUrlVisivel()
+    {
+        var output = PodePegarTermo() && TermoRecebido;
+        return output;
+    }
+
+    [Parameter] public EventCallback OnEmprestimoSalvo { get; set; }
+
+
+    void OnValidSubmit()
+    {
+
+    }
 
 
     protected override void OnInitialized()
@@ -80,14 +94,25 @@
 
     async Task GetTermo()
     {
+        
         var funcionario = mapper.Map<Funcionario>(Model.Funcionario);
-        var termopdf = termoManager.BuildTermo(Model.entrega, funcionario, Ferramentas, Model.Obra);
+        var termopdf = await termoManager.BuildTermo(Model.entrega, funcionario, Ferramentas, Model.Obra);
 
         if (termopdf.IsSuccess)
-            await PrintingService.Print(termopdf.Value);
-        else
-            await JSRuntime.InvokeAsync<object>("Alert", "Falha Na alocação das ferramentas: " + termopdf.Error);
+        {
+            await PrintingService.Print("api/termo?filepath=" + termopdf.Value);
+            TermoRecebido = true;
+            carregandoTermo = false;
 
+        }
+        else
+        {
+            await JSRuntime.InvokeAsync<object>("Alert", "Falha Na alocação das ferramentas: " + termopdf.Error);
+        }
+
+        classbtnfinalizar = "";
+
+        StateHasChanged();
     }
 
 }

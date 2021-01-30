@@ -5,7 +5,7 @@ namespace Almocherifado.core.AgregateRoots.FerramentaNm
 {
     public class FerramentaEmprestada
     {
-        private FerramentaEmprestada()
+        protected FerramentaEmprestada()
         {
 
         }

@@ -7,6 +7,7 @@ using CSharpFunctionalExtensions;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Almocherifado.ServerHosted.Services
@@ -27,24 +28,20 @@ namespace Almocherifado.ServerHosted.Services
             basepath = pathHelper.FotosTermos_Location;
         }
 
-        public Result<string> BuildTermo(DateTime DataEntrega, Funcionario funcionario, List<Ferramenta> ferramentas, string Obra)
+        public async Task<Result<string>> BuildTermo(DateTime DataEntrega, Funcionario funcionario, List<Ferramenta> ferramentas, string Obra)
         {
             //try
             {
-                var documento = termoService.GetTermoPreenchido(DataEntrega, funcionario, ferramentas, Obra);
-
-                Assert.NotEmpty(documento.Text);
-
-                var output = basepath + @"\" + DataEntrega.ToFileTime() + ".docx";
-
-
-                Directory.CreateDirectory( Path.GetDirectoryName(output));
-
-                documento.SaveAs(output);
-
-                pdfconversor.ExportarWordParaPdf(output);
-
-                output = output.Replace(".docx", ".pdf");
+                var output = await Task.Run(() =>
+                {
+                    var documento = termoService.GetTermoPreenchido(DataEntrega, funcionario, ferramentas, Obra);
+                    Assert.NotEmpty(documento.Text);
+                    var output = basepath + @"\" + DataEntrega.ToFileTime() + ".docx";
+                    Directory.CreateDirectory(Path.GetDirectoryName(output));
+                    documento.SaveAs(output);
+                    pdfconversor.ExportarWordParaPdf(output);
+                    return output.Replace(".docx", ".pdf");
+                });
 
                 return output;
             }

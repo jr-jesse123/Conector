@@ -38,7 +38,7 @@ namespace Almocherifado.ServerHosted.Tests
 
             string Resultfile = new TermoManager(responsabilidadeService, toPDFService, 
                 new PathHelper(HostMock.Object))
-                .BuildTermo(dataentrega, funcionario, ferramentas, obra).Value;
+                .BuildTermo(dataentrega, funcionario, ferramentas, obra).Result.Value;
 
             var controller = new TermoController(HostMock.Object);
 

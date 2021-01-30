@@ -1,18 +1,25 @@
 ﻿
-
-<Field Horizontal="true">
-    <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop">Termo de Responsabilidade:</FieldLabel>
-    <FieldBody>
-                <FileEdit AutoReset="false"  Changed="NovaFoto" Filter="image/*"></FileEdit>
-    </FieldBody>
-</Field>
-
-
+<Accordion>
+    <Collapse Visible="Visible">
+        <CollapseHeader>
+            Termo de Responsabilidade
+        </CollapseHeader>
+        <CollapseBody>
+            <Field Horizontal="true">
+                <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop">Termo de Responsabilidade:</FieldLabel>
+                <FieldBody>
+                    <FileEdit AutoReset="false" Changed="NovaFoto" Filter="image/*"></FileEdit>
+                </FieldBody>
+            </Field>
+        </CollapseBody>
+    </Collapse>
+</Accordion>
 
 @code {
 
     [Parameter] public string Url { get; set; }
     [Parameter] public EventCallback<string> UrlChanged { get; set; }
+    [Parameter] public bool Visible { get; set; }
 
     byte[] fileContent;
     async Task NovaFoto(FileChangedEventArgs fileArgs)
@@ -25,5 +32,6 @@
         fileContent = stram.ToArray();
         await UrlChanged.InvokeAsync($"\\termos\\{DateTime.Now.ToFileTime()}.jpg");
     }
+
 
 }

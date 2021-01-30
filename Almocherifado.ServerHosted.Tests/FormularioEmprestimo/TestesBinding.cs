@@ -52,7 +52,10 @@ namespace Almocherifado.ServerHosted.Tests.NovaPasta
 
             var sut = RenderComponent<ObraInput>(ObraControleParam, callbackParam);
 
-            sut.Find("input").Change(new ChangeEventArgs() { Value = ObraStrInput });
+            
+            sut.Find("input")
+                .Input(new ChangeEventArgs() { Value = ObraStrInput });
+                
 
             ObraStrControle.Should().Be(ObraStrInput);
 
