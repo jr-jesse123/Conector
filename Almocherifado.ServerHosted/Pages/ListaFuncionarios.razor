@@ -4,7 +4,7 @@
 
 
 
-<DataGrid @ref="gridRef" TItem="Funcionario" Editable="true" Filterable="true"
+<DataGrid @ref="gridRef" TItem="Funcionario" Editable="true" Filterable="true" ShowPager="true"
           Data="@funcionarios">
     <DataGridCommandColumn TItem="Funcionario">
         <DeleteCommandTemplate>
@@ -16,6 +16,7 @@
     <DataGridColumn TItem="Funcionario" Field="@nameof(Funcionario.Email)" Caption="Email" Sortable="false" />
     <DataGridColumn TItem="Funcionario" Field="@nameof(Funcionario.CPF)" Caption="CPF" Sortable="false" />
 
+    
 </DataGrid>
 
 

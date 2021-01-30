@@ -44,6 +44,7 @@ namespace Almocherifado.InfraEstrutura.Repositorios
             context.SaveChanges();
         }
 
+ 
 
         public void EditarEmprestimo(Emprestimo emprestimo)
         {

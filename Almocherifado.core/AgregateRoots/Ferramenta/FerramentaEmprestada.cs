@@ -3,7 +3,7 @@ using Almocherifado.core.AgregateRoots.EmprestimoNm;
 
 namespace Almocherifado.core.AgregateRoots.FerramentaNm
 {
-    public class FerramentaEmprestada
+    public class FerramentaEmprestada 
     {
         protected FerramentaEmprestada()
         {
@@ -19,7 +19,6 @@ namespace Almocherifado.core.AgregateRoots.FerramentaNm
             if(!DataDevolucao.HasValue)
             DataDevolucao = DateTime.Now;
         }
-
 
         public bool Recebido
         {

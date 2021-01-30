@@ -49,7 +49,7 @@
                 }
                 else
                 {
-                    <Switch  CheckedChanged="() => AdicionarOuRemoverFerramenta(context)"
+                    <Switch Checked="FerramentasChecadas.Contains(context)"  CheckedChanged="() => AdicionarOuRemoverFerramenta(context)"
                             Margin="Margin.IsAuto" Size="Size.Large" TValue="bool">Selecionar Para Nova Alocação</Switch>
                 }
             </DisplayTemplate>

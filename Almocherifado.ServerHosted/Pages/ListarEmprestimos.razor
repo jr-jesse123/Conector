@@ -1,5 +1,69 @@
 ﻿@page "/"
+@using Blazorise.DataGrid
+@using Almocherifado.Application
+
+<DataGrid TItem="Emprestimo" Data="Emprestimos" Filterable="true" PageSize="20" ShowPager="true">
+    <DataGridColumns>
+        <DataGridColumn TItem="Emprestimo" Field="@nameof(Emprestimo.Obra)" Caption="Obra"></DataGridColumn>
+        <DataGridColumn TItem="Emprestimo" Field="@nameof(Emprestimo.Funcionario)" Caption="Responsável"></DataGridColumn>
+        <DataGridColumn TItem="Emprestimo" Field="@nameof(Emprestimo.Finalizado)" Caption="Finalizado"></DataGridColumn>
+    </DataGridColumns>
+
+    <DetailRowTemplate>
+        @{ 
+            var feraamentasEmprestas = context.FerramentasEmprestas;
+
+                <DataGrid  TItem="FerramentaEmprestada" 
+                      Data="context.FerramentasEmprestas"
+                      Sortable="false" >
+
+                <DataGridColumn TItem="FerramentaEmprestada" Field="@nameof(FerramentaEmprestada.Ferramenta)" Caption="FerramentaS" >
+                    <DisplayTemplate Context="another_name">
+                        @another_name.Ferramenta.NomeAbreviado
+                    </DisplayTemplate>
+                </DataGridColumn>
+                    
+                <DataGridColumn TItem="FerramentaEmprestada" Field="@nameof(FerramentaEmprestada.Recebido)" Caption="Devolver" >
+                    <DisplayTemplate Context="another_name">
+                        @if (another_name.DataDevolucao.HasValue)
+                        {
+                            <p>Devolvida em:</p> @another_name.DataDevolucao;
+                        }
+                        else
+                        {
+                            <Button @onclick="() => OnRecebimento(another_name)" Color="Color.Success">Acusar Recebimento</Button>
+                        }
+                    </DisplayTemplate>
+                </DataGridColumn>
+            </DataGrid>
+        }
+    </DetailRowTemplate>
+</DataGrid>
+
+
 
 @code {
+    [Inject] IEmprestimosRepository repository { get; set; }
+    List<Emprestimo> Emprestimos { get; set; }
+    [Inject] IFerramentasService FerramentasService { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Emprestimos = repository.GetAllEmprestimos().OrderBy(e => e.Finalizado).ToList();
+    }
+
+
+    void OnRecebimento(FerramentaEmprestada ferramentaEmprestada)
+    {
+        FerramentasService.ReceberFerramenta(ferramentaEmprestada);
+        StateHasChanged();
+    }
+
+    //cards para cada emprestimo
+    //na capa vamos mostrar o funcionário, a obra, e se está finalizado
+    //expandindo nós teremos acesso às ferramentas e a possibildiade de realizar a entrega das mesmas
+
+
+    //poderemos filtrar por obra, e por funcionário, e por ferramenta
 
 }

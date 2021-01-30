@@ -30,5 +30,20 @@ namespace Almocherifado.Application
                  emprestimoEmAndamento is null ? false : true;
         }
 
+        public void ReceberFerramenta(FerramentaEmprestada ferramentaEmprestada)
+        {
+            ferramentaEmprestada.AcusarRecebimento();
+
+            //var local = Context.Set<FerramentaEmprestada>().Local.Where(fe => fe == ferramentaEmprestada).First();
+
+            //if (local != null)
+            //    Context.Entry(local).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+
+            //Context.Attach(ferramentaEmprestada);
+
+            Context.SaveChanges();
+        }
+
+
     }
 }
