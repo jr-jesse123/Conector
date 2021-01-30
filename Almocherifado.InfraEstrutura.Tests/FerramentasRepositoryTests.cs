@@ -39,12 +39,14 @@ namespace Almocherifado.InfraEstrutura.Tests
         {   
             FerramentaRepository sut = new (testContext);
 
+            var count = sut.GetallFerramentas().Count();
+
             sut.AdicionarFerramenta(ferramenta);
 
-            sut.GetallFerramentas().Count().Should().Be(1);
+            sut.GetallFerramentas().Count().Should().Be(++count);
             //var fixture = new Fixture();
 
-            var ferramentapersistida = sut.GetallFerramentas().First();
+            var ferramentapersistida = sut.GetallFerramentas().Last();
             ferramentapersistida.Should().BeEquivalentTo(ferramenta, "este foi o funcionário adicionado");
 
         }
@@ -60,12 +62,14 @@ namespace Almocherifado.InfraEstrutura.Tests
         public void Ferramenta_Deve_Ser_Deletado(Ferramenta ferramenta1, Ferramenta ferramenta2)
         {
             IFerramentaRepository sut = new FerramentaRepository(testContext);
+            var count = sut.GetallFerramentas().Count();
+
             sut.AdicionarFerramenta(ferramenta2);
             sut.AdicionarFerramenta(ferramenta1);
             
             sut.DeletarFerramenta(ferramenta2);
 
-            sut.GetallFerramentas().Count().Should().Be(1, "haviam dois funcionários e um foi dleetado");
+            sut.GetallFerramentas().Count().Should().Be(++count, "haviam dois funcionários e um foi dleetado");
 
         }
 

@@ -1,6 +1,8 @@
 ﻿using Almocherifado.core.AgregateRoots.EmprestimoNm;
 using Almocherifado.core.AgregateRoots.FerramentaNm;
 using Almocherifado.core.AgregateRoots.FuncionarioNm;
+using Almocherifado.core.Tests;
+using AutoFixture;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -23,8 +25,6 @@ namespace Almocherifado.InfraEstrutura
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
-            
             modelBuilder.Entity<Funcionario>()
                 .Property(f => f.CPF).HasConversion(p => p.Value, p => CPF.Create(p).Value);
 
@@ -38,7 +38,7 @@ namespace Almocherifado.InfraEstrutura
             modelBuilder.Entity<Funcionario>()
               .Property(f => f.Nome).HasConversion(p => p.Value, p => Nome.Create(p).Value);
 
-            
+
             modelBuilder.Entity<Ferramenta>().HasKey(f => f.Id);
             modelBuilder.Entity<Ferramenta>().Property(f => f.NomeAbreviado);
             modelBuilder.Entity<Ferramenta>().Property(f => f.Descricao);
@@ -47,9 +47,8 @@ namespace Almocherifado.InfraEstrutura
             modelBuilder.Entity<Ferramenta>().Property(f => f.Marca);
             modelBuilder.Entity<Ferramenta>().Property(f => f.Modelo);
             modelBuilder.Entity<Ferramenta>().HasMany(f => f.HistoricoEmprestimos).WithOne(h => h.Ferramenta);
-
-
             
+
             modelBuilder.Entity<Emprestimo>().HasKey(e => e.Id);
             modelBuilder.Entity<Emprestimo>().HasOne(e => e.Funcionario).WithMany().IsRequired();
             modelBuilder.Entity<Emprestimo>().HasMany(e => e.FerramentasEmprestas).WithOne(fe => fe.Emprestimo)
@@ -62,11 +61,26 @@ namespace Almocherifado.InfraEstrutura
             modelBuilder.Entity<Emprestimo>().Property(e => e.TermoResponsabilidade);
 
 
-
             modelBuilder.Entity<FerramentaEmprestada>().HasIndex(fe => fe.Id);
             modelBuilder.Entity<FerramentaEmprestada>().HasOne(fe => fe.Ferramenta).WithMany(f => f.HistoricoEmprestimos);
             modelBuilder.Entity<FerramentaEmprestada>().HasOne(fe => fe.Emprestimo).WithMany(e => e.FerramentasEmprestas);
 
+
+
+
+            DomainFixture fixture = new();
+
+            //TODO: REMOVER ESTE SEED JUNTO COM OS PRIVATE SETTERS
+            var ferramentas = fixture.Build<Ferramenta>().CreateMany(50);
+            var IdInfo = typeof(Ferramenta).GetProperty("Id");
+            int lastId = 1;
+            ferramentas.ToList().ForEach(f => IdInfo.SetValue(f, lastId++));
+
+            var UrlInfo = typeof(Ferramenta).GetProperty(nameof(Ferramenta.FotoUrl));
+            ferramentas.ToList().ForEach(f => UrlInfo.SetValue(f, "132564796661945613.jpg"));
+
+            modelBuilder.Entity<Ferramenta>().HasData(ferramentas);
+            modelBuilder.Entity<Funcionario>().HasData(fixture.CreateMany<Funcionario>(10));
 
             base.OnModelCreating(modelBuilder);
         }

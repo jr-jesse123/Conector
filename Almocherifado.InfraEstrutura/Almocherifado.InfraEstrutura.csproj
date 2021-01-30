@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Almocherifado.core.Tests\Almocherifado.core.Tests.csproj" />
     <ProjectReference Include="..\Almocherifado.core\Almocherifado.core.csproj" />
     <ProjectReference Include="..\DocX-master\Xceed.Words.NET.Standard\Xceed.Words.NET.Standard.csproj" />
   </ItemGroup>

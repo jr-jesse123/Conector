@@ -36,7 +36,7 @@ namespace Almocherifado.InfraEstrutura.Tests
 
             sut.GetFuncionarios().Count().Should().BeGreaterThan(0,"Um funcionário foi adicionado na memmória") ;
 
-            var funcionarioPersistido = sut.GetFuncionarios().First();
+            var funcionarioPersistido = sut.GetFuncionarios().Last();
             funcionarioPersistido.Should().BeEquivalentTo(funcionario, "este foi o funcionário adicionado");
             funcionarioPersistido.Nome.Should().BeEquivalentTo(funcionario.Nome, "este foi o nome do funcionário adicionado");
             funcionarioPersistido.Email.Should().BeEquivalentTo(funcionario.Email, "este foi o email do funcionário adicionado");
@@ -45,23 +45,23 @@ namespace Almocherifado.InfraEstrutura.Tests
         public void Dispose()
         {
             testContext.Database.EnsureDeleted();
-            testContext.Dispose();
+            testContext.Dispose(); 
         }
 
         [Theory, DomainAutoData]
         public void Funcionario_Deve_Ser_Deletado(Funcionario funcionario1, Funcionario funcionario2)
         {
-
             IFuncionariosRepository sut = new FuncionariosRepository(testContext);
+            var count = sut.GetFuncionarios().Count();
 
             sut.AdicionarFuncionario(funcionario1);
             sut.AdicionarFuncionario(funcionario2);
 
             sut.DeletarFuncionario(funcionario1);
 
-            sut.GetFuncionarios().Count().Should().Be(1,"haviam dois funcionários e um foi dleetado");
+            sut.GetFuncionarios().Count().Should().Be(++count,"haviam dois funcionários e um foi dleetado");
 
-            sut.GetFuncionarios().Single().Should().Be(funcionario2);
+            sut.GetFuncionarios().Last().Should().Be(funcionario2);
 
         }
 

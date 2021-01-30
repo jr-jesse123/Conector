@@ -23,13 +23,13 @@ namespace Almocherifado.core.AgregateRoots.FerramentaNm
             Modelo = modelo;
         }
 
-        public int Id { get; }
+        public int Id { get; private set; }
         public string NomeAbreviado { get; }
         public string Marca { get;  }
         public string Modelo { get; }
         public string Descricao { get; }
         public DateTime DataCompra { get; }
-        public string FotoUrl { get; }
+        public string FotoUrl { get; private set; }
         public virtual IReadOnlyCollection<FerramentaEmprestada> HistoricoEmprestimos { get; }
 
 

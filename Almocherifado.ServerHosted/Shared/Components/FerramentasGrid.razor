@@ -4,9 +4,10 @@
 @using Almocherifado.core
 
 <Row>
-    <DataGrid TItem="Ferramenta" Data="Ferramentas" Filterable="true" 
+    <DataGrid TItem="Ferramenta" Data="Ferramentas" Filterable="true" ShowPager="true" PageSize="20"
         SelectedRowStyling="(Ferramenta, styling) => styling.Background = Background.None"
         RowStyling="OnRowStyling">
+        
     <DataGridColumns>
         <DataGridCommandColumn TItem="Ferramenta">
             <DeleteCommandTemplate>
@@ -43,7 +44,8 @@
             <DisplayTemplate>
                 @if (context.Emprestada)
                 {
-                    @context.HistoricoEmprestimos.Where(fe => fe.DataDevolucao is null).Single().Emprestimo.Obra;
+                    <p>Alocado Para a obra:  @context.HistoricoEmprestimos.Where(fe => fe.DataDevolucao is null).Single().Emprestimo.Obra;</p>
+                    <p>Com o Funcionário: @context.HistoricoEmprestimos.Where(fe => fe.DataDevolucao is null).Single().Emprestimo.Funcionario.Nome;</p>
                 }
                 else
                 {
@@ -73,9 +75,9 @@
     void OnRowStyling(Ferramenta ferramenta, DataGridRowStyling styling)
     {
         if (ferramenta.Emprestada)
-            styling.Background = Background.Info;
-        else
             styling.Background = Background.Light;
+        else
+            styling.Background = Background.Transparent;
     }
 
     async Task AdicionarOuRemoverFerramenta(Ferramenta ferramenta)

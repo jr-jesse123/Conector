@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿
 @page "/ListarFerramentas"
 
 @using Blazorise.DataGrid
@@ -24,7 +24,7 @@
                 <CloseButton Clicked="@HideModal" />
             </ModalHeader>
             <ModalBody>
-                <CadastrarImprestimo Ferramentas="FerramentasSelecionadas" />
+                <CadastrarImprestimo OnEmprestimoSalvo="OnAlocacaoFinalizada" Ferramentas="FerramentasSelecionadas" />
                 @*<Field>
                     <FieldLabel>Name</FieldLabel>
                     <TextEdit Placeholder="Enter name..." />
@@ -42,16 +42,12 @@
     </Modal>
 
     @code{
+        [Inject] NavigationManager NavigationManager { get; set; }
         List<Ferramenta> FerramentasSelecionadas = new();
         //[Inject] NavigationManager Navigation { get; set; }
         bool PodeAlocar()
         {
             return !(FerramentasSelecionadas?.Count > 0);
-        }
-
-        void AbrirModeal()
-        {
-
         }
 
         private Modal modalRef;
@@ -66,14 +62,10 @@
             modalRef.Hide();
         }
 
-        //protected override void OnInitialized()
-        //{
-        //    Navigation.NavigateTo("/fotos/Modelo de Responsabilidade de equipamentos.docx");
-        //}
+        void OnAlocacaoFinalizada()
+        {
+            modalRef.Hide();
+            NavigationManager.NavigateTo(NavigationManager.Uri, true);
+        }
 
-        //TODO: TERMINAR DE ERFATORAR AS RELAÇÕES DE BINDING ENTRE O COMPONENTE DE FERRAMENTAS GRID E ESTA PAGINA
-
-        //TODO: CONTINUAR CRIANDO MODAL PARA COMPLEMENTAR O TERMO DE RESPONSABILIDADE ENTRE O CADASTRO DO EMPRESTIMO E A FINALIZAÇÃO.
-
-        //PRIMEIRO ESCOLHER FERRAMENTAS //DEPOIS EM MODAL PREENCHER FORMULRIO // E ENTÃO EM NOVO CAMPO INSERIR FORMULARIO E FINALIZAR EMPRESTIMO
 }
