@@ -29,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - Domain", "4 - Domain", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Almocherifado.core.Tests", "Almocherifado.core.Tests\Almocherifado.core.Tests.csproj", "{54C65C00-61B5-4D11-B32E-F1017B94AB36}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Almocherifado.UI", "Almocherifado.UI\Almocherifado.UI.csproj", "{37AD8176-32EA-4552-8E03-05133982179B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{54C65C00-61B5-4D11-B32E-F1017B94AB36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54C65C00-61B5-4D11-B32E-F1017B94AB36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54C65C00-61B5-4D11-B32E-F1017B94AB36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37AD8176-32EA-4552-8E03-05133982179B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37AD8176-32EA-4552-8E03-05133982179B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37AD8176-32EA-4552-8E03-05133982179B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37AD8176-32EA-4552-8E03-05133982179B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,6 +90,7 @@ Global
 		{28A670A8-5701-4B22-8872-E4E5B96A19A3} = {3C642CCB-9285-4E3F-ADF3-BED626B3DD0C}
 		{4BC0D9B3-7CF0-4DB8-A51F-AABFA9868A31} = {3C642CCB-9285-4E3F-ADF3-BED626B3DD0C}
 		{54C65C00-61B5-4D11-B32E-F1017B94AB36} = {511AFA74-77D9-477E-AF7C-DBD1E17B62BA}
+		{37AD8176-32EA-4552-8E03-05133982179B} = {F1309122-8B34-4E60-93CF-2A0F3085DD73}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AE9DE8E1-8D8A-4FD8-B401-84631A52ED6C}
