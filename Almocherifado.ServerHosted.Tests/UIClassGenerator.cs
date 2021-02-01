@@ -1,14 +1,11 @@
-﻿using Almocherifado.ServerHosted.Data.Models;
+﻿using Almocherifado.UI.Data.Models;
 using AutoFixture.Kernel;
 using Bogus;
 using System;
 using Bogus.Extensions.Brazil;
-using System.Reflection;
 
-namespace Almocherifado.ServerHosted.Tests
+namespace Almocherifado.UI.Tests
 {
-    public partial class Mappingtests
-    {
         class UIClassGenerator : ISpecimenBuilder
         {
             public object Create(object request, ISpecimenContext context)
@@ -32,24 +29,10 @@ namespace Almocherifado.ServerHosted.Tests
                 }
 
 
-                //PropertyInfo Prop = request as PropertyInfo;
-                //if (Prop?.Name == "Id")
-                //{
-                //    return new Random().Next(1,10000);
-                //}
-
                 return new NoSpecimen();
 
             }
 
-            
-
         }
-
-
-    
-
-
-    }
     
 }

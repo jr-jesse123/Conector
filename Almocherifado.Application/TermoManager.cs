@@ -2,7 +2,6 @@
 using Almocherifado.core.AgregateRoots.FuncionarioNm;
 using Almocherifado.core.Services;
 using Almocherifado.InfraEstrutura;
-using Almocherifado.ServerHosted.Helpers.FileHelpers;
 using CSharpFunctionalExtensions;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Almocherifado.ServerHosted.Services
+namespace Almocherifado.Application
 {
     public class TermoManager : ITermoManager
     {
@@ -23,7 +22,7 @@ namespace Almocherifado.ServerHosted.Services
         {
             this.termoService = termoService;
             this.pdfconversor = pdfconversor;
-            
+
 
             basepath = pathHelper.FotosTermos_Location;
         }

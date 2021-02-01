@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Almocherifado.core.AgregateRoots.FerramentaNm;
 using Almocherifado.core.AgregateRoots.FuncionarioNm;
 using Almocherifado.core.Services;
 using Almocherifado.core.Tests;
 using Almocherifado.InfraEstrutura;
-using Almocherifado.ServerHosted.Helpers.FileHelpers;
-using Almocherifado.ServerHosted.Services;
 using Moq;
 using Xunit;
 using Xunit.Abstractions;

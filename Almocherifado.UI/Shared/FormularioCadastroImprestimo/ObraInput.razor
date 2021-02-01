@@ -1,0 +1,18 @@
+﻿
+<Field Horizontal="true">
+    <FieldLabel ColumnSize="ColumnSize.Is4.OnDesktop">Obra/Locacao:</FieldLabel>
+    <FieldBody>
+        <TextEdit @bind-Text="Obra" @oninput="UpdateObra"></TextEdit>
+    </FieldBody>
+</Field>
+
+
+@code {
+    [Parameter] public string Obra { get; set; }
+    [Parameter] public EventCallback<string> ObraChanged { get; set; }
+
+    async Task UpdateObra(ChangeEventArgs args)
+    {
+        await  ObraChanged.InvokeAsync(args.Value.ToString());
+    }
+}

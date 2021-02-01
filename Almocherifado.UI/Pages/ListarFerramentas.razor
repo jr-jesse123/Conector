@@ -1,0 +1,64 @@
+﻿
+@page "/ListarFerramentas"
+
+@using Blazorise.DataGrid
+
+
+@using Almocherifado.Application
+
+
+<Row>
+    <Button Color="Color.Info"   Disabled="PodeAlocar()" @onclick="ShowModal">
+        Alocar Ferramentas Selecionadas
+    </Button>
+</Row>
+
+<FerramentasGrid @bind-FerramentasChecadas="FerramentasSelecionadas"></FerramentasGrid>
+
+
+    <Modal @ref="modalRef"  >
+        <ModalBackdrop />
+        <ModalContent Size="ModalSize.Large" IsCentered="true">
+            <ModalHeader>
+                <ModalTitle>Employee edit</ModalTitle>
+                <CloseButton Clicked="@HideModal" />
+            </ModalHeader>
+            <ModalBody>
+                <CadastrarImprestimo OnEmprestimoSalvo="OnAlocacaoFinalizada" Ferramentas="FerramentasSelecionadas" />
+
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
+                <Button Color="Color.Primary" Clicked="@HideModal">Save Changes</Button>
+            </ModalFooter>
+        </ModalContent>
+    </Modal>
+
+    @code{
+        [Inject] NavigationManager NavigationManager { get; set; }
+        List<Ferramenta> FerramentasSelecionadas = new();
+        //[Inject] NavigationManager Navigation { get; set; }
+        bool PodeAlocar()
+        {
+            return !(FerramentasSelecionadas?.Count > 0);
+        }
+
+        private Modal modalRef;
+
+        private void ShowModal()
+        {
+            modalRef.Show();
+        }
+
+        private void HideModal()
+        {
+            modalRef.Hide();
+        }
+
+        void OnAlocacaoFinalizada()
+        {
+            modalRef.Hide();
+            NavigationManager.NavigateTo(NavigationManager.Uri, true);
+        }
+
+}

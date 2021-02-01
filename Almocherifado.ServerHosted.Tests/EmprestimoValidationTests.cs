@@ -1,18 +1,13 @@
-﻿using Almocherifado.core.AgregateRoots.EmprestimoNm;
-using Almocherifado.core.AgregateRoots.FerramentaNm;
-using Almocherifado.ServerHosted.Data.Models;
+﻿using Almocherifado.core.AgregateRoots.FerramentaNm;
+using Almocherifado.UI.Data.Models;
 using FluentAssertions;
 using FluentValidation.TestHelper;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
-using static Almocherifado.ServerHosted.Tests.Mappingtests;
 
-namespace Almocherifado.ServerHosted.Tests
+namespace Almocherifado.UI.Tests
 {
     public class EmprestimoValidationTests
     {

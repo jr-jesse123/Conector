@@ -1,5 +1,6 @@
 ﻿using Almocherifado.core.Tests;
-using Almocherifado.ServerHosted.Shared.FormularioCadastroImprestimo;
+using Almocherifado.UI.Shared.FormularioCadastroImprestimo;
+using Almocherifado.UI.Shared.FormularioCadastroImprestimo;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Bunit;
@@ -9,7 +10,7 @@ using System;
 using Xunit;
 using static Bunit.ComponentParameterFactory;
 
-namespace Almocherifado.ServerHosted.Tests.NovaPasta
+namespace Almocherifado.UI.Tests.NovaPasta
 {
     public class TestesBinding : TestContext
     {

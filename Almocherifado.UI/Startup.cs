@@ -1,5 +1,16 @@
+using Almocherifado.Application;
+using Almocherifado.core.Services;
+using Almocherifado.InfraEstrutura;
+using Almocherifado.InfraEstrutura.Repositorios;
 using Almocherifado.UI.Areas.Identity;
 using Almocherifado.UI.Data;
+using Almocherifado.UI.Helpers.FileHelpers;
+using Append.Blazor.Printing;
+using AutoMapper;
+using BlazorDownloadFile;
+using Blazorise;
+using Blazorise.Bootstrap;
+using Blazorise.Icons.FontAwesome;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -34,18 +45,48 @@ namespace Almocherifado.UI
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddSingleton<WeatherForecastService>();
+            
+
+
+            services.AddBlazorise(options => options.ChangeTextOnKeyPress = true)
+                .AddBootstrapProviders()
+                .AddFontAwesomeIcons();
+
+            services.AddDbContext<AlmocherifadoContext>(x => 
+                x.UseSqlite(@"Data Source = almocherifado.db")
+                .UseLazyLoadingProxies());
+            
+            services.AddBlazorDownloadFile();
+            services.AddScoped<IPrintingService, PrintingService>();
+
+
+            services.Scan(scan => scan.FromAssembliesOf(typeof(FuncionariosRepository))
+                .AddClasses()
+                .AsImplementedInterfaces()
+            );
+
+            //application
+            services.Scan(scan => scan.FromAssembliesOf(typeof(FerramentasService), typeof(TermoManager), typeof(ITermoResponsabilidadeService), typeof(ModeloTermoService))
+                .AddClasses()
+                .AsImplementedInterfaces()
+            );
+
+            services.AddAutoMapper(typeof(Startup));
+
+            services.AddScoped<IPathHelper, PathHelper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AlmocherifadoContext context)
         {
+            context.Database.Migrate();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -62,6 +103,10 @@ namespace Almocherifado.UI
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.ApplicationServices
+                .UseBootstrapProviders()
+                .UseFontAwesomeIcons();
 
             app.UseAuthentication();
             app.UseAuthorization();

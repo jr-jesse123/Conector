@@ -1,21 +1,13 @@
-﻿using AutoFixture.Xunit2;
+﻿
+using AutoFixture.Xunit2;
 
-namespace Almocherifado.ServerHosted.Tests
+namespace Almocherifado.UI.Tests
 {
-    public partial class Mappingtests
-    {
-        public class UiAutoData : AutoDataAttribute
+    public class UiAutoData : AutoDataAttribute
         {
             public UiAutoData() : base( () => new UIFixture())
             {
 
             }
         }
-
-
-    
-
-
-    }
-    
 }

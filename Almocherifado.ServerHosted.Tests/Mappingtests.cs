@@ -1,8 +1,8 @@
 using Almocherifado.core.AgregateRoots.EmprestimoNm;
 using Almocherifado.core.AgregateRoots.FerramentaNm;
 using Almocherifado.core.Tests;
-using Almocherifado.ServerHosted.Data.Models;
-using Almocherifado.ServerHosted.Data.Models.MappingProfiles;
+using Almocherifado.UI.Data.Models;
+using Almocherifado.UI.Data.Models.MappingProfiles;
 using AutoMapper;
 using FluentAssertions;
 using System;
@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using Xunit;
 using Almocherifado.core.AgregateRoots.FuncionarioNm;
 
-namespace Almocherifado.ServerHosted.Tests
+namespace Almocherifado.UI.Tests
 {
     public partial class Mappingtests
     {

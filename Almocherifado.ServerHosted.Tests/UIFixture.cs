@@ -1,10 +1,8 @@
 ﻿using Almocherifado.core.Tests;
 using AutoFixture.AutoMoq;
 
-namespace Almocherifado.ServerHosted.Tests
+namespace Almocherifado.UI.Tests
 {
-    public partial class Mappingtests
-    {
         public class  UIFixture : DomainFixture
         {
             public UIFixture()
@@ -16,9 +14,4 @@ namespace Almocherifado.ServerHosted.Tests
         }
 
 
-    
-
-
-    }
-    
 }

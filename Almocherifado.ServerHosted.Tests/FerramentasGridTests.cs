@@ -1,17 +1,11 @@
 ﻿using Almocherifado.core.AgregateRoots.FerramentaNm;
 using Almocherifado.InfraEstrutura.Repositorios;
-using Almocherifado.ServerHosted.Helpers.FileHelpers;
-using Almocherifado.ServerHosted.Shared.Components;
-using AutoFixture.Xunit2;
 using Bunit;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
-using static Almocherifado.ServerHosted.Tests.Mappingtests;
 using static Bunit.ComponentParameterFactory;
 
 using AutoFixture;
@@ -21,8 +15,11 @@ using Almocherifado.InfraEstrutura;
 using Microsoft.EntityFrameworkCore;
 using FluentAssertions;
 using Microsoft.AspNetCore.Components;
+using Almocherifado.Application;
+using Almocherifado.UI.Shared.Components;
+using static Almocherifado.UI.Tests.Mappingtests;
 
-namespace Almocherifado.ServerHosted.Tests
+namespace Almocherifado.UI.Tests
 {
     public class FerramentasGridTests : TestContext
     {
@@ -44,9 +41,9 @@ namespace Almocherifado.ServerHosted.Tests
             context.AddRange(ferramentas);
             context.SaveChanges();
             ferramentas = context.Ferramentas.ToList();
-            
+
             var repositoryMock = new Mock<IFerramentaRepository>();
-            var pathHelperMock = new Mock<IPathHelper>( MockBehavior.Strict);
+            var pathHelperMock = new Mock<IPathHelper>(MockBehavior.Strict);
             pathHelperMock.SetupAllProperties();
 
             repositoryMock.Setup(r => r.GetallFerramentas()).Returns(ferramentas);
@@ -62,7 +59,7 @@ namespace Almocherifado.ServerHosted.Tests
 
             //addiona a primeira ferramenta
             sut.FindComponents<Blazorise.Switch<bool>>().First()
-                .Find("input").Change(new ChangeEventArgs() { Value = true});
+                .Find("input").Change(new ChangeEventArgs() { Value = true });
 
             ferramentaListControl.Count.Should().Be(1);
 
