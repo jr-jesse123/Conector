@@ -5,10 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Almocherifado.ServerHosted.Services
+namespace Almocherifado.Application
 {
     public interface ITermoManager
     {
-        Task<Result<string>>  BuildTermo(DateTime DataEntrega, Funcionario funcionario, List<Ferramenta> ferramentas, string Obra);
+        Task<Result<string>> BuildTermo(DateTime DataEntrega, Funcionario funcionario, List<Ferramenta> ferramentas, string Obra);
     }
 }

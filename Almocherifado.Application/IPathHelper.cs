@@ -1,4 +1,4 @@
-﻿namespace Almocherifado.ServerHosted.Helpers.FileHelpers
+﻿namespace Almocherifado.Application
 {
     public interface IPathHelper
     {

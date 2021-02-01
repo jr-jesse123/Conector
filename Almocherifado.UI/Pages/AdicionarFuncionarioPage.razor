@@ -1,0 +1,77 @@
+﻿@page "/AdicionarFuncionario/"
+@using Blazorise
+@using Blazored.FluentValidation;
+@using Almocherifado.InfraEstrutura.Repositorios;
+
+<EditForm Model="Model" OnValidSubmit="AdicionarFuncionario">
+    <FluentValidationValidator />
+    <Field>
+        <FieldLabel For="CPF">CPF: </FieldLabel>
+        <TextEdit id="CPF" @bind-Text="Model.CPF"></TextEdit>
+        <ValidationMessage For="() => Model.CPF" />
+    </Field>
+    <Field>
+        <FieldLabel For="Nome">Nome: </FieldLabel>
+        <TextEdit id="Nome" @bind-Text="Model.Nome"></TextEdit>
+        <ValidationMessage For="(() => Model.Nome)"></ValidationMessage>
+    </Field>
+    <Field>
+        <FieldLabel For="Email">Email: </FieldLabel>
+        <TextEdit id="Email" @bind-Text="Model.Email"></TextEdit>
+        <ValidationMessage For="() => Model.Email" />
+    </Field>
+
+    <Button Color="Blazorise.Color.Primary" Type="ButtonType.Submit">Adicionar</Button>
+    <Button Color="Blazorise.Color.Secondary" Type="ButtonType.Reset">Limpar</Button>
+
+    <Alert @ref="AlertRef" Margin="Margin.Is5.FromTop" Color="Color.Info">
+        <Heading Size="HeadingSize.Is4" TextColor="TextColor.Success">
+            Salvo
+            <CloseButton />
+        </Heading>
+        <Paragraph>
+            @mensagem
+        </Paragraph>
+        <Paragraph  >
+            <Button @onclick="() => AlertRef.Hide()"  Color="@Cor">Ok</Button>
+        </Paragraph>
+    </Alert>
+</EditForm>
+
+@code{
+    FuncionarioModel Model { get; set; } = new FuncionarioModel();
+    [Inject] public IFuncionariosRepository repo { get; set; }
+    [Inject] IMapper mapper { get; set; }
+    Alert AlertRef;
+    string mensagem;
+    Color Cor;
+
+    void AdicionarFuncionario(EditContext editContext)
+    {
+        //var novoFunc = Model.GetFuncionario();
+
+        var novoFunc = mapper.Map<Funcionario>(Model);
+
+        var fucionarios = repo.GetFuncionarios();
+
+        var funcExsitente = fucionarios.SingleOrDefault(f => f == novoFunc);
+
+        if (funcExsitente is null)
+        {
+            repo.AdicionarFuncionario(mapper.Map<Funcionario>(Model));
+            mensagem = "Funcionário Salvo Com sucesso!";
+            Cor = Color.Success;
+            AlertRef.Show();
+        }
+        else
+        {
+            mensagem = "Funcionario já existente" + Environment.NewLine + funcExsitente.ToString();
+            Cor = Color.Danger;
+            AlertRef.Show();
+        }
+
+
+
+    }
+}
+

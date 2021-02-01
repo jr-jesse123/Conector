@@ -1,7 +1,6 @@
 ﻿using Almocherifado.core.AgregateRoots.FuncionarioNm;
 using Almocherifado.core.Tests;
-using Almocherifado.ServerHosted.Shared;
-using Almocherifado.ServerHosted.Shared.FormularioCadastroImprestimo;
+using Almocherifado.UI.Shared.FormularioCadastroImprestimo;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
@@ -11,14 +10,11 @@ using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using Xunit;
-
-
-using System.Threading.Tasks;
 using Xunit.Abstractions;
-using Almocherifado.ServerHosted.Data.Models;
+using Almocherifado.UI.Data.Models;
 using System.Linq;
 
-namespace Almocherifado.ServerHosted.Tests
+namespace Almocherifado.UI.Tests
 {
     public class FuncionarioSelectTests : TestContext , IDisposable
     {

@@ -29,7 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Almocherifado.core.Tests\Almocherifado.core.Tests.csproj" />
-    <ProjectReference Include="..\Almocherifado.ServerHosted\Almocherifado.ServerHosted.csproj" />
+    <ProjectReference Include="..\Almocherifado.UI\Almocherifado.UI.csproj" />
   </ItemGroup>
 
 </Project>
