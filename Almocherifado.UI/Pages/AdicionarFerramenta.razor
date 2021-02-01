@@ -12,7 +12,7 @@
     <FluentValidationValidator />
     <Field>
         <FieldLabel>Nome Abreviado:</FieldLabel>
-        <TextEdit @bind-Text="@ferramentamodel.NomeAbreviado" />
+        <TextEdit @bind-Text="@ferramentamodel.NomeAbreviado"  />
         <ValidationMessage For="() => ferramentamodel.NomeAbreviado" />
     </Field>
     <Field>
@@ -37,7 +37,7 @@
     </Field>
     <Field>
         <FieldLabel>Descrição:</FieldLabel>
-        <MemoEdit @bind-Text="ferramentamodel.Descricao" Rows="3"></MemoEdit>
+        <MemoEdit @bind-Text="ferramentamodel.Descricao"  Rows="3"></MemoEdit>
         <ValidationMessage For="() => ferramentamodel.Descricao" />
     </Field>
 

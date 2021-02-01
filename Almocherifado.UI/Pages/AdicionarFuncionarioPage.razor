@@ -7,12 +7,12 @@
     <FluentValidationValidator />
     <Field>
         <FieldLabel For="CPF">CPF: </FieldLabel>
-        <TextEdit id="CPF" @bind-Text="Model.CPF"></TextEdit>
+        <TextEdit id="CPF" @bind-Text="Model.CPF" ></TextEdit>
         <ValidationMessage For="() => Model.CPF" />
     </Field>
     <Field>
         <FieldLabel For="Nome">Nome: </FieldLabel>
-        <TextEdit id="Nome" @bind-Text="Model.Nome"></TextEdit>
+        <TextEdit id="Nome" @bind-Text="Model.Nome" ></TextEdit>
         <ValidationMessage For="(() => Model.Nome)"></ValidationMessage>
     </Field>
     <Field>

@@ -7,8 +7,13 @@
 <DataGrid @ref="gridRef" TItem="Funcionario" Editable="true" Filterable="true" ShowPager="true"
           Data="@funcionarios">
     <DataGridCommandColumn TItem="Funcionario">
+        <EditCommandTemplate>
+
+        </EditCommandTemplate>
         <DeleteCommandTemplate>
-            <Button Color="Color.Danger" Clicked="()=>OnDeleteClicked(context)">Deletar</Button>
+            <AuthorizeView Context="_authContext">
+                <Button Color="Color.Danger" Clicked="()=>OnDeleteClicked(context)">Deletar</Button>
+            </AuthorizeView>
         </DeleteCommandTemplate>
     </DataGridCommandColumn>
 

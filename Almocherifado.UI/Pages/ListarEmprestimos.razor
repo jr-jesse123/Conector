@@ -8,7 +8,12 @@
     <DataGridColumns>
         <DataGridColumn TItem="Emprestimo" Field="@nameof(Emprestimo.Obra)" Caption="Obra"></DataGridColumn>
         <DataGridColumn TItem="Emprestimo" Field="@nameof(Emprestimo.Funcionario)" Caption="Responsável"></DataGridColumn>
-        <DataGridColumn TItem="Emprestimo" Field="@nameof(Emprestimo.Finalizado)" Caption="Finalizado"></DataGridColumn>
+        <DataGridColumn TItem="Emprestimo" Field="@nameof(Emprestimo.Finalizado)" Filterable="false" Caption="Finalizado">
+            <DisplayTemplate>
+                
+                <Check Size="Size.ExtraLarge"  readonly  TValue="bool" Checked="context.Finalizado"></Check>
+            </DisplayTemplate>
+        </DataGridColumn>
     </DataGridColumns>
 
     <DetailRowTemplate>

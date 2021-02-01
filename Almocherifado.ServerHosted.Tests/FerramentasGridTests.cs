@@ -19,6 +19,10 @@ using Almocherifado.Application;
 using Almocherifado.UI.Shared.Components;
 using static Almocherifado.UI.Tests.Mappingtests;
 
+
+using System.Threading.Tasks;
+using Bunit.TestDoubles;
+
 namespace Almocherifado.UI.Tests
 {
     public class FerramentasGridTests : TestContext
@@ -27,8 +31,10 @@ namespace Almocherifado.UI.Tests
         {
             Services.AddBlazorise()
                 .AddBootstrapProviders();
-
+            
             JSInterop.Mode = JSRuntimeMode.Loose;
+
+            
         }
 
         [Theory, UiAutoData]
@@ -55,12 +61,16 @@ namespace Almocherifado.UI.Tests
 
             var FerramentasListSourceParam = Parameter(nameof(FerramentasGrid.FerramentasChecadas), ferramentaListControl);
 
+            var authContext = this.AddTestAuthorization();
+            authContext.SetAuthorized("Jessé");
+
+
             var sut = RenderComponent<FerramentasGrid>(FerramentasListSourceParam);
 
             //addiona a primeira ferramenta
             sut.FindComponents<Blazorise.Switch<bool>>().First()
                 .Find("input").Change(new ChangeEventArgs() { Value = true });
-
+            
             ferramentaListControl.Count.Should().Be(1);
 
             //adiciona a terceira ferramenta

@@ -4,7 +4,7 @@
 @using Almocherifado.core
 
 <Row>
-    <DataGrid TItem="Ferramenta" Data="Ferramentas" Filterable="true" ShowPager="true" PageSize="20"
+    <DataGrid TItem="Ferramenta" Data="Ferramentas" Filterable="true"  ShowPager="true" PageSize="20"
         SelectedRowStyling="(Ferramenta, styling) => styling.Background = Background.None"
         RowStyling="OnRowStyling">
         
@@ -49,8 +49,15 @@
                 }
                 else
                 {
-                    <Switch Checked="FerramentasChecadas.Contains(context)"  CheckedChanged="() => AdicionarOuRemoverFerramenta(context)"
-                            Margin="Margin.IsAuto" Size="Size.Large" TValue="bool">Selecionar Para Nova Alocação</Switch>
+                    <AuthorizeView Context="subcontext">
+                        <Authorized>
+                            <Switch Checked="FerramentasChecadas.Contains(context)" CheckedChanged="() => AdicionarOuRemoverFerramenta(context)"
+                                    Margin="Margin.IsAuto" Size="Size.Large" TValue="bool">Selecionar Para Nova Alocação</Switch>
+                        </Authorized>
+                        <NotAuthorized>
+                            Ferramenta Disponível
+                        </NotAuthorized>
+                    </AuthorizeView>
                 }
             </DisplayTemplate>
         </DataGridColumn>

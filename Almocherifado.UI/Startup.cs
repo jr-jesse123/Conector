@@ -68,7 +68,7 @@ namespace Almocherifado.UI
             
 
 
-            services.AddBlazorise(options => options.ChangeTextOnKeyPress = true)
+            services.AddBlazorise(options => options.ChangeTextOnKeyPress = false )
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();
 
