@@ -1,73 +1,142 @@
-﻿<Sidebar @ref="sidebar">
-    <SidebarContent>
-        <SidebarBrand>
-            <a href="">Menu</a>
-        </SidebarBrand>
-        <SidebarNavigation>
-            <SidebarLabel>Main</SidebarLabel>
-            <SidebarItem>
-                <SidebarLink To="" Title="Home">
-                    <Icon Name="IconName.Home" Margin="Margin.Is3.FromRight" />Home
-                </SidebarLink>
-            </SidebarItem>
-            <SidebarItem>
-                <SidebarLink Toggled="(isOpen)=> mailSidebarSubItems.Toggle(isOpen)" IsShow="true">
-                    <Icon Name="IconName.Users" Margin="Margin.Is3.FromRight" />Funcionários
-                </SidebarLink>
-                <SidebarSubItem @ref="mailSidebarSubItems" IsShow="true">
-                    <SidebarItem>
-                        <SidebarLink To="AdicionarFuncionario">Cadastrar</SidebarLink>
-                    </SidebarItem>
-                    <SidebarItem>
-                        <SidebarLink To="ListarFuncionarios">Listar</SidebarLink>
-                    </SidebarItem>
-                    @* other subitems *@
-                </SidebarSubItem>
-            </SidebarItem>
-            <SidebarItem>
-                <SidebarLink Toggled="(isOpen)=> appsSidebarSubItems.Toggle(isOpen)" IsShow="true">
-                    <Icon Name="IconName.Wrench" Margin="Margin.Is3.FromRight" />Ferramentas
-                </SidebarLink>
-                <SidebarSubItem @ref="appsSidebarSubItems" IsShow="true">
-                    <SidebarItem>
-                        <SidebarLink To="AdicionarFerramenta">Cadastrar</SidebarLink>
-                    </SidebarItem>
-                    <SidebarItem>
-                        <SidebarLink To="/ListarFerramentas">Listar</SidebarLink>
-                    </SidebarItem>
-                    <SidebarItem>
-                        <SidebarLink To="apps/todo">Histórico</SidebarLink>
-                    </SidebarItem>
-                </SidebarSubItem>
-            </SidebarItem>
-            <SidebarItem>
-                <SidebarLink Toggled="(isOpen)=> EmprestimoSubItems.Toggle(isOpen)" IsShow="true">
-                    <Icon Name="IconName.HandsHelping" Margin="Margin.Is3.FromRight" />Emprestimos
-                </SidebarLink>
-                <SidebarSubItem @ref="EmprestimoSubItems" IsShow="true">
-                    <SidebarItem>
-                        <SidebarLink To="AdicionarFerramenta">Cadastrar</SidebarLink>
-                    </SidebarItem>
-                    <SidebarItem>
-                        <SidebarLink To="/ListarFerramentas">Listar</SidebarLink>
-                    </SidebarItem>
-                    <SidebarItem>
-                        <SidebarLink To="apps/todo">Histórico</SidebarLink>
-                    </SidebarItem>
-                </SidebarSubItem>
-            </SidebarItem>
-        </SidebarNavigation>
-    </SidebarContent>
-</Sidebar>
+﻿@inherits LayoutComponentBase
+
+<Bar Breakpoint="Breakpoint.Desktop" NavigationBreakpoint="Breakpoint.Tablet" ThemeContrast="ThemeContrast.Dark"
+        Mode="BarMode.VerticalInline" CollapseMode="BarCollapseMode.Small">
+    <BarToggler />
+    <BarBrand>
+        <BarItem>
+            <BarLabel>
+                            
+            </BarLabel>
+        </BarItem>
+    </BarBrand>
+    <BarMenu>
+        <BarStart>
+            <BarItem>
+                <BarDropdown @bind-Visible="uiElementsVisible">
+                    <BarDropdownToggle>
+                        <BarIcon IconName="IconName.Wrench" />
+                        Ferramentas
+                    </BarDropdownToggle>
+                    <BarDropdownMenu>
+                        <BarDropdownItem To="/AdicionarFerramenta">
+                            <AuthorizeView>
+                                Cadastrar
+                            </AuthorizeView>
+                        </BarDropdownItem>
+                        <BarDropdownItem To="/ListarFerramentas">
+                            Listar
+                        </BarDropdownItem>
+                    </BarDropdownMenu>
+                </BarDropdown>
+            </BarItem>
+            <BarItem>
+                <BarDropdown>
+                    <BarDropdownToggle>
+                        <BarIcon IconName="IconName.Users" />
+                        Funcionarios
+                    </BarDropdownToggle>
+                    <BarDropdownMenu>
+                        <BarDropdownItem To="/AdicionarFuncionario/">
+                            <AuthorizeView>
+                                Adicionar
+                            </AuthorizeView>
+                        </BarDropdownItem>
+                        <BarDropdownItem To="/listarFuncionarios">
+                            Listar
+                        </BarDropdownItem>
+                                    
+                    </BarDropdownMenu>
+                </BarDropdown>
+            </BarItem>
+            <BarItem>
+                <BarDropdown>
+                    <BarDropdownToggle>
+                        <BarIcon IconName="IconName.HandsHelping" />
+                        Alocações
+                    </BarDropdownToggle>
+                    <BarDropdownMenu>
+                        <BarDropdownItem To="/ListarEmprestimos">
+                            Historico
+                        </BarDropdownItem>
+                    </BarDropdownMenu>
+                </BarDropdown>
+            </BarItem>
+        </BarStart>
+    </BarMenu>
+</Bar>
 
 @code{
-    Sidebar sidebar;
-    SidebarSubItem mailSidebarSubItems;
-    SidebarSubItem appsSidebarSubItems;
-    SidebarSubItem EmprestimoSubItems;
-
-    void ToggleSidebar()
+    void OnThemeEnabledChanged(bool value)
     {
-        sidebar.Toggle();
+        if (Theme == null)
+            return;
+
+        Theme.Enabled = value;
+
+        Theme.ThemeHasChanged();
     }
+
+    void OnGradientChanged(bool value)
+    {
+        if (Theme == null)
+            return;
+
+        Theme.IsGradient = value;
+
+        //if ( Theme.GradientOptions == null )
+        //    Theme.GradientOptions = new GradientOptions();
+
+        //Theme.GradientOptions.BlendPercentage = 80;
+
+        Theme.ThemeHasChanged();
+    }
+
+    void OnRoundedChanged(bool value)
+    {
+        if (Theme == null)
+            return;
+
+        Theme.IsRounded = value;
+
+        Theme.ThemeHasChanged();
+    }
+
+    void OnThemeColorChanged(string value)
+    {
+        if (Theme == null)
+            return;
+
+        if (Theme.ColorOptions == null)
+            Theme.ColorOptions = new ThemeColorOptions();
+
+        if (Theme.BackgroundOptions == null)
+            Theme.BackgroundOptions = new ThemeBackgroundOptions();
+
+        if (Theme.TextColorOptions == null)
+            Theme.TextColorOptions = new ThemeTextColorOptions();
+
+        Theme.ColorOptions.Primary = value;
+        Theme.BackgroundOptions.Primary = value;
+        Theme.TextColorOptions.Primary = value;
+
+        if (Theme.InputOptions == null)
+            Theme.InputOptions = new ThemeInputOptions();
+
+        //Theme.InputOptions.Color = value;
+        Theme.InputOptions.CheckColor = value;
+        Theme.InputOptions.SliderColor = value;
+
+        Theme.ThemeHasChanged();
+    }
+
+    private bool topbarVisible = false;
+    private bool uiElementsVisible = false;
+
+    [CascadingParameter] protected Theme Theme { get; set; }
+
+    RenderFragment customIcon =@<img src="/brand-logo.png" style="width:32px; height: 32px" />;
 }
+
+
+

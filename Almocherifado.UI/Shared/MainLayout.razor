@@ -1,25 +1,27 @@
 ﻿@inherits LayoutComponentBase
-
-
-
-    <Row>
-        <Column ColumnSize="ColumnSize.Is2">
-            <LocalSideBar ></LocalSideBar>
-        </Column>
-        <Column>
-
-
-            <div class="main">
-                <div class="top-row px-4 auth">
+<Layout Class="bg-light">
+    <Layout Sider="true">
+        <LayoutSider>
+            <LayoutSiderContent>
+                <LocalSideBar />
+            </LayoutSiderContent>
+        </LayoutSider>
+        <Layout>
+            <LayoutHeader Fixed="true" Class="bg-light" >
+                <div class="d-block float-right  justify-content-end">
                     <LoginDisplay />
                 </div>
-
-                <div class="content px-4">
+            </LayoutHeader>
+            <LayoutContent>
+                <Container Padding="Padding.Is2" Margin="Margin.Is2">
                     @Body
-                </div>
-            </div>
+                </Container>
+            </LayoutContent>
+        </Layout>
+    </Layout>
+</Layout>
 
-        </Column>
-    </Row>
+
+
 
 

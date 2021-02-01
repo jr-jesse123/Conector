@@ -1,8 +1,10 @@
-﻿@page "/"
+﻿@page "/ListarEmprestimos"
 @using Blazorise.DataGrid
 @using Almocherifado.Application
 
-<DataGrid TItem="Emprestimo" Data="Emprestimos" Filterable="true" PageSize="20" ShowPager="true">
+<DataGrid TItem="Emprestimo" Data="Emprestimos" Filterable="true" PageSize="20" ShowPager="true" 
+          @bind-SelectedRow="EmprestimoSelecionado"
+          DetailRowTrigger="@((item) => item == EmprestimoSelecionado)">
     <DataGridColumns>
         <DataGridColumn TItem="Emprestimo" Field="@nameof(Emprestimo.Obra)" Caption="Obra"></DataGridColumn>
         <DataGridColumn TItem="Emprestimo" Field="@nameof(Emprestimo.Funcionario)" Caption="Responsável"></DataGridColumn>
@@ -46,7 +48,7 @@
     [Inject] IEmprestimosRepository repository { get; set; }
     List<Emprestimo> Emprestimos { get; set; }
     [Inject] IFerramentasService FerramentasService { get; set; }
-
+    Emprestimo EmprestimoSelecionado { get; set; }
     protected override void OnInitialized()
     {
         Emprestimos = repository.GetAllEmprestimos().OrderBy(e => e.Finalizado).ToList();

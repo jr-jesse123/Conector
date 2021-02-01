@@ -6,31 +6,35 @@
 
 @using Almocherifado.Application
 
-
-<Row>
-    <Button Color="Color.Info"   Disabled="PodeAlocar()" @onclick="ShowModal">
-        Alocar Ferramentas Selecionadas
-    </Button>
-</Row>
-
+<AuthorizeView>
+    <Authorized>
+        <Row>
+            <Button Color="Color.Info" Disabled="PodeAlocar()" @onclick="ShowModal">
+                Alocar Ferramentas Selecionadas
+            </Button>
+        </Row>
+    </Authorized>
+    <NotAuthorized>
+        Faça Login para poder Gerenciar Alocações.
+    </NotAuthorized>
+</AuthorizeView>
 <FerramentasGrid @bind-FerramentasChecadas="FerramentasSelecionadas"></FerramentasGrid>
 
 
     <Modal @ref="modalRef"  >
-        <ModalBackdrop />
-        <ModalContent Size="ModalSize.Large" IsCentered="true">
+        <ModalBackdrop   />
+        <ModalContent  Size="ModalSize.Large" IsCentered="true">
             <ModalHeader>
                 <ModalTitle>Employee edit</ModalTitle>
                 <CloseButton Clicked="@HideModal" />
             </ModalHeader>
             <ModalBody>
                 <CadastrarImprestimo OnEmprestimoSalvo="OnAlocacaoFinalizada" Ferramentas="FerramentasSelecionadas" />
-
             </ModalBody>
-            <ModalFooter>
+            @*<ModalFooter>
                 <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
                 <Button Color="Color.Primary" Clicked="@HideModal">Save Changes</Button>
-            </ModalFooter>
+            </ModalFooter>*@
         </ModalContent>
     </Modal>
 

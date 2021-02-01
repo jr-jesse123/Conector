@@ -47,13 +47,13 @@ namespace Almocherifado.InfraEstrutura
             modelBuilder.Entity<Ferramenta>().Property(f => f.Marca);
             modelBuilder.Entity<Ferramenta>().Property(f => f.Modelo);
             modelBuilder.Entity<Ferramenta>().HasMany(f => f.HistoricoEmprestimos).WithOne(h => h.Ferramenta);
-            
+
 
             modelBuilder.Entity<Emprestimo>().HasKey(e => e.Id);
             modelBuilder.Entity<Emprestimo>().HasOne(e => e.Funcionario).WithMany().IsRequired();
             modelBuilder.Entity<Emprestimo>().HasMany(e => e.FerramentasEmprestas).WithOne(fe => fe.Emprestimo)
                 .Metadata.PrincipalToDependent.SetPropertyAccessMode(PropertyAccessMode.Field);
-            
+
             modelBuilder.Entity<Emprestimo>().Property(e => e.Entrega).IsRequired();
             modelBuilder.Entity<Emprestimo>().Property(e => e.Obra).IsRequired();
             modelBuilder.Entity<Emprestimo>().HasOne(e => e.Funcionario);
@@ -65,9 +65,11 @@ namespace Almocherifado.InfraEstrutura
             modelBuilder.Entity<FerramentaEmprestada>().HasOne(fe => fe.Ferramenta).WithMany(f => f.HistoricoEmprestimos);
             modelBuilder.Entity<FerramentaEmprestada>().HasOne(fe => fe.Emprestimo).WithMany(e => e.FerramentasEmprestas);
 
+            //Seed(modelBuilder);
+        }
 
-
-
+        private void Seed(ModelBuilder modelBuilder)
+        {
             DomainFixture fixture = new();
 
             //TODO: REMOVER ESTE SEED JUNTO COM OS PRIVATE SETTERS
@@ -84,8 +86,6 @@ namespace Almocherifado.InfraEstrutura
 
             base.OnModelCreating(modelBuilder);
         }
-
-
     }
 
     public static class ExpressionHelper
