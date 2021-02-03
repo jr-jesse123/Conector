@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 using Almocherifado.core.AgregateRoots.FuncionarioNm;
+using AutoFixture;
 
 namespace Almocherifado.UI.Tests
 {
@@ -56,13 +57,18 @@ namespace Almocherifado.UI.Tests
         }
 
         [Theory, UiAutoData]
-        public void Conversao_De_Emprestimo_Para_EmprestimoModelModel_eh_Valida(EmprestimoModel emprestmioModel, List<Ferramenta>  ferramentas)
+        public void Conversao_De_Emprestimo_Para_EmprestimoModelModel_eh_Valida(EmprestimoModel emprestmioModel, Funcionario funcionario, UIFixture fixture)
         {
+
+
             var emprestimoObject = mapper.Map<EmprestimoModel, Emprestimo>(emprestmioModel);
             
             emprestimoObject.Entrega.Should().NotBe(default(DateTime));
             emprestimoObject.Finalizado.Should().BeFalse();
-            emprestimoObject.Funcionario.Should().Be(mapper.Map<Funcionario>(emprestmioModel.Funcionario));
+
+            //emprestimoObject.Funcionario.Id.Should();
+
+            emprestimoObject.Funcionario.CPF.ToString().Should().Be(mapper.Map<Funcionario>(emprestmioModel.Funcionario).CPF.ToString());
             emprestimoObject.Funcionario.CPF.ToString().Should().Be(emprestmioModel.Funcionario.CPF);
             emprestimoObject.Obra.Should().Be(emprestmioModel.Obra);
             emprestimoObject.Entrega.Should().Be(emprestmioModel.entrega);
@@ -70,6 +76,17 @@ namespace Almocherifado.UI.Tests
             emprestimoObject.FerramentasEmprestas.ForEach(e => e.AcusarRecebimento());
 
             emprestimoObject.Finalizado.Should().BeTrue();
+
+        }
+
+
+
+        [Theory, UiAutoData]
+        public void Conversao_De_FuncionarioModel_Para_Funcionario_eh_Valida(FuncionarioModel funcionarioModel)
+        {
+            var funcionarioObject = mapper.Map<FuncionarioModel, Funcionario>(funcionarioModel);
+            funcionarioObject.CPF.ToString().Should().Be(funcionarioModel.CPF.ToString());
+
 
         }
     }

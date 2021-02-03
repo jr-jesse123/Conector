@@ -21,7 +21,8 @@ namespace Almocherifado.Application.Tests
 
         public FerramentasServicesTests()
         {
-            var options = new DbContextOptionsBuilder<AlmocherifadoContext>().UseSqlite(@"Data Source = TestesFerramentaServcie.db;").Options;
+            var options = new DbContextOptionsBuilder<AlmocherifadoContext>()
+                .UseSqlite(@"Data Source = TestesFerramentaServcie.db;").Options;
             context = new AlmocherifadoContext(options);
 
             context.Database.EnsureDeleted();

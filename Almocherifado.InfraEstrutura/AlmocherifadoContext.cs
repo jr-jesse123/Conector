@@ -1,8 +1,10 @@
 ﻿using Almocherifado.core.AgregateRoots.EmprestimoNm;
 using Almocherifado.core.AgregateRoots.FerramentaNm;
 using Almocherifado.core.AgregateRoots.FuncionarioNm;
+using Almocherifado.core.Commom;
 using Almocherifado.core.Tests;
 using AutoFixture;
+using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -22,15 +24,12 @@ namespace Almocherifado.InfraEstrutura
             
         }
 
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Funcionario>().HasKey(f => f.Id);
+
             modelBuilder.Entity<Funcionario>()
                 .Property(f => f.CPF).HasConversion(p => p.Value, p => CPF.Create(p).Value);
-
-            modelBuilder.Entity<Funcionario>()
-                .HasKey(f => f.CPF);
-
 
             modelBuilder.Entity<Funcionario>()
           .Property(f => f.Email).HasConversion(p => p.Value, p => Email.Create(p).Value);
@@ -85,6 +84,33 @@ namespace Almocherifado.InfraEstrutura
             modelBuilder.Entity<Funcionario>().HasData(fixture.CreateMany<Funcionario>(10));
 
             base.OnModelCreating(modelBuilder);
+        }
+
+
+
+        public override int SaveChanges()
+        {
+            var output =  base.SaveChanges();
+
+            // dispatch events only if save was successful
+            var entitiesWithEvents = ChangeTracker.Entries<AggregateRoot>()
+                .Select(e => e.Entity)
+                .Where(e => e.DomainEvents.Any())
+                .ToArray();
+
+            foreach (AggregateRoot entity in entitiesWithEvents)
+            {
+                var events = entity.DomainEvents.ToArray();
+                
+                foreach (var domainEvent in events)
+                {
+                    DomainEvents.Dispatch(domainEvent);
+                }
+                
+                entity.ClevarEvents();
+            }
+
+            return output;
         }
     }
 

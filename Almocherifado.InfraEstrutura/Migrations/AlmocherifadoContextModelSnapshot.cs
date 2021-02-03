@@ -18,16 +18,15 @@ namespace Almocherifado.InfraEstrutura.Migrations
 
             modelBuilder.Entity("Almocherifado.core.AgregateRoots.EmprestimoNm.Emprestimo", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Entrega")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("FuncionarioCPF")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<long>("FuncionarioId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Obra")
                         .IsRequired()
@@ -38,7 +37,7 @@ namespace Almocherifado.InfraEstrutura.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FuncionarioCPF");
+                    b.HasIndex("FuncionarioId");
 
                     b.ToTable("Emprestimos");
                 });
@@ -74,14 +73,14 @@ namespace Almocherifado.InfraEstrutura.Migrations
 
             modelBuilder.Entity("Almocherifado.core.AgregateRoots.FerramentaNm.FerramentaEmprestada", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime?>("DataDevolucao")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("EmprestimoId")
+                    b.Property<long?>("EmprestimoId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("FerramentaId")
@@ -100,6 +99,10 @@ namespace Almocherifado.InfraEstrutura.Migrations
 
             modelBuilder.Entity("Almocherifado.core.AgregateRoots.FuncionarioNm.Funcionario", b =>
                 {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("CPF")
                         .HasColumnType("TEXT");
 
@@ -109,7 +112,7 @@ namespace Almocherifado.InfraEstrutura.Migrations
                     b.Property<string>("Nome")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("CPF");
+                    b.HasKey("Id");
 
                     b.ToTable("Funcionarios");
                 });
@@ -118,7 +121,7 @@ namespace Almocherifado.InfraEstrutura.Migrations
                 {
                     b.HasOne("Almocherifado.core.AgregateRoots.FuncionarioNm.Funcionario", "Funcionario")
                         .WithMany()
-                        .HasForeignKey("FuncionarioCPF")
+                        .HasForeignKey("FuncionarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

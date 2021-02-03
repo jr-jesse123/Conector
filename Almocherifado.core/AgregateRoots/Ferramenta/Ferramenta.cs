@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Almocherifado.core.AgregateRoots.FerramentaNm
 {
     [DebuggerDisplay("id:{Id},Nome:{NomeAbreviado}")]
-    public class Ferramenta : ValueObject<Ferramenta>
+    public class Ferramenta : Entity
     {
         protected Ferramenta() { }
 
@@ -41,19 +41,11 @@ namespace Almocherifado.core.AgregateRoots.FerramentaNm
                     return HistoricoEmprestimos.Any(e => !e.DataDevolucao.HasValue);
                 else
                     return false;
-                
             } 
         }
 
-        protected override bool EqualsCore(Ferramenta other)
-        {
-            return other.Id == Id;
-        }
 
-        protected override int GetHashCodeCore()
-        {
-            return Id.GetHashCode();
-        }
+
 
         public override string ToString()
         {

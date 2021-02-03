@@ -6,6 +6,7 @@ using AutoFixture.Kernel;
 using AutoFixture.Xunit2;
 using Bogus;
 using Bogus.Extensions.Brazil;
+using CSharpFunctionalExtensions;
 using System;
 using System.Reflection;
 
@@ -74,6 +75,14 @@ class DomainClassesGenerator : ISpecimenBuilder
                 return DateTime.Today;
             }
         }
+
+
+        var entity = request as Entity<CPF>;
+        if (entity is not null)
+        {
+
+        }
+        
 
         return new NoSpecimen();
 

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Almocherifado.UI.Data.Models.MappingProfiles
 {
+    
     public class DomainToResponseProfile : Profile
     {
         public DomainToResponseProfile()
@@ -18,8 +19,13 @@ namespace Almocherifado.UI.Data.Models.MappingProfiles
                 .ForMember(dest => dest.Id, opt => opt.Ignore());
             CreateMap<Ferramenta, FerramentaModel>();
 
-            CreateMap<FuncionarioModel, Funcionario>();
-            CreateMap<Funcionario, FuncionarioModel>();
+            CreateMap<FuncionarioModel, Funcionario>()
+                .ForMember(F => F.Id, OPT => OPT.Ignore())
+                    .ForMember(F => F.CPF, OPT => OPT.MapFrom(f => f.CPF))
+                ;
+
+            CreateMap<Funcionario, FuncionarioModel>()
+                ;
 
 
             CreateMap<EmprestimoModel, Emprestimo>()
@@ -27,6 +33,9 @@ namespace Almocherifado.UI.Data.Models.MappingProfiles
                 new Funcionario(mod.Funcionario.Nome, mod.Funcionario.CPF, mod.Funcionario.Email),
                 mod.Obra, mod.Ferramentas.ToArray()))
                 .ForMember(e => e.FerramentasEmprestas, opt => opt.Ignore())
+                .ForMember(e => e.Id, opt => opt.Ignore())
+                .ForMember(e => e.DomainEvents, opt => opt.Ignore())
+
                 ;
         }
     }

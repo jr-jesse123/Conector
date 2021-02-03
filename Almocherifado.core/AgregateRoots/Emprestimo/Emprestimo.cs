@@ -3,12 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Almocherifado.core.AgregateRoots.FuncionarioNm;
-using Almocherifado.core.AgregateRoots.FerramentaNm;
+using CSharpFunctionalExtensions;
+using Almocherifado.core.Commom;
 
 namespace Almocherifado.core.AgregateRoots.EmprestimoNm
 {
-    public class Emprestimo
+    public class Emprestimo : AggregateRoot
     {
+        public new void ClevarEvents()
+        {
+            throw new Exception("deixa de ser inxirido");
+        }
+
         protected Emprestimo() { }
         public Emprestimo(DateTime entrega, Funcionario  funcionario, string obra, params Ferramenta[] ferramentas)
         {
@@ -26,9 +32,12 @@ namespace Almocherifado.core.AgregateRoots.EmprestimoNm
             Funcionario = funcionario ?? throw new ArgumentNullException(nameof(funcionario));
             _ferramentasEmprestas = ferramentas.Select(ferramenta => new FerramentaEmprestada(ferramenta)).ToList();
             Obra = obra;
+
+            AddDomainEvent(new EmprestimoCriadoEvent(this));
+            
         }
 
-        public int Id { get; }
+        //public int Id { get; }
         public DateTime Entrega { get; }
         public virtual Funcionario Funcionario { get; }
         private readonly List<FerramentaEmprestada> _ferramentasEmprestas = new List<FerramentaEmprestada>();
@@ -37,6 +46,8 @@ namespace Almocherifado.core.AgregateRoots.EmprestimoNm
         public string TermoResponsabilidade { get; }
         public bool Finalizado { get => FerramentasEmprestas.Any(f => f.DataDevolucao is null) ? false : true; }
 
-
     }
+
+
+    
 }

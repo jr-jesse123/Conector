@@ -37,7 +37,6 @@ namespace Almocherifado.InfraEstrutura.Repositorios
                 }
             }
 
-
             context.AttachRange(emprestimo.FerramentasEmprestas);
 
             context.Emprestimos.Add(emprestimo);
