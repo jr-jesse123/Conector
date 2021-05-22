@@ -72,10 +72,10 @@ namespace Almocherifado.UI
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();
 
-            services.AddDbContext<AlmocherifadoContext>(x => 
-                x.UseSqlite(@"Data Source = almocherifado.db")
-                .UseLazyLoadingProxies());
-            
+            services.AddDbContext<AlmocherifadoContext>(x =>
+                x.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddBlazorDownloadFile();
             services.AddScoped<IPrintingService, PrintingService>();
 

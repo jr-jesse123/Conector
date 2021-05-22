@@ -22,13 +22,14 @@ namespace Almocherifado.InfraEstrutura.Tests
         public FerramentasRepositoryTests(ITestOutputHelper testOutputHelper)
         {
             DbContextOptions<AlmocherifadoContext> options = new DbContextOptionsBuilder<AlmocherifadoContext>()
-           .UseSqlite(@"Data Source=TestesFerramentas.db")
-           .UseLazyLoadingProxies().Options;
+           .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=almocherifadoTests;Trusted_Connection=True;MultipleActiveResultSets=true")
+           .Options;
            
             testContext = new AlmocherifadoContext(options);
             testContext.Database.EnsureDeleted();
 
-            testContext.Database.Migrate();
+            testContext.Database.EnsureCreated();
+            //testContext.Database.Migrate();
             
             // this.testOutputHelper = testOutputHelper;
         }

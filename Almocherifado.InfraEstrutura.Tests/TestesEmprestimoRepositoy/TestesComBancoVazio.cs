@@ -29,8 +29,9 @@ namespace Almocherifado.InfraEstrutura.Tests.TestesEmprestimoRepositoy
         {
             var con = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TesteEmprestimo;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             DbContextOptions<AlmocherifadoContext> options = new DbContextOptionsBuilder<AlmocherifadoContext>()
-                
-                .UseSqlite(@$"Data Source = Testesalmocherifado.db;").Options;
+
+                .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=almocherifadoTests;Trusted_Connection=True;MultipleActiveResultSets=true")
+           .Options;
 
 
             TestContext = new AlmocherifadoContext(options);

@@ -20,11 +20,13 @@ namespace Almocherifado.InfraEstrutura.Tests
 
             DbContextOptions<AlmocherifadoContext> options = new 
                 DbContextOptionsBuilder<AlmocherifadoContext>()
-                .UseSqlite("Data Source = FuncionariosTests.db").Options;
+                .UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=almocherifadoTests;Trusted_Connection=True;MultipleActiveResultSets=true")
+           .Options; 
 
             testContext = new AlmocherifadoContext(options);
             testContext.Database.EnsureDeleted();
-            testContext.Database.Migrate();
+            testContext.Database.EnsureCreated();
+
         }
         
         [Theory, DomainAutoData]

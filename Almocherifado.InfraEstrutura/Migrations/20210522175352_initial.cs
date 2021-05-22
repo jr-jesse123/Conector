@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Almocherifado.InfraEstrutura.Migrations
 {
-    public partial class initial1 : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,12 +11,14 @@ namespace Almocherifado.InfraEstrutura.Migrations
                 name: "Ferramentas",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    NomeAbreviado = table.Column<string>(type: "TEXT", nullable: true),
-                    Descrição = table.Column<string>(type: "TEXT", nullable: true),
-                    DataCompra = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    FotoUrl = table.Column<string>(type: "TEXT", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NomeAbreviado = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Marca = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Modelo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DataCompra = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FotoUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -27,33 +29,35 @@ namespace Almocherifado.InfraEstrutura.Migrations
                 name: "Funcionarios",
                 columns: table => new
                 {
-                    CPF = table.Column<string>(type: "TEXT", nullable: false),
-                    Nome = table.Column<string>(type: "TEXT", nullable: true),
-                    Email = table.Column<string>(type: "TEXT", nullable: true)
+                    cpfStr = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CPF = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Funcionarios", x => x.CPF);
+                    table.PrimaryKey("PK_Funcionarios", x => x.cpfStr);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Emprestimos",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Entrega = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    FuncionarioCPF = table.Column<string>(type: "TEXT", nullable: false),
-                    Obra = table.Column<string>(type: "TEXT", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Entrega = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FuncionariocpfStr = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Obra = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TermoResponsabilidade = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Emprestimos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Emprestimos_Funcionarios_FuncionarioCPF",
-                        column: x => x.FuncionarioCPF,
+                        name: "FK_Emprestimos_Funcionarios_FuncionariocpfStr",
+                        column: x => x.FuncionariocpfStr,
                         principalTable: "Funcionarios",
-                        principalColumn: "CPF",
+                        principalColumn: "cpfStr",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -61,11 +65,11 @@ namespace Almocherifado.InfraEstrutura.Migrations
                 name: "FerramentaEmprestada",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    EmprestimoId = table.Column<int>(type: "INTEGER", nullable: true),
-                    DataDevolucao = table.Column<DateTime>(type: "TEXT", nullable: true),
-                    FerramentaId = table.Column<int>(type: "INTEGER", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmprestimoId = table.Column<int>(type: "int", nullable: true),
+                    DataDevolucao = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    FerramentaId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -85,9 +89,9 @@ namespace Almocherifado.InfraEstrutura.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Emprestimos_FuncionarioCPF",
+                name: "IX_Emprestimos_FuncionariocpfStr",
                 table: "Emprestimos",
-                column: "FuncionarioCPF");
+                column: "FuncionariocpfStr");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FerramentaEmprestada_EmprestimoId",

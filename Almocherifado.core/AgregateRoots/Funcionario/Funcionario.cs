@@ -6,23 +6,27 @@ namespace Almocherifado.core.AgregateRoots.FuncionarioNm
 {
     public class Funcionario : ValueObject<Funcionario>
     {
+        private string cpfStr;
+        private CPF cPF;
+
         public Nome Nome { get; }
-        public CPF CPF { get; }
+
+        public CPF CPF { get => cPF; set { cpfStr = value.Value; cPF = value;  } }
         public Email Email { get; }
 
         //public Funcionario( CPF cpf)
         //{
-            
+
         //    CPF = cpf;
 
-            
+
         //}
 
         public Funcionario(Nome nome, CPF cpf, Email email)
         {
             Nome = nome;
             CPF = cpf;
-            
+
             Email = email;
         }
         protected Funcionario() { }

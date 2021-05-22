@@ -29,7 +29,7 @@ namespace Almocherifado.InfraEstrutura
                 .Property(f => f.CPF).HasConversion(p => p.Value, p => CPF.Create(p).Value);
 
             modelBuilder.Entity<Funcionario>()
-                .HasKey(f => f.CPF);
+                .HasKey("cpfStr");
 
 
             modelBuilder.Entity<Funcionario>()
