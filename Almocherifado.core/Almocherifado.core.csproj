@@ -15,10 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Services\Modelo de Responsabilidade de equipamentos.docx">
+    <None Update="Services\Modelo_de_Responsabilidade_de_equipamentos.docx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Services\Modelo de Responsabilidade de equipamentos.pdf">
+    <None Update="Services\Modelo_de_Responsabilidade_de_equipamentos.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Services\toPDF.PDF">

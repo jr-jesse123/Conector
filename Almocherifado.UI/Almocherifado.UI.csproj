@@ -6,33 +6,27 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\fotos\Modelo de Responsabilidade de equipamentos.docx" />
-    <Content Remove="wwwroot\Termos\Modelo de Responsabilidade de equipamentos.pdf" />
+    <Content Remove="wwwroot\fotos\Modelo_de_Responsabilidade_de_equipamentos.docx" />
+    <Content Remove="wwwroot\termos\Modelo_de_Responsabilidade_de_equipamentos.pdf" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\fotos\Modelo de Responsabilidade de equipamentos.docx">
+    <None Include="wwwroot\fotos\Modelo_de_Responsabilidade_de_equipamentos.docx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="wwwroot\Termos\Modelo de Responsabilidade de equipamentos.pdf">
+    <None Include="wwwroot\termos\Modelo_de_Responsabilidade_de_equipamentos.pdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
-
-	<ItemGroup>
-		<Content Remove="wwwroot\fotos\Modelo de Responsabilidade de equipamentos.docx" />
-		<Content Remove="wwwroot\termos\Modelo de Responsabilidade de equipamentos.pdf" />
-	</ItemGroup>
-
-	<ItemGroup>
+	<!--<ItemGroup>
 		<None Include="wwwroot\fotos\Modelo de Responsabilidade de equipamentos.docx">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 		<None Include="wwwroot\termos\Modelo de Responsabilidade de equipamentos.pdf">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-	</ItemGroup>
+	</ItemGroup>-->
 
 	<ItemGroup>
 	<PackageReference Include="Append.Blazor.Printing" Version="1.0.0" />

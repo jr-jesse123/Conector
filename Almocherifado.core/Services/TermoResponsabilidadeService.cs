@@ -52,7 +52,7 @@ namespace Almocherifado.core.Services
         {
             lock (this)
             {
-                using var documento = DocX.Load(basepath + @"\Services\Modelo de Responsabilidade de equipamentos.docx");
+                using var documento = DocX.Load(basepath + @"/Services/Modelo_de_Responsabilidade_de_equipamentos.docx");
                 return documento.Copy();
             }
         }
