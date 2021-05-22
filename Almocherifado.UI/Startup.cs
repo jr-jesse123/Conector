@@ -135,13 +135,13 @@ namespace Almocherifado.UI
                 endpoints.MapFallbackToPage("/_Host");
             });
 
-            //var user = new IdentityUser("Admin3") { Email = "admin3@admin", EmailConfirmed = true };
-            //var hash = new PasswordHasher<IdentityUser>().HashPassword(null, "SenhaAdmin");
-            ////user.PasswordHash = hash;
-            ////var userStore = new UserStore<IdentityUser>(applicationDbContext);
-            
-            // var result = userManager.CreateAsync(user,"Senhakrai").Result;
-            
+            var user = new IdentityUser("Admin3") { Email = "admin3@admin", EmailConfirmed = true };
+            var hash = new PasswordHasher<IdentityUser>().HashPassword(null, "SenhaAdmin");
+            user.PasswordHash = hash;
+            var userStore = new UserStore<IdentityUser>(applicationDbContext);
+
+            var result = userManager.CreateAsync(user, "Senhakrai").Result;
+
 
         }
     }

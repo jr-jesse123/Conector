@@ -21,7 +21,6 @@ namespace Almocherifado.UI
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>()
-                    .UseUrls("https://*:4999")
                     ;
                 });
     }
