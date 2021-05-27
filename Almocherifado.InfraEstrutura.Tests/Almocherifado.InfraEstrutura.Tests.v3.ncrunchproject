@@ -4,6 +4,7 @@
       <NamedTestSelector>
         <TestName>Almocherifado.InfraEstrutura.Tests.WordToPDfTests.Arquivo_Word_Eh_Convertido_Para_PDF</TestName>
       </NamedTestSelector>
+      <AllTestsSelector />
     </IgnoredTests>
   </Settings>
 </ProjectConfiguration>

@@ -1,0 +1,19 @@
+﻿@inherits LayoutComponentBase
+@using MenuLateral
+
+
+<div id="quadro" class=" bg-white">
+    <header class="d-flex align-items-center justify-content-between">
+       <LogoConnector/>
+        <CurrentUser/>
+    </header>
+    <div id="center" class="row h-100">
+        <aside class="col-3 pt-5">
+            <Almocherifado.UI.Components.Layout.MenuLateral.MenuLateral />
+            <div id="body" class="col-9">
+                @Body
+            </div>
+        </aside>
+    </div>
+
+</div>

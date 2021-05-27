@@ -1,0 +1,27 @@
+﻿#center {
+    width: calc(100% - 165px);
+}
+
+header {
+    height: 70px;
+    background-color: #05374D;
+    margin-right: 165px;
+}
+
+aside {
+    background-color: #05374D;
+    height: 100%;
+}
+
+#quadro {
+    background-color: white;
+    height: 100%;
+    max-width: calc(100% - 165px);
+    margin-left: auto;
+}
+
+#espace {
+    float: right;
+    width: 165px;
+    height: 100%;
+}

@@ -1,0 +1,62 @@
+﻿<div class="Menu-Item">
+    <div class="Menu-Item-Title d-flex w-100" @onclick="() => Toogle()">
+
+        <div class="icon-container" style="width:40px">
+            @Icon
+        </div>
+
+        <h5 class="text-white mx-3 w-100">
+            @Titulo
+        </h5>
+
+        <div class="icon-container ">
+            <svg width="23" height="24" viewBox="0 0 23 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M2.29946 6.96936C2.36434 6.89952 2.44143 6.8441 2.52629 6.80629C2.61116 6.76849 2.70214 6.74902 2.79402 6.74902C2.8859 6.74902 2.97688 6.76849 3.06174 6.80629C3.1466 6.8441 3.22369 6.89952 3.28858 6.96936L11.1764 15.4399L19.0642 6.96936C19.1291 6.89963 19.2062 6.84432 19.2911 6.80658C19.3759 6.76884 19.4669 6.74942 19.5587 6.74942C19.6506 6.74942 19.7415 6.76884 19.8264 6.80658C19.9112 6.84432 19.9883 6.89963 20.0533 6.96936C20.1182 7.0391 20.1697 7.12188 20.2049 7.21299C20.24 7.3041 20.2581 7.40175 20.2581 7.50036C20.2581 7.59898 20.24 7.69663 20.2049 7.78774C20.1697 7.87885 20.1182 7.96163 20.0533 8.03136L11.6709 17.0314C11.606 17.1012 11.529 17.1566 11.4441 17.1944C11.3592 17.2322 11.2682 17.2517 11.1764 17.2517C11.0845 17.2517 10.9935 17.2322 10.9086 17.1944C10.8238 17.1566 10.7467 17.1012 10.6818 17.0314L2.29946 8.03136C2.23441 7.9617 2.18279 7.87893 2.14758 7.78781C2.11236 7.6967 2.09424 7.59901 2.09424 7.50036C2.09424 7.40171 2.11236 7.30403 2.14758 7.21291C2.18279 7.1218 2.23441 7.03903 2.29946 6.96936Z" fill="white" />
+            </svg>
+        </div>
+
+    </div>
+    <ul class="text-white list-unstyled ms-5 @collapseClass">
+
+        @foreach (var item in Links)
+        {
+            <li class="@(item.Text == Selected ? "fw-bold" : "" )">
+                @item.Text
+            </li>
+
+        }
+       
+    </ul>
+</div>
+
+
+@code   {
+
+    [Parameter] public bool isCollapsed { get; set; } = true;
+
+    string collapseClass;
+    string arrowDirectionClass = "";
+
+    protected override void OnParametersSet()
+    {
+        collapseClass = isCollapsed ? "collapse" : "collapse show";
+        arrowDirectionClass = isCollapsed ? "" : "inverted";
+    }
+
+    public void Toogle()
+    {
+        isCollapsed = !isCollapsed;
+
+        OnParametersSet();
+    }
+
+
+    [Parameter] public string Titulo { get; set; } = "";
+    [Parameter] public List<(string Text, string Href)> Links { get; set; }
+           = new List<(string Text, string Href)>();
+    [Parameter] public string Selected { get; set; } = "";
+    [Parameter] public RenderFragment Icon { get; set; }
+
+
+
+}

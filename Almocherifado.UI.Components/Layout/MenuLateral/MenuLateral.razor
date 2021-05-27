@@ -1,0 +1,27 @@
+﻿@using Almocherifado.UI.Components.Layout.MenuLateral.icons
+
+<MenuItem Titulo="FERRAMENTAS"
+          Links="@(new List<(string, string)>() {("CADASTRAR",""), ("LISTAR","") }  )"
+          Selected="CADASTRAR">
+
+    <Icon>
+        <FerramentasIcon/>
+    </Icon>
+
+</MenuItem>
+
+
+<MenuItem Titulo="FUNCIONÁRIOS"
+          Links="@(new List<(string, string)>() {("CADASTRAR",""), ("LISTAR","") }  )">
+    <Icon>
+        <FuncionariosIcon />
+    </Icon>
+</MenuItem>
+
+
+<MenuItem Titulo="ALOCAÇÕES"
+          Links="@(new List<(string, string)>() {("HISTÓRICO","")}  )">
+    <Icon>
+        <AlocacoesIcon />
+    </Icon>
+</MenuItem>

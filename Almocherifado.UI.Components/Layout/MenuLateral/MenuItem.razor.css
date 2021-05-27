@@ -1,0 +1,21 @@
+﻿
+a{
+    text-decoration:none;
+}
+
+.Menu-Item {
+    font-family: Inter;
+    color: white;
+}
+Menu-Item li {
+    color: white;
+}
+
+.inverted {
+    transform: rotate(180deg);
+}
+
+.icon-container {
+    min-width: 30px;
+}
+
