@@ -1,0 +1,33 @@
+﻿<div class="mb-3">
+
+    <label class="form-label w-100">
+        @LabelContent
+        @InputField
+    </label>
+    @Disclaimer
+    @ValidFeedBack
+    @InvalidValidFeedBack
+</div>
+
+@code{
+
+    
+
+    [Parameter] public RenderFragment LabelContent { get; set; }
+
+    [Parameter]
+    public RenderFragment ValidFeedBack { get; set; } =@<span />;
+
+    [Parameter]
+    public RenderFragment InvalidValidFeedBack { get; set; } =@<span />;
+
+    [Parameter]
+    public RenderFragment InputField { get; set; } = @<input type="text" class="form-control" />;
+
+    [Parameter]
+    public RenderFragment Disclaimer { get; set; } = @<span />;
+
+
+//@<div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>;
+
+}

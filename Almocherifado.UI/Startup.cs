@@ -23,6 +23,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Syncfusion.Blazor;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,7 +66,8 @@ namespace Almocherifado.UI
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
-            
+
+            services.AddSyncfusionBlazor();
 
 
             services.AddBlazorise(options => options.ChangeTextOnKeyPress = false )
@@ -101,6 +103,10 @@ namespace Almocherifado.UI
             AlmocherifadoContext context, ApplicationDbContext applicationDbContext,
             UserManager<IdentityUser> userManager)
         {
+
+            Syncfusion.Licensing.SyncfusionLicenseProvider
+                .RegisterLicense("NDUyMjY2QDMxMzkyZTMxMmUzMFB3VlplMFgwZm9KYVR6UVZ3dG1pcTcvSzg0elBLaTFsSi9maTRUVVZUcHc9");
+
             applicationDbContext.Database.Migrate();
             context.Database.Migrate();
 

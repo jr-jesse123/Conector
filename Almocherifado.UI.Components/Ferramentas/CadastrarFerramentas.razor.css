@@ -1,0 +1,32 @@
+﻿.half-contained {
+    width: calc(44%);
+}
+
+
+
+/*Input File*/
+#DropArea {
+    padding: 50px 25px;
+    margin: 0px auto;
+    border: 1px solid #c3c3c3;
+    text-align: center;
+    width: 100%;
+    display: inline-flex;
+}
+
+.e-file-select,
+.e-file-drop {
+    display: none;
+}
+
+body .e-upload-drag-hover {
+    outline: 2px dashed brown;
+}
+
+#uploadfile {
+    width: 60%;
+    display: inline-flex;
+    margin-left: 5%;
+}
+
+
