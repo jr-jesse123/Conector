@@ -1,5 +1,39 @@
-﻿@page "/"
+﻿@page "/{Route}"
+@inject NavigationManager navMan
 @using Almocherifado.UI.Components.Ferramentas
 
 
-<Almocherifado.UI.Components.Inicio></Almocherifado.UI.Components.Inicio>
+@switch (Route)
+{
+    case "":
+        <Almocherifado.UI.Components.Inicio></Almocherifado.UI.Components.Inicio>
+        break;
+    case "CadastrarFerramenta":
+        <CadastrarFerramentas />
+        break;
+
+    case "ListarFerramenta":
+        <ListarFerramentas />
+        break;
+    case "CadastrarFuncionario":
+        <h1>Nada aqui ainad</h1>
+        break;
+    case "ListarFuncionario":
+        <Almocherifado.UI.Components.Funcionarios.ListarFuncionarios></Almocherifado.UI.Components.Funcionarios.ListarFuncionarios>
+        break;
+    case "AlocarFerramenta":
+        <Almocherifado.UI.Components.Alocacao.AlocarFerramenta />
+        break;
+    case "DevolverFerramenta":
+        <h1>Nada aqui ainda</h1>
+        break;
+    default:
+        <h1>Rota não encontrada</h1>
+        break;
+}
+
+
+@code{
+    [Parameter] public string Route { get; set; }
+}
+

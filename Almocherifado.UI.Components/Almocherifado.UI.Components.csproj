@@ -7,11 +7,13 @@
   <ItemGroup>
     <None Remove="Ferramentas\ListarFerramentas.razor.css" />
     <None Remove="Inicio.razor.css" />
+    <None Remove="Layout\MenuLateral\MenuLateral.razor.css" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Ferramentas\ListarFerramentas.razor.css" />
     <Content Include="Inicio.razor.css" />
+    <Content Include="Layout\MenuLateral\MenuLateral.razor.css" />
   </ItemGroup>
 
   

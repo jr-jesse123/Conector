@@ -1,4 +1,6 @@
-﻿<div class="Menu-Item">
+﻿
+
+<div class="Menu-Item">
     <div class="Menu-Item-Title d-flex w-100" @onclick="() => Toogle()">
 
         <div class="icon-container" style="width:40px">
@@ -20,10 +22,11 @@
 
         @foreach (var item in Links)
         {
-            <li class="@(item.Text == Selected ? "fw-bold" : "" )">
-                @item.Text
-            </li>
-
+            <div class="text-white">
+                <a class="@(item.Text == Selected ? "fw-bold" : "" )" href="@item.Href">
+                    @item.Text
+                </a>
+            </div>
         }
        
     </ul>

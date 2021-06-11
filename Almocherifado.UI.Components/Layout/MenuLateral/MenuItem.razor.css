@@ -1,11 +1,14 @@
 ﻿
 a{
     text-decoration:none;
+    text-transform:uppercase;
+    text-decoration:none;
 }
 
 .Menu-Item {
     font-family: Inter;
     color: white;
+    cursor:pointer;
 }
 Menu-Item li {
     color: white;

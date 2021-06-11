@@ -1,8 +1,7 @@
 ﻿@using Almocherifado.UI.Components.Layout.MenuLateral.icons
+@inject  NavigationManager navManager
 
-
-
-<div class="my-2 d-flex align-items-center">
+<div id="Home" class="my-4 d-flex align-items-center" @onclick="@(() => navManager.NavigateTo("/"))">
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M7.3125 12.3694V16.3125C7.3125 16.4617 7.25324 16.6048 7.14775 16.7103C7.04226 16.8158 6.89919 16.875 6.75 16.875H2.25C2.10082 16.875 1.95774 16.8158 1.85225 16.7103C1.74676 16.6048 1.6875 16.4617 1.6875 16.3125V8.43753C1.68737 8.36361 1.70181 8.29039 1.72999 8.22206C1.75817 8.15372 1.79955 8.09161 1.85175 8.03928L8.60175 1.28928C8.654 1.2369 8.71607 1.19533 8.78441 1.16698C8.85275 1.13862 8.92601 1.12402 9 1.12402C9.07399 1.12402 9.14725 1.13862 9.21559 1.16698C9.28393 1.19533 9.346 1.2369 9.39825 1.28928L16.1483 8.03928C16.2005 8.09161 16.2418 8.15372 16.27 8.22206C16.2982 8.29039 16.3126 8.36361 16.3125 8.43753V16.3125C16.3125 16.4617 16.2532 16.6048 16.1477 16.7103C16.0423 16.8158 15.8992 16.875 15.75 16.875H11.25C11.1008 16.875 10.9577 16.8158 10.8523 16.7103C10.7468 16.6048 10.6875 16.4617 10.6875 16.3125V12.375C10.6875 12.0938 10.4063 11.8125 10.125 11.8125H7.875C7.59375 11.8125 7.3125 12.0938 7.3125 12.3694Z" fill="white" />
         <path fill-rule="evenodd" clip-rule="evenodd" d="M14.625 2.8125V6.75L12.375 4.5V2.8125C12.375 2.66332 12.4343 2.52024 12.5398 2.41475C12.6452 2.30926 12.7883 2.25 12.9375 2.25H14.0625C14.2117 2.25 14.3548 2.30926 14.4602 2.41475C14.5657 2.52024 14.625 2.66332 14.625 2.8125Z" fill="white" />
@@ -10,10 +9,8 @@
     <h4 class="mx-2 my-0 text-white">INÍCIO</h4>
 </div>
 
-
-
 <MenuItem Titulo="FERRAMENTAS"
-          Links="@(new List<(string, string)>() {("CADASTRAR",""), ("LISTAR","") }  )"
+          Links="@(new List<(string, string)>() {("CADASTRAR","CadastrarFerramenta"), ("LISTAR","ListarFerramenta") }  )"
           Selected="CADASTRAR">
 
     <Icon>
@@ -24,7 +21,7 @@
 
 
 <MenuItem Titulo="FUNCIONÁRIOS"
-          Links="@(new List<(string, string)>() {("CADASTRAR",""), ("LISTAR","") }  )">
+          Links="@(new List<(string, string)>() {("CADASTRAR","CadastrarFuncionario"), ("LISTAR","ListarFuncionario") }  )">
     <Icon>
         <FuncionariosIcon />
     </Icon>
@@ -32,7 +29,7 @@
 
 
 <MenuItem Titulo="ALOCAÇÕES"
-          Links="@(new List<(string, string)>() {("HISTÓRICO","")}  )">
+          Links="@(new List<(string, string)>() {("Alocar Ferramenta","AlocarFerramenta"),("Devolver Ferramenta","DevolverFerramenta")}  )">
     <Icon>
         <AlocacoesIcon />
     </Icon>

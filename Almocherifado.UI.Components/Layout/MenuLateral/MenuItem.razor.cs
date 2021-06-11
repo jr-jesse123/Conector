@@ -10,7 +10,7 @@ namespace Almocherifado.UI.Components.Layout.MenuLateral
     public partial class MenuItem
     {
         //TODO: INVERTER A SETA QUANDO EXPANDIDO
-
+        [Inject]NavigationManager NavigationManager { get; set; }
 
         string collapseClass;
         string arrowDirectionClass = "";
