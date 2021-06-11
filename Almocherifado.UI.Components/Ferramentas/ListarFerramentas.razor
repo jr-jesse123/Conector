@@ -1,0 +1,592 @@
+﻿<div class="container h-100 mt-5">
+    <h2> <b> FERRAMENTAS</b></h2>
+
+    <div class="row d-flex justify-content-between my-4 ">
+        <div class="col-auto">
+
+            <div class="input-group" ;">
+                <input type="text" class="form-control" aria-label="Dollar amount (with dot and two decimal places)">
+                <span class="input-group-text">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(#clip0)">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M10.442 10.4417C10.5349 10.3487 10.6452 10.275 10.7666 10.2247C10.888 10.1743 11.0181 10.1484 11.1495 10.1484C11.2809 10.1484 11.411 10.1743 11.5324 10.2247C11.6538 10.275 11.7641 10.3487 11.857 10.4417L15.707 14.2917C15.8946 14.4792 16.0001 14.7336 16.0002 14.9989C16.0003 15.2641 15.895 15.5186 15.7075 15.7062C15.52 15.8939 15.2656 15.9993 15.0004 15.9994C14.7351 15.9995 14.4806 15.8942 14.293 15.7067L10.443 11.8567C10.35 11.7639 10.2763 11.6536 10.2259 11.5322C10.1756 11.4108 10.1497 11.2806 10.1497 11.1492C10.1497 11.0178 10.1756 10.8877 10.2259 10.7663C10.2763 10.6449 10.35 10.5346 10.443 10.4417H10.442Z" fill="#05374D" />
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M6.5 12C7.22227 12 7.93747 11.8577 8.60476 11.5813C9.27205 11.3049 9.87837 10.8998 10.3891 10.3891C10.8998 9.87837 11.3049 9.27205 11.5813 8.60476C11.8577 7.93747 12 7.22227 12 6.5C12 5.77773 11.8577 5.06253 11.5813 4.39524C11.3049 3.72795 10.8998 3.12163 10.3891 2.61091C9.87837 2.10019 9.27205 1.69506 8.60476 1.41866C7.93747 1.14226 7.22227 1 6.5 1C5.04131 1 3.64236 1.57946 2.61091 2.61091C1.57946 3.64236 1 5.04131 1 6.5C1 7.95869 1.57946 9.35764 2.61091 10.3891C3.64236 11.4205 5.04131 12 6.5 12ZM13 6.5C13 8.22391 12.3152 9.87721 11.0962 11.0962C9.87721 12.3152 8.22391 13 6.5 13C4.77609 13 3.12279 12.3152 1.90381 11.0962C0.684819 9.87721 0 8.22391 0 6.5C0 4.77609 0.684819 3.12279 1.90381 1.90381C3.12279 0.684819 4.77609 0 6.5 0C8.22391 0 9.87721 0.684819 11.0962 1.90381C12.3152 3.12279 13 4.77609 13 6.5Z" fill="#05374D" />
+                        </g>
+                        <defs>
+                            <clipPath id="clip0">
+                                <rect width="16" height="16" fill="white" />
+                            </clipPath>
+                        </defs>
+                    </svg>
+
+                </span>
+            </div>
+        </div>
+        <div class="col-auto">
+            <select style="width: 192px;vertical-align: middle;">
+                <option disabled selected>
+                    Filtrar
+                </option>
+                <option>Disponível</option>
+                <option>Em Manutenção</option>
+                <option>Alocada</option>
+                <option>Baixada</option>
+
+
+            </select>
+            <buton class="btn-danger btn mx-3">Baixar</buton>
+            <buton class="btn-dark btn">Nova Ferramenta</buton>
+        </div>
+    </div>
+
+    <div class="row ">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">FOTO(S)</th>
+                    <th scope="col">NOME</th>
+                    <th scope="col">DADOS GERAIS</th>
+                    <th scope="col">DESCRIÇÃO</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th>
+                        <div id="carouselExampleIndicators" class="carousel slide d-flex align-items-center" data-bs-ride="carousel" style="width: 100px;height: 100px;">
+                            <!-- <div class="carousel-indicators">
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            </div> -->
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon bg-dark" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                <span class="carousel-control-next-icon bg-dark" aria-hidden="true">
+
+                                </span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </th>
+                    <th>
+                        <h5>TA SCOPE</h5>
+                        <p class="mt-3 mb-0">Adquirida em:</p>
+                        <span class="fw-normal">05/2021</span>
+                    </th>
+                    <th>
+                        <div>
+                            <b>Marca:</b>
+                            <span class="fw-normal">IMI HYdronic</span>
+                        </div>
+                        <div>
+                            <b>Modelo:</b>
+                            <span class="fw-normal">TA Scope</span>
+                        </div>
+                        <div>
+                            <b>Patrimonio:</b>
+                            <span class="fw-normal">Patrimonio</span>
+                        </div>
+                    </th>
+                    <th style="max-width: 127px;">
+                        <span class="fw-normal">
+                            Equipamento para medição de vazãode água
+                        </span>
+                    </th>
+                    <th style="max-width: 127px;">
+                        <span class="fw-normal" style="color:#008F31;">
+                            Disponível para alocação
+                        </span>
+                    </th>
+                </tr>
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th>
+                        <div id="carouselExampleIndicators" class="carousel slide d-flex align-items-center" data-bs-ride="carousel" style="width: 100px;height: 100px;">
+                            <!-- <div class="carousel-indicators">
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            </div> -->
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon bg-dark" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                <span class="carousel-control-next-icon bg-dark" aria-hidden="true">
+
+                                </span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </th>
+                    <th>
+                        <h5>TA SCOPE</h5>
+                        <p class="mt-3 mb-0">Adquirida em:</p>
+                        <span class="fw-normal">05/2021</span>
+                    </th>
+                    <th>
+                        <div>
+                            <b>Marca:</b>
+                            <span class="fw-normal">IMI HYdronic</span>
+                        </div>
+                        <div>
+                            <b>Modelo:</b>
+                            <span class="fw-normal">TA Scope</span>
+                        </div>
+                        <div>
+                            <b>Patrimonio:</b>
+                            <span class="fw-normal">Patrimonio</span>
+                        </div>
+                    </th>
+                    <th style="max-width: 127px;">
+                        <span class="fw-normal">
+                            Equipamento para medição de vazãode água
+                        </span>
+                    </th>
+                    <th style="max-width: 127px;">
+                        <div class="fw-normal text-danger ">
+                            <input type="checkbox" checked class="bg-danger">
+                            <span style="font-size: 12px;">Em manutenção</span>
+                        </div>
+                        <div>
+                            <p class="my-0">
+                                <b style="font-size: 12px;"> Responsável:</b>
+                            </p>
+                            <span class="fw-normal" style="font-size: 12px;">Vanessa de Souza Lima Caiafa</span>
+                        </div>
+                        <div>
+                            <p class="my-0">
+                                <b style="font-size: 12px;"> Alocada Em:</b>
+                            </p>
+                            <span class="fw-normal" style="font-size: 12px;">
+                                Impact Hub
+                            </span>
+                        </div>
+
+
+                    </th>
+                </tr>
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th>
+                        <div id="carouselExampleIndicators" class="carousel slide d-flex align-items-center" data-bs-ride="carousel" style="width: 100px;height: 100px;">
+                            <!-- <div class="carousel-indicators">
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            </div> -->
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon bg-dark" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                <span class="carousel-control-next-icon bg-dark" aria-hidden="true">
+
+                                </span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </th>
+                    <th>
+                        <h5>TA SCOPE</h5>
+                        <p class="mt-3 mb-0">Adquirida em:</p>
+                        <span class="fw-normal">05/2021</span>
+                    </th>
+                    <th>
+                        <div>
+                            <b>Marca:</b>
+                            <span class="fw-normal">IMI HYdronic</span>
+                        </div>
+                        <div>
+                            <b>Modelo:</b>
+                            <span class="fw-normal">TA Scope</span>
+                        </div>
+                        <div>
+                            <b>Patrimonio:</b>
+                            <span class="fw-normal">Patrimonio</span>
+                        </div>
+                    </th>
+                    <th style="max-width: 127px;">
+                        <span class="fw-normal">
+                            Equipamento para medição de vazãode água
+                        </span>
+                    </th>
+                    <th style="max-width: 127px;">
+                        <div class="fw-normal ">
+                            <input type="checkbox">
+                            <span style="font-size: 12px;">Em manutenção</span>
+                        </div>
+                        <div>
+                            <p class="my-0">
+                                <b style="font-size: 12px;"> Responsável:</b>
+                            </p>
+                            <span class="fw-normal" style="font-size: 12px;">Vanessa de Souza Lima Caiafa</span>
+                        </div>
+                        <div>
+                            <p class="my-0">
+                                <b style="font-size: 12px;"> Alocada Em:</b>
+                            </p>
+                            <span class="fw-normal" style="font-size: 12px;">
+                                Impact Hub
+                            </span>
+                        </div>
+
+
+                    </th>
+                </tr>
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th>
+                        <div id="carouselExampleIndicators" class="carousel slide d-flex align-items-center" data-bs-ride="carousel" style="width: 100px;height: 100px;">
+                            <!-- <div class="carousel-indicators">
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            </div> -->
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon bg-dark" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                <span class="carousel-control-next-icon bg-dark" aria-hidden="true">
+
+                                </span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </th>
+                    <th>
+                        <h5>TA SCOPE</h5>
+                        <p class="mt-3 mb-0">Adquirida em:</p>
+                        <span class="fw-normal">05/2021</span>
+                    </th>
+                    <th>
+                        <div>
+                            <b>Marca:</b>
+                            <span class="fw-normal">IMI HYdronic</span>
+                        </div>
+                        <div>
+                            <b>Modelo:</b>
+                            <span class="fw-normal">TA Scope</span>
+                        </div>
+                        <div>
+                            <b>Patrimonio:</b>
+                            <span class="fw-normal">Patrimonio</span>
+                        </div>
+                    </th>
+                    <th style="max-width: 127px;">
+                        <span class="fw-normal">
+                            Equipamento para medição de vazãode água
+                        </span>
+                    </th>
+                    <th style="max-width: 127px;">
+                        <span class="fw-normal" style="color:#008F31;">
+                            Disponível para alocação
+                        </span>
+                    </th>
+                </tr>
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th>
+                        <div id="carouselExampleIndicators" class="carousel slide d-flex align-items-center" data-bs-ride="carousel" style="width: 100px;height: 100px;">
+                            <!-- <div class="carousel-indicators">
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            </div> -->
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon bg-dark" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                <span class="carousel-control-next-icon bg-dark" aria-hidden="true">
+
+                                </span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </th>
+                    <th>
+                        <h5>TA SCOPE</h5>
+                        <p class="mt-3 mb-0">Adquirida em:</p>
+                        <span class="fw-normal">05/2021</span>
+                    </th>
+                    <th>
+                        <div>
+                            <b>Marca:</b>
+                            <span class="fw-normal">IMI HYdronic</span>
+                        </div>
+                        <div>
+                            <b>Modelo:</b>
+                            <span class="fw-normal">TA Scope</span>
+                        </div>
+                        <div>
+                            <b>Patrimonio:</b>
+                            <span class="fw-normal">Patrimonio</span>
+                        </div>
+                    </th>
+                    <th style="max-width: 127px;">
+                        <span class="fw-normal">
+                            Equipamento para medição de vazãode água
+                        </span>
+                    </th>
+                    <th style="max-width: 127px;">
+                        <span class="fw-normal" style="color:#008F31;">
+                            Disponível para alocação
+                        </span>
+                    </th>
+                </tr>
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th>
+                        <div id="carouselExampleIndicators" class="carousel slide d-flex align-items-center" data-bs-ride="carousel" style="width: 100px;height: 100px;">
+                            <!-- <div class="carousel-indicators">
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            </div> -->
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon bg-dark" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                <span class="carousel-control-next-icon bg-dark" aria-hidden="true">
+
+                                </span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </th>
+                    <th>
+                        <h5>TA SCOPE</h5>
+                        <p class="mt-3 mb-0">Adquirida em:</p>
+                        <span class="fw-normal">05/2021</span>
+                    </th>
+                    <th>
+                        <div>
+                            <b>Marca:</b>
+                            <span class="fw-normal">IMI HYdronic</span>
+                        </div>
+                        <div>
+                            <b>Modelo:</b>
+                            <span class="fw-normal">TA Scope</span>
+                        </div>
+                        <div>
+                            <b>Patrimonio:</b>
+                            <span class="fw-normal">Patrimonio</span>
+                        </div>
+                    </th>
+                    <th style="max-width: 127px;">
+                        <span class="fw-normal">
+                            Equipamento para medição de vazãode água
+                        </span>
+                    </th>
+                    <th style="max-width: 127px;">
+                        <span class="fw-normal" style="color:#008F31;">
+                            Disponível para alocação
+                        </span>
+                    </th>
+                </tr>
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th>
+                        <div id="carouselExampleIndicators" class="carousel slide d-flex align-items-center" data-bs-ride="carousel" style="width: 100px;height: 100px;">
+                            <!-- <div class="carousel-indicators">
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            </div> -->
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon bg-dark" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                <span class="carousel-control-next-icon bg-dark" aria-hidden="true">
+
+                                </span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </th>
+                    <th>
+                        <h5>TA SCOPE</h5>
+                        <p class="mt-3 mb-0">Adquirida em:</p>
+                        <span class="fw-normal">05/2021</span>
+                    </th>
+                    <th>
+                        <div>
+                            <b>Marca:</b>
+                            <span class="fw-normal">IMI HYdronic</span>
+                        </div>
+                        <div>
+                            <b>Modelo:</b>
+                            <span class="fw-normal">TA Scope</span>
+                        </div>
+                        <div>
+                            <b>Patrimonio:</b>
+                            <span class="fw-normal">Patrimonio</span>
+                        </div>
+                    </th>
+                    <th style="max-width: 127px;">
+                        <span class="fw-normal">
+                            Equipamento para medição de vazãode água
+                        </span>
+                    </th>
+                    <th style="max-width: 127px;">
+                        <span class="fw-normal" style="color:#008F31;">
+                            Disponível para alocação
+                        </span>
+                    </th>
+                </tr>
+                <tr>
+                    <th><input type="checkbox"></th>
+                    <th>
+                        <div id="carouselExampleIndicators" class="carousel slide d-flex align-items-center" data-bs-ride="carousel" style="width: 100px;height: 100px;">
+                            <!-- <div class="carousel-indicators">
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            </div> -->
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="https://static.ferramentaskennedy.com.br/storage/assets/aprenda-a-fazer-a-limpeza-das-suas-ferramentas90764499276e742e233c922f16f2cf44.jpg" class="d-block w-100" alt="...">
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon bg-dark" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                                <span class="carousel-control-next-icon bg-dark" aria-hidden="true">
+
+                                </span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        </div>
+                    </th>
+                    <th>
+                        <h5>TA SCOPE</h5>
+                        <p class="mt-3 mb-0">Adquirida em:</p>
+                        <span class="fw-normal">05/2021</span>
+                    </th>
+                    <th>
+                        <div>
+                            <b>Marca:</b>
+                            <span class="fw-normal">IMI HYdronic</span>
+                        </div>
+                        <div>
+                            <b>Modelo:</b>
+                            <span class="fw-normal">TA Scope</span>
+                        </div>
+                        <div>
+                            <b>Patrimonio:</b>
+                            <span class="fw-normal">Patrimonio</span>
+                        </div>
+                    </th>
+                    <th style="max-width: 127px;">
+                        <span class="fw-normal">
+                            Equipamento para medição de vazãode água
+                        </span>
+                    </th>
+                    <th style="max-width: 127px;">
+                        <span class="fw-normal" style="color:#008F31;">
+                            Disponível para alocação
+                        </span>
+                    </th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+
+}

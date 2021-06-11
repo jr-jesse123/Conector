@@ -15,7 +15,8 @@ aside {
 
 #quadro {
     background-color: white;
-    height: 100vh;
+/*//TODO: VERIFICAR SE ESSE VW TA CERTO NA ALTURA, MAS FUNCIONOU*/
+    height: 100vw;
     max-width: calc(100% - 165px);
     margin-left: auto;
 }

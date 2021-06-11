@@ -7,18 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <style>
 
-        thead{
-            background-color: #05374D;
-            color: white;
-        }
-
-        th{
-            text-align: center;
-            font-weight: normal;
-            font-size: 14px;
-            
-        }
-
         #center{
             width: calc(100% - 165px);
         }
@@ -39,7 +27,7 @@
         }
         #quadro{
             background-color: white;
-            height: 100vw;
+            height: 100%;
             max-width: calc(100% - 165px);
             margin-left: auto;
             
@@ -137,97 +125,76 @@
             </div>
         </aside>
          <div id="body" class="col-9">
-             <div class="container h-100 mt-5" >
-                <h2 > <b> ALOCAR FERRAMENTA</b></h2>
+             <div class="container h-100" >
                 
-                <div class="row d-flex justify-content-between my-4 ">
-              
-                    <div class="row my-5 d-flex justify-content-evenly">
-                        <div class="col-auto">
-                            <div>*Patrimônio</div>
-                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                        </div>
-                        <div class="col-auto d-flex flex-column justify-content-between">
-                            <p><b>Ferramenta:</b>TA SCOPE</p>
-                            <p><b>Marca:</b>IMI Hydronic</p>
-                            <p class="mb-0"><b>Modelo:</b>TA SCOPE</p>
-                        </div>
-                        <div class="col-auto  d-flex flex-column justify-content-between">
-                            <h4 class="text-success fw-bold">Disponível para alocação</h4>
-                            <button class="btn btn-outline-info w-75"  >Adicionar Ferramenta</button>
-                        </div>
-                    </div>
+                <H2 class="fw-bold my-4">CADASTRO DE FERRAMENTAS</H2>
+                <div class="row h-100" style="margin-left: 0px; margin-right: 0px; ">
+                    <form class="was-validated d-flex">
+                        <div class="half-contained h-100 me-5">
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label"><b>*</b>Nome
+                                <input type="text"  class="form-control" ></label>
+                                <div id="emailHelp"  class="form-text">We'll never share your email with anyone else.</div>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                  </div>
+                                <div class="invalid-feedback">
+                                    Please choose a username.
+                                  </div>
+                              </div>
+                             
+                              <div class="row">
 
-                    
-                        <table class="table">
-                            <thead >
-                                <tr>
-                                    <th scope="col" >PATRIMÔNIO</th>
-                                    <th scope="col" >FERRAMENTA</th>
-                                    <th scope="col" >MARCA</th>
-                                    <th scope="col" >MODELO</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    
-                                    <td>
-                                        <b>0023</b>
-                                    </td>
-                                    <th style="text-align: left;width: 300px;">
-                                        <p class="fs-5">Manifold</p>
-                                    </th>
-                                    
-                                    <td  style="max-width: 127px;">
-                                        <p class="fs-5">EOS</p>
-                                    </td>
-                                    
-                                    <td  style="max-width: 127px;">
-                                        <p  style="text-transform: uppercase;" class="fs-5">eos-vmg-2-r22-b</p>
-                                    </td>
-                                </tr>
-                                
-                            </tbody>
-                        </table>
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="mb-3">
-                                <label  class="form-label">* Responsável</label>
-                                <select class="form-select">
-                                    <option disabled selected>
-                                        Selecione O responsável
-                                    </option>
-                                </select>
-                              </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="mb-3">
-                                <label  class="form-label">* Contrato/Locação</label>
-                                <input type="email" class="form-control" >
-                              </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="mb-3">
-                                <label  class="form-label">* Data Locação</label>
-                                <input type="date" class="form-control" >
-                                
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label"><b>*</b>Nome</label>
+                                        <input type="text"  class="form-control" >
+                                        <div id="emailHelp"  class="form-text">We'll never share your email with anyone else.</div>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                          </div>
+                                        <div class="invalid-feedback">
+                                            Please choose a username.
+                                          </div>
+                                      </div>
+                                     
+                                </div>
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label"><b>*</b>Nome</label>
+                                        <input type="date"  class="form-control" >
+                                        <div id="emailHelp"  class="form-text">We'll never share your email with anyone else.</div>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                          </div>
+                                        <div class="invalid-feedback">
+                                            Please choose a username.
+                                          </div>
+                                      </div>
+                                     
+                                </div>
                             </div>
-                            
                         </div>
-                        <div class="btn btn-lg btn-outline-primary mt-4 " style="height: 100px;" > 
-                            <div class="text-end">
-                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9.84375 7.5C9.84375 8.1216 9.59682 8.71774 9.15728 9.15728C8.71774 9.59682 8.1216 9.84375 7.5 9.84375C6.8784 9.84375 6.28226 9.59682 5.84272 9.15728C5.40318 8.71774 5.15625 8.1216 5.15625 7.5C5.15625 6.8784 5.40318 6.28226 5.84272 5.84272C6.28226 5.40318 6.8784 5.15625 7.5 5.15625C8.1216 5.15625 8.71774 5.40318 9.15728 5.84272C9.59682 6.28226 9.84375 6.8784 9.84375 7.5Z" fill="#136FCC"/>
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M0 7.5C0 7.5 2.8125 2.34375 7.5 2.34375C12.1875 2.34375 15 7.5 15 7.5C15 7.5 12.1875 12.6562 7.5 12.6562C2.8125 12.6562 0 7.5 0 7.5ZM7.5 10.7812C8.37024 10.7812 9.20484 10.4355 9.82019 9.82019C10.4355 9.20484 10.7812 8.37024 10.7812 7.5C10.7812 6.62976 10.4355 5.79516 9.82019 5.17981C9.20484 4.56445 8.37024 4.21875 7.5 4.21875C6.62976 4.21875 5.79516 4.56445 5.17981 5.17981C4.56445 5.79516 4.21875 6.62976 4.21875 7.5C4.21875 8.37024 4.56445 9.20484 5.17981 9.82019C5.79516 10.4355 6.62976 10.7812 7.5 10.7812Z" fill="#136FCC"/>
-                                </svg> visualizar
-                            </div>
-                            <h4 mt-0 >
-                                Termo de Responsabilidade 
-                            </h4>
+                        <div class="half-contained h-100">
+                            <div class="bg-dark text-white" style="width: 142px;font-size: 10px;">
+                                "Imagens do tipo .jpg, .gif e .png 
+                                até Xmb são suportadas."
                         </div>
-                    </div>
+                           
+
+
+                        <div class="mb-3 pr">
+                            <input class="form-control" type="file" id="formFileMultiple" multiple>
+                            <label for="formFileMultiple" class="form-label">Multiple files input example</label>
+                        </div>
+
+                        </div>
+                    </form>
                 </div>
              </div>
+
+         </div>
+        
     </div>
     
     </div>
