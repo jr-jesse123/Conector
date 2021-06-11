@@ -21,10 +21,11 @@ namespace Almocherifado.Application.Tests
 
         public FerramentasServicesTests()
         {
-            var options = new DbContextOptionsBuilder<AlmocherifadoContext>().UseSqlite(@"Data Source = TestesFerramentaServcie.db;").Options;
+            var options = new DbContextOptionsBuilder<AlmocherifadoContext>()
+                .UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TestAlmocharifado;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False").Options;
             context = new AlmocherifadoContext(options);
 
-            context.Database.EnsureDeleted();
+            //context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
             repository = new FerramentaRepository(context);

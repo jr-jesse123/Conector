@@ -1,7 +1,3 @@
-using Almocherifado.Application;
-using Almocherifado.core.Services;
-using Almocherifado.InfraEstrutura;
-using Almocherifado.InfraEstrutura.Repositorios;
 using Almocherifado.UI.Areas.Identity;
 using Almocherifado.UI.Data;
 using Almocherifado.UI.Helpers.FileHelpers;
@@ -11,23 +7,17 @@ using BlazorDownloadFile;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
+using InfraEstrutura;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Syncfusion.Blazor;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Almocherifado.UI
 {
@@ -47,7 +37,7 @@ namespace Almocherifado.UI
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => 
+            services.AddDefaultIdentity<IdentityUser>(options =>
             {
                 options.SignIn.RequireConfirmedAccount = false;
                 options.Password = new PasswordOptions()
@@ -59,8 +49,8 @@ namespace Almocherifado.UI
                     RequireNonAlphanumeric = false,
                     RequireUppercase = false
                 };
-                
-            } )
+
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
@@ -70,37 +60,38 @@ namespace Almocherifado.UI
             services.AddSyncfusionBlazor();
 
 
-            services.AddBlazorise(options => options.ChangeTextOnKeyPress = false )
+            services.AddBlazorise(options => options.ChangeTextOnKeyPress = false)
                 .AddBootstrapProviders()
                 .AddFontAwesomeIcons();
 
-            services.AddDbContext<AlmocherifadoContext>(x =>
-                x.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-
+            
             services.AddBlazorDownloadFile();
             services.AddScoped<IPrintingService, PrintingService>();
 
+            services.AddDbContext<AlmocharifadoContext>
+                    (builder => builder
+                        //.UseSqlite("data =2  "));
+                        .UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Almocharifado2;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
 
-            services.Scan(scan => scan.FromAssembliesOf(typeof(FuncionariosRepository))
-                .AddClasses()
-                .AsImplementedInterfaces()
-            );
+            //services.Scan(scan => scan.FromAssembliesOf(typeof(FuncionariosRepository))
+            //    .AddClasses()
+            //    .AsImplementedInterfaces()
+            
 
             //application
-            services.Scan(scan => scan.FromAssembliesOf(typeof(FerramentasService), typeof(TermoManager), typeof(ITermoResponsabilidadeService), typeof(ModeloTermoService))
-                .AddClasses()
-                .AsImplementedInterfaces()
-            );
+            //services.Scan(scan => scan.FromAssembliesOf(typeof(FerramentasService), typeof(TermoManager), typeof(ITermoResponsabilidadeService), typeof(ModeloTermoService))
+            //    .AddClasses()
+            //    .AsImplementedInterfaces()
+            //);
 
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddScoped<IPathHelper, PathHelper>();
+            //services.AddScoped<IPathHelper, PathHelper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, 
-            AlmocherifadoContext context, ApplicationDbContext applicationDbContext,
+             ApplicationDbContext applicationDbContext,
             UserManager<IdentityUser> userManager)
         {
 
@@ -108,7 +99,7 @@ namespace Almocherifado.UI
                 .RegisterLicense("NDUyMjY2QDMxMzkyZTMxMmUzMFB3VlplMFgwZm9KYVR6UVZ3dG1pcTcvSzg0elBLaTFsSi9maTRUVVZUcHc9");
 
             applicationDbContext.Database.Migrate();
-            context.Database.Migrate();
+            
 
             if (env.IsDevelopment())
             {
