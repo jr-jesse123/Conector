@@ -24,8 +24,3 @@ type Alocacao =
       Responsavel:Funcionario;ContratoLocacao:string;
       DataAlocacao:DateTime
    }
-
-
-
-
-   
