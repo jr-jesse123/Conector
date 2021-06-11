@@ -10,7 +10,7 @@ type Ferramenta =
             Id:int
             Nome:string;Marca:string;
             Modelo:string;DataCompra:DateTime;
-            Patrimonio:int;Fotos:string[];
+            Patrimonio:int;Fotos:string list;
             Descricao:string
          }
    
@@ -20,7 +20,7 @@ type Funcionario = {Nome:string;CPF:string;Cargo:string;Email:string;Foto:string
 [<CLIMutable>]
 type Alocacao = 
    {
-      Id:int;Ferramentas:ICollection<Ferramenta>;
+      Id:int;Ferramentas:Ferramenta list;
       Responsavel:Funcionario;ContratoLocacao:string;
       DataAlocacao:DateTime
    }

@@ -2,10 +2,10 @@
 @inject NavigationManager navMan
 @using Almocherifado.UI.Components.Ferramentas
 
-
-@switch (Route)
-{
-    case "":
+<CadastrarFerramentas></CadastrarFerramentas> 
+@*@switch (Route)
+                      {
+                      case "" :
         <Almocherifado.UI.Components.Inicio></Almocherifado.UI.Components.Inicio>
         break;
     case "CadastrarFerramenta":
@@ -30,7 +30,7 @@
     default:
         <h1>Rota não encontrada</h1>
         break;
-}
+}*@
 
 
 @code{

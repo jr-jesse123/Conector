@@ -20,7 +20,7 @@ namespace InfraEstrutura
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Ferramenta>().Property(x => x.Fotos)
-                .HasConversion(x => x.Aggregate((a, b) => a + ";" + b), x => x.Split(new char[] { ';' }));
+                .HasConversion(x => x.Aggregate((a, b) => a + ";" + b), x => FsharpList x.Split(new char[] { ';' }));
 
             builder.Entity<Funcionario>().HasKey(f => f.CPF);
         }
