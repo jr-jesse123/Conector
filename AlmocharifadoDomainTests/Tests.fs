@@ -9,19 +9,9 @@ open Microsoft.EntityFrameworkCore
 open AutoFixture
 open Entities
 open Swensen.Unquote
-open Xunit
-open Xunit
-open Entities
-open AutoFixture
-open Entities
 open System.Collections.Generic
-open Entities
-open Entities
 open AutoFixture
-open Entities
-open Entities
-open Xunit
-open Entities
+open AlmocharifadoApplication
 
 let getContext ()=
    let options = DbContextOptionsBuilder<AlmocharifadoContext>()
@@ -70,12 +60,15 @@ type InfraEstruturaTests() =
       
       let ferramenta = Fixture().Build<Ferramenta>().With((fun x -> x.Id),0).Create() 
       let ferramenta2 = Fixture().Build<Ferramenta>().With((fun x -> x.Id),0).Create() 
-      
+      let ferramentas = [ferramenta;ferramenta2]
+
       let aloc = 
-             Fixture().Build<Alocacao>()
+             Fixture().Build<DTO.AlocacaoDto>()
                   .With((fun x -> x.Id),0)
-                  .With((fun x -> x.Ferramentas), [|ferramenta;ferramenta2|] :> ICollection<Ferramenta>)
+                  .With((fun x -> x.Ferramentas), List(ferramentas) :> ICollection<Ferramenta> )
                   .Create()
+                  
+               |> DTO.AlocacaoDto.ToDomain
 
       context.Alocaoes.Add(aloc)
       context.SaveChanges()
@@ -104,22 +97,42 @@ type ApplicationTests() =
       test <@ ferramentas 
          |> Seq.forall (fun ferramenta -> Alocacoes.FerramentaAlocada alocacoesFetcher ferramenta ) @>
 
-
-
-[<Fact>]
-let ``Ferramenta não alocada é reconhecida corretamente``()=
+   [<Fact>]
+   let ``Ferramenta não alocada é reconhecida corretamente``()=
    
-   let alocacoes = Fixture().Build<Alocacao>().CreateMany(5)
-   let alocaccoesFetcher () = alocacoes
-   let ferramentas = alocacoes 
-                     |> Seq.collect (fun aloc -> aloc.Ferramentas)
+      let alocacoes = Fixture().Build<Alocacao>().CreateMany(5)
+      let alocaccoesFetcher () = alocacoes
+      let ferramentas = alocacoes 
+                        |> Seq.collect (fun aloc -> aloc.Ferramentas)
 
-   let ferramentaNaoAlocada = Fixture().Build<Ferramenta>().Create()
-   test <@ not(Alocacoes.FerramentaAlocada alocaccoesFetcher ferramentaNaoAlocada)  @>
-
-
+      let ferramentaNaoAlocada = Fixture().Build<Ferramenta>().Create()
+      test <@ not(Alocacoes.FerramentaAlocada alocaccoesFetcher ferramentaNaoAlocada)  @>
 
 
+   [<Theory>]
+   [<InlineData(10,11)>]
+   [<InlineData(20,21)>]
+   [<InlineData(0,1)>]
+   let ``Proximo número de patrimônio é obtido corretamente`` qtd expected =
+      let mutable patrimonio = 0
+      let proximoPatrimonio () = 
+         patrimonio <- patrimonio + 1 
+         patrimonio
+      
+      let ferramentasFetcher qtd () = 
+         if qtd = 0 then 
+            [] :> IEnumerable<Ferramenta>
+         else
+            Fixture().Build<Ferramenta>()
+               .With((fun x -> x.Id),0)
+               .With<int>((fun fer -> fer.Patrimonio), proximoPatrimonio )
+               .CreateMany(qtd)
+                                    
+
+      let proximo = Alocacoes.GetProximoPatrimonio (ferramentasFetcher qtd)
+      test <@ proximo = expected @>
+
+      
 
    
 

@@ -1,21 +1,19 @@
-﻿@using Almocherifado.UI.Components
+﻿@using Microsoft.AspNetCore.Components.Forms
+@using Almocherifado.UI.Components
 @using Almocherifado.UI.Components.Forms
-@using Microsoft.JSInterop
-@using System.IO
-@using Syncfusion.Blazor
 @using Syncfusion.Blazor.Inputs
+@inject NavigationManager navMan
 
-@*<div class="invalid-feedback">ErroAqui</div>;*@
 
 <div class="container h-100 w-100">
 
     <h2 class="fw-bold my-4">CADASTRO DE FERRAMENTAS</h2>
     <div class="row h-100 w-100" style="margin-left: 0px; margin-right: 0px; ">
-        
 
-        <Microsoft.AspNetCore.Components.Forms.EditForm Model="FerramentaInput">
-            <div class="was-validated d-flex">>
 
+        <EditForm OnValidSubmit="@OnValidInput" Model="@FerramentaInput">
+            <ValidationSummary/>
+            <div class=@formClass>
                 <div class="half-contained h-100 me-5 w-100">
                     <InputGroup>
                         <LabelContent>
@@ -25,7 +23,7 @@
                             <InputInfo Text="É necessário informar o nome da ferramenta" Tipo="InputInfoType.Invalid"></InputInfo>
                         </InvalidValidFeedBack>
                         <InputField>
-                            <input placeholder="Insira o nome da ferramenta" type="text" class="form-control" />
+                            <InputText @bind-Value="@FerramentaInput.Nome" placeholder="Insira o nome da ferramenta" type="text" class="form-control" />
                         </InputField>
                     </InputGroup>
 
@@ -37,7 +35,7 @@
                             <InputInfo Text="É necessário informar A marca da ferramenta" Tipo="InputInfoType.Invalid"></InputInfo>
                         </InvalidValidFeedBack>
                         <InputField>
-                            <input placeholder="Insira a marca da ferramenta" type="text" class="form-control" />
+                            <InputText @bind-Value="@FerramentaInput.Marca" placeholder="Insira a marca da ferramenta" type="text" class="form-control" />
                         </InputField>
                     </InputGroup>
 
@@ -48,6 +46,9 @@
                         <InvalidValidFeedBack>
                             <InputInfo Text="É necessário informar o Modelo da ferramenta" Tipo="InputInfoType.Invalid"></InputInfo>
                         </InvalidValidFeedBack>
+                        <InputField>
+                            <InputText @bind-Value="@FerramentaInput.Modelo" placeholder="Insira o Modelo da ferramenta" type="text" class="form-control" />
+                        </InputField>
                     </InputGroup>
 
 
@@ -55,23 +56,20 @@
                         <div class="col-6">
                             <div class="mb-3">
 
-                                <label for="exampleInputEmail1" class="form-label"><b>*</b>Nome</label>
-                                <input type="text" class="form-control">
-                                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-                                <div class="valid-feedback">
-                                    Looks good!
-                                </div>
+                                <label for="DataCompra" class="form-label"><b>*</b>Data da Compra:</label>
+                                <InputDate @bind-Value="FerramentaInput.DataDaCompra" id="DataCompra" type="text" class="form-control"/>
+                                
                                 <div class="invalid-feedback">
-                                    Please choose a username.
+                                    
                                 </div>
                             </div>
 
                         </div>
                         <div class="col-6">
                             <div class="mb-3">
-                                <label for="exampleInputEmail1" class="form-label"><b>*</b>Nome</label>
-                                <input type="date" class="form-control">
-                                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                                <label for="exampleInputEmail1" class="form-label"><b>*</b>Patrimônio</label>
+                                <InputNumber disabled @bind-Value="@ProximoPatrimoonio" class="form-control" />
+                                
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
@@ -101,10 +99,11 @@
                             Selecione ou solte aqui a(s) imagem(s)
                         </div>
 
-                        <SfUploader ID="UploadFiles" AutoUpload=true DropArea="#DropArea"
-                                    AllowedExtensions=".doc, .docx, .xls, .xlsx">
+                        <SfUploader  ID="UploadFiles" AutoUpload=true DropArea="#DropArea"
+                                    AllowedExtensions=".jpg">
+                            <UploaderEvents ValueChange="OnChange">
 
-
+                            </UploaderEvents>
                         </SfUploader>
 
                         <InputGroup>
@@ -113,7 +112,7 @@
                             </LabelContent>
                             <InputField>
                                 <div>
-                                    <textarea class="w-100"></textarea>
+                                    <InputTextArea @bind-Value="FerramentaInput.Descricao" class="w-100"></InputTextArea>
                                 </div>
                             </InputField>
                             <InvalidValidFeedBack>
@@ -122,18 +121,14 @@
                         </InputGroup>
 
                         <div class="w-100 d-flex f¨lex-row justify-content-end">
-                            <button class="btn btn-outline-danger mx-4">Cancelar</button>
-                            <button class="btn btn-dark">Continuar</button>
+                            <button @onclick="@(() => navMan.NavigateTo("/"))" class="btn btn-outline-danger mx-4">Cancelar</button>
+                            <button type="submit" class="btn btn-dark">Continuar</button>
                         </div>
-
                     </div>
                 </div>
             </div>
-        </Microsoft.AspNetCore.Components.Forms.EditForm>
+        </EditForm>
     </div>
 </div>
 
 
-@code{
-    public Models.CadastroFerramentaModel FerramentaInput { get; set; }
-}

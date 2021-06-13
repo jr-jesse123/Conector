@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\InfraEstrutura\InfraEstrutura.csproj" />
+    <ProjectReference Include="..\AlmocharifadoApplication\AlmocharifadoApplication.fsproj" />
   </ItemGroup>
 
 </Project>
