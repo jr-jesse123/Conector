@@ -2,7 +2,7 @@
 @using Almocherifado.UI.Components
 @using Almocherifado.UI.Components.Forms
 @using Syncfusion.Blazor.Inputs
-@inject NavigationManager navMan
+
 
 
 <div class="container h-100 w-100">
@@ -10,12 +10,12 @@
     <h2 class="fw-bold my-4">CADASTRO DE FERRAMENTAS</h2>
     <div class="row h-100 w-100" style="margin-left: 0px; margin-right: 0px; ">
 
-
         <EditForm OnValidSubmit="@OnValidInput" Model="@FerramentaInput">
             <ValidationSummary/>
             <div class=@formClass>
                 <div class="half-contained h-100 me-5 w-100">
-                    <InputGroup>
+                    @*<InputGroup Id="Teste">*@
+                     <InputGroup id="NomeInput" >
                         <LabelContent>
                             <b>*</b>Nome
                         </LabelContent>
@@ -23,7 +23,7 @@
                             <InputInfo Text="É necessário informar o nome da ferramenta" Tipo="InputInfoType.Invalid"></InputInfo>
                         </InvalidValidFeedBack>
                         <InputField>
-                            <InputText @bind-Value="@FerramentaInput.Nome" placeholder="Insira o nome da ferramenta" type="text" class="form-control" />
+                            <InputText id="NomeInput" @bind-Value="@FerramentaInput.Nome" placeholder="Insira o nome da ferramenta" type="text" class="form-control" />
                         </InputField>
                     </InputGroup>
 
@@ -35,7 +35,7 @@
                             <InputInfo Text="É necessário informar A marca da ferramenta" Tipo="InputInfoType.Invalid"></InputInfo>
                         </InvalidValidFeedBack>
                         <InputField>
-                            <InputText @bind-Value="@FerramentaInput.Marca" placeholder="Insira a marca da ferramenta" type="text" class="form-control" />
+                            <InputText id="MarcaInput" @bind-Value="@FerramentaInput.Marca" placeholder="Insira a marca da ferramenta" type="text" class="form-control" />
                         </InputField>
                     </InputGroup>
 
@@ -47,7 +47,7 @@
                             <InputInfo Text="É necessário informar o Modelo da ferramenta" Tipo="InputInfoType.Invalid"></InputInfo>
                         </InvalidValidFeedBack>
                         <InputField>
-                            <InputText @bind-Value="@FerramentaInput.Modelo" placeholder="Insira o Modelo da ferramenta" type="text" class="form-control" />
+                            <InputText id="ModeloInput" @bind-Value="@FerramentaInput.Modelo" placeholder="Insira o Modelo da ferramenta" type="text" class="form-control" />
                         </InputField>
                     </InputGroup>
 
@@ -56,11 +56,11 @@
                         <div class="col-6">
                             <div class="mb-3">
 
-                                <label for="DataCompra" class="form-label"><b>*</b>Data da Compra:</label>
-                                <InputDate @bind-Value="FerramentaInput.DataDaCompra" id="DataCompra" type="text" class="form-control"/>
-                                
+                                <label for="DataDaCompraInput" class="form-label"><b>*</b>Data da Compra:</label>
+                                <InputDate  @bind-Value="FerramentaInput.DataDaCompra" id="DataDaCompraInput" type="text" class="form-control" />
+
                                 <div class="invalid-feedback">
-                                    
+
                                 </div>
                             </div>
 
@@ -68,8 +68,8 @@
                         <div class="col-6">
                             <div class="mb-3">
                                 <label for="exampleInputEmail1" class="form-label"><b>*</b>Patrimônio</label>
-                                <InputNumber disabled @bind-Value="@ProximoPatrimoonio" class="form-control" />
-                                
+                                <InputNumber id="ProximoPatrimonio" disabled @bind-Value="@ProximoPatrimonio" class="form-control" />
+
                                 <div class="valid-feedback">
                                     Looks good!
                                 </div>
@@ -82,49 +82,29 @@
                     </div>
                 </div>
 
-
+                
                 <div class="half-contained w-100">
-                    <div id="inputFile" class="mb-3 w-100">
-                        <label class="mb-5"> <b>*</b>Fotos(s)</label>
-
-                        <a data-bs-toggle="popover" data-bs-placement="right"
-                           data-bs-content="<div class='bg-dark text-white' style='width: 142px;font-size: 10px;'>'Imagens do tipo .jpg, .gif e .png até Xmb são suportadas.'</div>" data-bs-trigger="hover">
-                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M20 10C20 12.6522 18.9464 15.1957 17.0711 17.0711C15.1957 18.9464 12.6522 20 10 20C7.34784 20 4.8043 18.9464 2.92893 17.0711C1.05357 15.1957 0 12.6522 0 10C0 7.34784 1.05357 4.8043 2.92893 2.92893C4.8043 1.05357 7.34784 0 10 0C12.6522 0 15.1957 1.05357 17.0711 2.92893C18.9464 4.8043 20 7.34784 20 10ZM8.2125 7.54125H6.5625C6.525 5.18375 8.35 4.375 10.0075 4.375C11.7537 4.375 13.3488 5.2875 13.3488 7.175C13.3488 8.525 12.555 9.1675 11.7938 9.74625C10.8725 10.445 10.5312 10.7063 10.5312 11.6038V12.0475H8.89625L8.8875 11.4688C8.84 10.31 9.50625 9.59625 10.3475 8.985C11.085 8.43 11.5538 8.065 11.5538 7.27125C11.5538 6.24 10.7688 5.81125 9.91125 5.81125C8.785 5.81125 8.21375 6.565 8.21375 7.54125H8.2125ZM9.77625 15.595C9.04625 15.595 8.515 15.1025 8.515 14.4362C8.515 13.7463 9.04625 13.2613 9.7775 13.2613C10.5387 13.2613 11.0625 13.7463 11.0625 14.4362C11.0625 15.1025 10.5375 15.595 9.77625 15.595Z" fill="#C4C4C4" />
-                            </svg>
-
-                        </a>
-
-                        <div ID="DropArea">
-                            Selecione ou solte aqui a(s) imagem(s)
+                    @Uploader
+               
+                <InputGroup>
+                    <LabelContent>
+                        Descrição
+                    </LabelContent>
+                    <InputField>
+                        <div>
+                            <InputTextArea id="DescricaoInput" @bind-Value="FerramentaInput.Descricao" class="w-100 form-control"></InputTextArea>
                         </div>
+                    </InputField>
+                    <InvalidValidFeedBack>
+                        <InputInfo Text="É necessário informar o Modelo da ferramenta" Tipo="InputInfoType.Invalid"></InputInfo>
+                    </InvalidValidFeedBack>
+                </InputGroup>
 
-                        <SfUploader  ID="UploadFiles" AutoUpload=true DropArea="#DropArea"
-                                    AllowedExtensions=".jpg">
-                            <UploaderEvents ValueChange="OnChange">
+                <div class="w-100 d-flex f¨lex-row justify-content-end">
+                    <button @onclick="@(() => navMan.NavigateTo("/"))" class="btn btn-outline-danger mx-4">Cancelar</button>
+                    <button type="submit" class="btn btn-dark">Continuar</button>
+                </div>
 
-                            </UploaderEvents>
-                        </SfUploader>
-
-                        <InputGroup>
-                            <LabelContent>
-                                Descrição
-                            </LabelContent>
-                            <InputField>
-                                <div>
-                                    <InputTextArea @bind-Value="FerramentaInput.Descricao" class="w-100"></InputTextArea>
-                                </div>
-                            </InputField>
-                            <InvalidValidFeedBack>
-                                <InputInfo Text="É necessário informar o Modelo da ferramenta" Tipo="InputInfoType.Invalid"></InputInfo>
-                            </InvalidValidFeedBack>
-                        </InputGroup>
-
-                        <div class="w-100 d-flex f¨lex-row justify-content-end">
-                            <button @onclick="@(() => navMan.NavigateTo("/"))" class="btn btn-outline-danger mx-4">Cancelar</button>
-                            <button type="submit" class="btn btn-dark">Continuar</button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </EditForm>
@@ -132,3 +112,5 @@
 </div>
 
 
+@code{ 
+}

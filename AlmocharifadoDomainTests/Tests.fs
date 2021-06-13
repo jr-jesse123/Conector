@@ -63,12 +63,12 @@ type InfraEstruturaTests() =
       let ferramentas = [ferramenta;ferramenta2]
 
       let aloc = 
-             Fixture().Build<DTO.AlocacaoDto>()
+             Fixture().Build<Dtos.DTO.AlocacaoDto>()
                   .With((fun x -> x.Id),0)
                   .With((fun x -> x.Ferramentas), List(ferramentas) :> ICollection<Ferramenta> )
                   .Create()
                   
-               |> DTO.AlocacaoDto.ToDomain
+               |> Dtos.DTO.AlocacaoDto.ToDomain
 
       context.Alocaoes.Add(aloc)
       context.SaveChanges()

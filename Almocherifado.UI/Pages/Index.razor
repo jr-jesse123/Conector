@@ -1,36 +1,45 @@
-﻿@page "/{Route}"
+﻿@page "/"
+@page "/{Route}"
 @inject NavigationManager navMan
 @using Almocherifado.UI.Components.Ferramentas
+@using Syncfusion.Blazor.Inputs
+<CadastrarFerramentas>
 
-<CadastrarFerramentas></CadastrarFerramentas> 
+    <Uploader>
+        
+        <Almocherifado.UI.Components.Uploader></Almocherifado.UI.Components.Uploader>
+
+    </Uploader>
+
+</CadastrarFerramentas>
 @*@switch (Route)
-                      {
-                      case "" :
-        <Almocherifado.UI.Components.Inicio></Almocherifado.UI.Components.Inicio>
-        break;
-    case "CadastrarFerramenta":
-        <CadastrarFerramentas />
-        break;
+                          {
+                          case "" :
+            <Almocherifado.UI.Components.Inicio></Almocherifado.UI.Components.Inicio>
+            break;
+        case "CadastrarFerramenta":
+            <CadastrarFerramentas />
+            break;
 
-    case "ListarFerramenta":
-        <ListarFerramentas />
-        break;
-    case "CadastrarFuncionario":
-        <h1>Nada aqui ainad</h1>
-        break;
-    case "ListarFuncionario":
-        <Almocherifado.UI.Components.Funcionarios.ListarFuncionarios></Almocherifado.UI.Components.Funcionarios.ListarFuncionarios>
-        break;
-    case "AlocarFerramenta":
-        <Almocherifado.UI.Components.Alocacao.AlocarFerramenta />
-        break;
-    case "DevolverFerramenta":
-        <h1>Nada aqui ainda</h1>
-        break;
-    default:
-        <h1>Rota não encontrada</h1>
-        break;
-}*@
+        case "ListarFerramenta":
+            <ListarFerramentas />
+            break;
+        case "CadastrarFuncionario":
+            <h1>Nada aqui ainad</h1>
+            break;
+        case "ListarFuncionario":
+            <Almocherifado.UI.Components.Funcionarios.ListarFuncionarios></Almocherifado.UI.Components.Funcionarios.ListarFuncionarios>
+            break;
+        case "AlocarFerramenta":
+            <Almocherifado.UI.Components.Alocacao.AlocarFerramenta />
+            break;
+        case "DevolverFerramenta":
+            <h1>Nada aqui ainda</h1>
+            break;
+        default:
+            <h1>Rota não encontrada</h1>
+            break;
+    }*@
 
 
 @code{

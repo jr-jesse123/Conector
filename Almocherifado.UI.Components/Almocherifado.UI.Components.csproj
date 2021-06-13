@@ -5,15 +5,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Uploader.razor.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Ferramentas\ListarFerramentas.razor.css" />
     <None Remove="Inicio.razor.css" />
     <None Remove="Layout\MenuLateral\MenuLateral.razor.css" />
+    <None Remove="Uploader.razor.css" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Ferramentas\ListarFerramentas.razor.css" />
     <Content Include="Inicio.razor.css" />
     <Content Include="Layout\MenuLateral\MenuLateral.razor.css" />
+    <Content Include="Uploader.razor.cs" />
+    <Content Include="Uploader.razor.css" />
   </ItemGroup>
 
   
@@ -29,6 +36,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AlmocharifadoApplication\AlmocharifadoApplication.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="NovaPasta\" />
   </ItemGroup>
 
 </Project>

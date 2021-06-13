@@ -11,7 +11,6 @@ namespace InfraEstrutura
         
         public AlmocharifadoContext(DbContextOptions<AlmocharifadoContext> options) : base(options)
         {
-
         }
 
         public DbSet<Funcionario> Funcionarios { get; set; }

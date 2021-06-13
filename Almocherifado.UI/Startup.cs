@@ -1,6 +1,5 @@
 using Almocherifado.UI.Areas.Identity;
 using Almocherifado.UI.Data;
-using Almocherifado.UI.Helpers.FileHelpers;
 using Append.Blazor.Printing;
 using AutoMapper;
 using BlazorDownloadFile;
@@ -18,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Syncfusion.Blazor;
+using AlmocharifadoApplication;
 
 namespace Almocherifado.UI
 {
@@ -73,18 +73,12 @@ namespace Almocherifado.UI
                         //.UseSqlite("data =2  "));
                         .UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Almocharifado2;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
 
-            //services.Scan(scan => scan.FromAssembliesOf(typeof(FuncionariosRepository))
-            //    .AddClasses()
-            //    .AsImplementedInterfaces()
             
-
-            //application
-            //services.Scan(scan => scan.FromAssembliesOf(typeof(FerramentasService), typeof(TermoManager), typeof(ITermoResponsabilidadeService), typeof(ModeloTermoService))
-            //    .AddClasses()
-            //    .AsImplementedInterfaces()
-            //);
-
+          
             services.AddAutoMapper(typeof(Startup));
+
+            services.ConfigurarPatrimonio();
+            //services.ConfigurarPatrimonio();
 
             //services.AddScoped<IPathHelper, PathHelper>();
         }

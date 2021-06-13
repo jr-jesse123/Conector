@@ -2,7 +2,15 @@
 
     <label class="form-label w-100">
         @LabelContent
-        @InputField
+        @if (@InputField is null)
+        {
+            <input type="text" class="form-control" @attributes="otherAttributes" />
+        }
+        else
+        {
+            @InputField
+        }
+
     </label>
     @Disclaimer
     @ValidFeedBack
@@ -11,7 +19,9 @@
 
 @code{
 
-    
+
+    [Parameter(CaptureUnmatchedValues =true)] 
+    public Dictionary<string,object> otherAttributes { get; set; }
 
     [Parameter] public RenderFragment LabelContent { get; set; }
 
@@ -22,7 +32,7 @@
     public RenderFragment InvalidValidFeedBack { get; set; } =@<span />;
 
     [Parameter]
-    public RenderFragment InputField { get; set; } = @<input type="text" class="form-control" />;
+    public RenderFragment InputField { get; set; }
 
     [Parameter]
     public RenderFragment Disclaimer { get; set; } = @<span />;

@@ -1,99 +1,49 @@
 ﻿
 
 namespace AlmocharifadoApplication
+
 open Entities
-open System
-open System.Collections.Generic
-open System
-open System
-   [<CLIMutable>]
-   type FuncionarioDto = Funcionario
+open InfraEstrutura
+open Microsoft.Extensions.DependencyInjection
+open System.Runtime.CompilerServices
+
+type IAlmocharifadoRepository =
+   abstract member GetAllFerramentas:unit->Ferramenta []
+
+
+module AlmocharifadoRepository=
+   open System.Linq
+   let GetAllFerramentas (context:AlmocharifadoContext) = context.Ferramentas.ToArray()
    
-   [<CLIMutable>]
-   type FerramentaDto  = 
-      {
-           Id:int
-           Nome:string;Marca:string;
-           Modelo:string;DataCompra:DateTime;
-           Patrimonio:int;Fotos:ICollection<string>;
-           Descricao:string
-        }
-   [<AutoOpen>]
-   module FerramentaDto=
-      let FromDomain (ferramenta:Ferramenta) =
-         
 
-                    {Id=ferramenta.Id;
-                     Nome=ferramenta.Nome;
-                     Modelo=ferramenta.Modelo;
-                     Patrimonio=ferramenta.Patrimonio;
-                     Fotos= new List<string>(ferramenta.Fotos) :> ICollection<string> ;
-                     Descricao=ferramenta.Descricao;
-                     Marca=ferramenta.Marca;
-                     DataCompra=ferramenta.DataCompra
-                     }
-      
-      //let ToDomain ferramentaDto :  Ferramenta =
-      //              {
-      //               Id=ferramentaDto.Id;
-      //               Nome=ferramentaDto.Nome;
-      //               Modelo=ferramentaDto.Modelo;
-      //               Patrimonio=ferramentaDto.Patrimonio;
-      //               Fotos= ferramentaDto.Fotos ;
-      //               Descricao=ferramentaDto.Descricao;
-      //               Marca=ferramentaDto.Marca;
-      //               DataCompra=ferramentaDto.DataCompra
-      //               }
- 
- module DTO  =
-    [<CLIMutable>]
-    type AlocacaoDto =
-       {
-          Id:int;Ferramentas:ICollection<Ferramenta> ;
-          Responsavel:FuncionarioDto;ContratoLocacao:string;
-          DataAlocacao:DateTime
-       }
-    [<AutoOpen>]
-    module AlocacaoDto=
-       let ToDomain alocDto : Alocacao =
-          {
-             Id=alocDto.Id;
-             Responsavel=alocDto.Responsavel
-             ContratoLocacao=alocDto.ContratoLocacao
-             DataAlocacao=alocDto.DataAlocacao
-             Ferramentas=alocDto.Ferramentas
-          }
-       let FromDomain  (aloc:Alocacao) =
-          {
-             Id=aloc.Id;
-             Responsavel=aloc.Responsavel
-             ContratoLocacao=aloc.ContratoLocacao
-             DataAlocacao=aloc.DataAlocacao
-             Ferramentas= aloc.Ferramentas |> List<Ferramenta>
-          }
-      
 
-module Alocacoes=
+type AlmocharifadoRepository (context:AlmocharifadoContext) =
+   interface IAlmocharifadoRepository
+      with member this.GetAllFerramentas () = AlmocharifadoRepository.GetAllFerramentas context
+
+module PatrimonioProvider =
+   let GetProximoPatrimonioLivre (repo:IAlmocharifadoRepository) =
+      repo.GetAllFerramentas >> Seq.ofArray
+      |> Alocacoes.GetProximoPatrimonio
+
+
+type IProximoPatrimonioProvider = 
+   abstract member GetProximoPatrimonio:unit->int
+
+type ProximoPatrimonioProvider (repo:IAlmocharifadoRepository) =
    
-   type FerramentasFetcher = unit->Ferramenta seq
-   type AlocacoesFetcher = unit->Alocacao seq
+   interface IProximoPatrimonioProvider 
+      with member  this.GetProximoPatrimonio () = PatrimonioProvider.GetProximoPatrimonioLivre repo
 
-   let FerramentaAlocada (listaAlocacoesFetcheer:AlocacoesFetcher) (ferramenta:Ferramenta) =
-      listaAlocacoesFetcheer ()
-      |> Seq.exists(fun aloc -> Seq.contains ferramenta aloc.Ferramentas; )
 
-   let GetProximoPatrimonio (ferramentasFetcher:FerramentasFetcher) =
-      let ferramentas = ferramentasFetcher () 
-      if Seq.isEmpty ferramentas then 
-         1
-      else
-         ferramentas
-         |> Seq.map (fun fer -> fer.Patrimonio)
-         |> Seq.max |> (+) 1
-         
-   
+open Microsoft.EntityFrameworkCore
+[<Extension>]
+type IServiceCollectionExt =
+   [<Extension>]
+   static member ConfigurarPatrimonio (services:IServiceCollection) = 
+      let constr  = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Almocharifado2;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
+      services
+         //.AddDbContext<AlmocharifadoContext>(fun options -> options.UseSqlServer(constr) |> ignore )
+         .AddTransient<IAlmocharifadoRepository,AlmocharifadoRepository>()
+         .AddTransient<IProximoPatrimonioProvider,ProximoPatrimonioProvider>()   
       
-      
-
-
-   
