@@ -3,15 +3,35 @@
 @inject NavigationManager navMan
 @using Almocherifado.UI.Components.Ferramentas
 @using Syncfusion.Blazor.Inputs
-<CadastrarFerramentas>
+@using Almocherifado.UI.Components
+@using Syncfusion.Blazor.Inputs
+
+<CadastrarFerramentas @ref="refCadastro">
 
     <Uploader>
-        
-        <Almocherifado.UI.Components.Uploader></Almocherifado.UI.Components.Uploader>
-
+        <Uploader  FotosChanged="@((x) => OnFotosChanged(x))" ></Uploader>
     </Uploader>
 
 </CadastrarFerramentas>
+
+
+@code{
+    CadastrarFerramentas refCadastro;
+
+    [Parameter] public string Route { get; set; }
+    //ElementReference cadastrarFerramenta { get; set; }
+    void OnFotosChanged(IEnumerable<UploadFiles> value)
+    {
+        refCadastro.ChangeFotos(value);
+    }
+}
+
+
+
+
+
+
+
 @*@switch (Route)
                           {
                           case "" :
@@ -40,9 +60,4 @@
             <h1>Rota não encontrada</h1>
             break;
     }*@
-
-
-@code{
-    [Parameter] public string Route { get; set; }
-}
 

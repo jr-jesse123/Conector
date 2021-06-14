@@ -1,3 +1,11 @@
 ﻿.half-contained {
     width: calc(44%);
 }
+
+.was-validated .invalid-feedback {
+    display: block 
+}
+
+#DataDaCompraInput{
+    font-size:12px;
+}

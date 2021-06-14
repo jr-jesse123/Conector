@@ -9,8 +9,10 @@ namespace InfraEstrutura
     public class AlmocharifadoContext : DbContext
     {
         
-        public AlmocharifadoContext(DbContextOptions<AlmocharifadoContext> options) : base(options)
+        public AlmocharifadoContext(
+            DbContextOptions<AlmocharifadoContext> options) : base(options)
         {
+            
         }
 
         public DbSet<Funcionario> Funcionarios { get; set; }
@@ -19,10 +21,15 @@ namespace InfraEstrutura
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            //builder.Entity<Ferramenta>().HasKey(f => f.Patrimonio);
+
             builder.Entity<Ferramenta>().Property(x => x.Fotos)
                 .HasConversion(x => x.Aggregate((a, b) => a + ";" + b), x => x.Split(new char[] { ';' }) );
 
             builder.Entity<Funcionario>().HasKey(f => f.CPF);
         }
+
+        
+
     }
 }

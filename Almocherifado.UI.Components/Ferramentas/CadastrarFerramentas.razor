@@ -2,7 +2,7 @@
 @using Almocherifado.UI.Components
 @using Almocherifado.UI.Components.Forms
 @using Syncfusion.Blazor.Inputs
-
+@using Blazored.FluentValidation
 
 
 <div class="container h-100 w-100">
@@ -10,20 +10,21 @@
     <h2 class="fw-bold my-4">CADASTRO DE FERRAMENTAS</h2>
     <div class="row h-100 w-100" style="margin-left: 0px; margin-right: 0px; ">
 
-        <EditForm OnValidSubmit="@OnValidInput" Model="@FerramentaInput">
-            <ValidationSummary/>
+        <EditForm @ref="form" Model="@FerramentaInput"  OnSubmit="OnSubmit">
+            <FluentValidationValidator/>
             <div class=@formClass>
                 <div class="half-contained h-100 me-5 w-100">
-                    @*<InputGroup Id="Teste">*@
                      <InputGroup id="NomeInput" >
                         <LabelContent>
                             <b>*</b>Nome
                         </LabelContent>
                         <InvalidValidFeedBack>
-                            <InputInfo Text="É necessário informar o nome da ferramenta" Tipo="InputInfoType.Invalid"></InputInfo>
+                            <div class="invalid-feedback">
+                                <ValidationMessage For="() => FerramentaInput.Nome" />
+                            </div>
                         </InvalidValidFeedBack>
                         <InputField>
-                            <InputText id="NomeInput" @bind-Value="@FerramentaInput.Nome" placeholder="Insira o nome da ferramenta" type="text" class="form-control" />
+                            <InputText id="NomeInput" required   @bind-Value="@FerramentaInput.Nome" placeholder="Insira o nome da ferramenta" type="text" class="form-control" />
                         </InputField>
                     </InputGroup>
 
@@ -32,10 +33,13 @@
                             <b>*</b>Marca
                         </LabelContent>
                         <InvalidValidFeedBack>
-                            <InputInfo Text="É necessário informar A marca da ferramenta" Tipo="InputInfoType.Invalid"></InputInfo>
+                            <div class="invalid-feedback" >
+                                <ValidationMessage For="() => FerramentaInput.Marca" />
+                            </div>
+                            @*<InputInfo Text="É necessário informar A marca da ferramenta" Tipo="InputInfoType.Invalid"></InputInfo>*@
                         </InvalidValidFeedBack>
                         <InputField>
-                            <InputText id="MarcaInput" @bind-Value="@FerramentaInput.Marca" placeholder="Insira a marca da ferramenta" type="text" class="form-control" />
+                            <InputText id="MarcaInput"  required @bind-Value="@FerramentaInput.Marca" placeholder="Insira a marca da ferramenta" type="text" class="form-control" />
                         </InputField>
                     </InputGroup>
 
@@ -44,38 +48,33 @@
                             <b>*</b>Modelo
                         </LabelContent>
                         <InvalidValidFeedBack>
-                            <InputInfo Text="É necessário informar o Modelo da ferramenta" Tipo="InputInfoType.Invalid"></InputInfo>
+                            <div class="invalid-feedback">
+                                <ValidationMessage For="() => FerramentaInput.Modelo" />
+                            </div>
                         </InvalidValidFeedBack>
                         <InputField>
-                            <InputText id="ModeloInput" @bind-Value="@FerramentaInput.Modelo" placeholder="Insira o Modelo da ferramenta" type="text" class="form-control" />
+                            <InputText id="ModeloInput" required   @bind-Value="@FerramentaInput.Modelo" placeholder="Insira o Modelo da ferramenta" type="text" class="form-control" />
                         </InputField>
                     </InputGroup>
-
+                    
 
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-8">
                             <div class="mb-3">
-
                                 <label for="DataDaCompraInput" class="form-label"><b>*</b>Data da Compra:</label>
-                                <InputDate  @bind-Value="FerramentaInput.DataDaCompra" id="DataDaCompraInput" type="text" class="form-control" />
-
+                                
+                                <InputDate min="1990-01-01" max="@DateTime.Now.Date.ToString("yyyy-MM-dd")"  @bind-Value="FerramentaInput.DataDaCompra" id="DataDaCompraInput" type="text" class="form-control" />
                                 <div class="invalid-feedback">
-
+                                    <ValidationMessage For="() => FerramentaInput.DataDaCompra" />
                                 </div>
                             </div>
 
                         </div>
-                        <div class="col-6">
+                        <div class="col-4">
                             <div class="mb-3">
-                                <label for="exampleInputEmail1" class="form-label"><b>*</b>Patrimônio</label>
+                                <label  class="form-label"><b>*</b>Patrimônio</label>
                                 <InputNumber id="ProximoPatrimonio" disabled @bind-Value="@ProximoPatrimonio" class="form-control" />
 
-                                <div class="valid-feedback">
-                                    Looks good!
-                                </div>
-                                <div class="invalid-feedback">
-                                    Please choose a username.
-                                </div>
                             </div>
 
                         </div>
@@ -85,25 +84,25 @@
                 
                 <div class="half-contained w-100">
                     @Uploader
-               
-                <InputGroup>
-                    <LabelContent>
-                        Descrição
-                    </LabelContent>
-                    <InputField>
-                        <div>
-                            <InputTextArea id="DescricaoInput" @bind-Value="FerramentaInput.Descricao" class="w-100 form-control"></InputTextArea>
-                        </div>
-                    </InputField>
-                    <InvalidValidFeedBack>
-                        <InputInfo Text="É necessário informar o Modelo da ferramenta" Tipo="InputInfoType.Invalid"></InputInfo>
-                    </InvalidValidFeedBack>
-                </InputGroup>
+                    <div class="invalid-feedback">
+                        <ValidationMessage For="() => FerramentaInput.Fotos" />
+                    </div>
+                    <InputGroup>
+                        <LabelContent>
+                            Descrição
+                        </LabelContent>
+                        <InputField>
+                            <div>
+                                <InputTextArea id="DescricaoInput" @bind-Value="FerramentaInput.Descricao" class="w-100 form-control"></InputTextArea>
+                            </div>
+                        </InputField>
 
-                <div class="w-100 d-flex f¨lex-row justify-content-end">
-                    <button @onclick="@(() => navMan.NavigateTo("/"))" class="btn btn-outline-danger mx-4">Cancelar</button>
-                    <button type="submit" class="btn btn-dark">Continuar</button>
-                </div>
+                    </InputGroup>
+
+                    <div class="w-100 d-flex f¨lex-row justify-content-end">
+                        <button @onclick="@(() => navMan.NavigateTo("/"))" class="btn btn-outline-danger mx-4">Cancelar</button>
+                        <button type="button" @onclick="OnSubmit" class="btn btn-dark">Continuar</button>
+                    </div>
 
                 </div>
             </div>
@@ -113,4 +112,5 @@
 
 
 @code{ 
+    EditForm form;
 }

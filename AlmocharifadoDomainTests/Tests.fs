@@ -13,6 +13,7 @@ open System.Collections.Generic
 open AutoFixture
 open AlmocharifadoApplication
 
+
 let getContext ()=
    let options = DbContextOptionsBuilder<AlmocharifadoContext>()
                   //.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Almocharifado2Tests;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False").Options
@@ -63,12 +64,12 @@ type InfraEstruturaTests() =
       let ferramentas = [ferramenta;ferramenta2]
 
       let aloc = 
-             Fixture().Build<Dtos.DTO.AlocacaoDto>()
+             Fixture().Build<Alocacao>()
                   .With((fun x -> x.Id),0)
-                  .With((fun x -> x.Ferramentas), List(ferramentas) :> ICollection<Ferramenta> )
+                  .With((fun x -> x.Ferramentas), List(ferramentas) :> seq<Ferramenta> )
                   .Create()
                   
-               |> Dtos.DTO.AlocacaoDto.ToDomain
+               
 
       context.Alocaoes.Add(aloc)
       context.SaveChanges()

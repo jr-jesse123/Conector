@@ -2,7 +2,6 @@
 
 namespace Entities
 open System
-open System.Collections.Generic
 
 
 //type Fotos = private Fotos of string []
@@ -54,73 +53,90 @@ module Alocacoes=
          |> Seq.max |> (+) 1
          
    
-namespace Dtos 
-open Entities
-open System
-open System.Collections.Generic
-   [<CLIMutable>]
-   type FuncionarioDto = Funcionario
+//namespace Dtos 
+//open Entities
+//open System
+//open System.Collections.Generic
+//   [<CLIMutable>]
+//   type FuncionarioDto = Funcionario
       
-   [<CLIMutable>]
-   type FerramentaDto  = 
-      {
-            Id:int
-            Nome:string;Marca:string;
-            Modelo:string;DataDaCompra:DateTime;
-            Patrimonio:int;Fotos:ICollection<string>;
-            Descricao:string
-         }
-   [<AutoOpen>]
-   module FerramentaDto=
-      let FromDomain (ferramenta:Ferramenta) =
+//   [<CLIMutable>]
+//   type FerramentaDto  = 
+//      {
+//            Id:int
+//            Nome:string;Marca:string;
+//            Modelo:string;DataDaCompra:DateTime;
+//            Patrimonio:int;Fotos:ICollection<string>;
+//            Descricao:string
+//         }
+//   open FluentValidation
+//   [<AutoOpen>]
+//   module FerramentaDto=
+//      let FromDomain (ferramenta:Ferramenta) =
    
-                     {Id=ferramenta.Id;
-                     Nome=ferramenta.Nome;
-                     Modelo=ferramenta.Modelo;
-                     Patrimonio=ferramenta.Patrimonio;
-                     Fotos= new List<string>(ferramenta.Fotos) :> ICollection<string> ;
-                     Descricao=ferramenta.Descricao;
-                     Marca=ferramenta.Marca;
-                     DataDaCompra=ferramenta.DataCompra
-                     }
+//                     {Id=ferramenta.Id;
+//                     Nome=ferramenta.Nome;
+//                     Modelo=ferramenta.Modelo;
+//                     Patrimonio=ferramenta.Patrimonio;
+//                     Fotos= new List<string>(ferramenta.Fotos) :> ICollection<string> ;
+//                     Descricao=ferramenta.Descricao;
+//                     Marca=ferramenta.Marca;
+//                     DataDaCompra=ferramenta.DataCompra
+//                     }
          
-      //let ToDomain ferramentaDto :  Ferramenta =
-      //              {
-      //               Id=ferramentaDto.Id;
-      //               Nome=ferramentaDto.Nome;
-      //               Modelo=ferramentaDto.Modelo;
-      //               Patrimonio=ferramentaDto.Patrimonio;
-      //               Fotos= ferramentaDto.Fotos ;
-      //               Descricao=ferramentaDto.Descricao;
-      //               Marca=ferramentaDto.Marca;
-      //               DataCompra=ferramentaDto.DataCompra
-      //               }
-    
-   module DTO  =
-      [<CLIMutable>]
-      type AlocacaoDto =
-         {
-            Id:int;Ferramentas:ICollection<Ferramenta> ;
-            Responsavel:FuncionarioDto;ContratoLocacao:string;
-            DataAlocacao:DateTime
-         }
-      [<AutoOpen>]
-      module AlocacaoDto=
-         let ToDomain alocDto : Alocacao =
-            {
-               Id=alocDto.Id;
-               Responsavel=alocDto.Responsavel
-               ContratoLocacao=alocDto.ContratoLocacao
-               DataAlocacao=alocDto.DataAlocacao
-               Ferramentas=alocDto.Ferramentas
-            }
-         let FromDomain  (aloc:Alocacao) =
-            {
-               Id=aloc.Id;
-               Responsavel=aloc.Responsavel
-               ContratoLocacao=aloc.ContratoLocacao
-               DataAlocacao=aloc.DataAlocacao
-               Ferramentas= aloc.Ferramentas |> List<Ferramenta>
-            }
+//      let ToDomain ferramentaDto :  Ferramenta =
+//                    {
+//                     Id=ferramentaDto.Id;
+//                     Nome=ferramentaDto.Nome;
+//                     Modelo=ferramentaDto.Modelo;
+//                     Patrimonio=ferramentaDto.Patrimonio;
+//                     Fotos= ferramentaDto.Fotos |> Array.ofSeq ;
+//                     Descricao=ferramentaDto.Descricao;
+//                     Marca=ferramentaDto.Marca;
+//                     DataCompra=ferramentaDto.DataDaCompra
+//                     }
+      
+//      //let ValidaiteFerramentaDto (builder:IRuleBuilder<>) ferDto =
+         
+
+//      type FerramentaValidator () as this = 
+//         inherit AbstractValidator<FerramentaDto>()
+//         do this.RuleFor(fun f -> f.DataDaCompra)
+//                     .InclusiveBetween(DateTime(1980,1,1),DateTime.Now)
+//                     .WithMessage("Data deve estar entre 1980 e hoje") 
+//                     |> ignore
+
+//         do this.RuleFor(fun f -> f.Nome).NotEmpty() |> ignore
+//         do this.RuleFor(fun f -> f.Modelo).NotEmpty() |> ignore
+//         do this.RuleFor(fun f -> f.Marca).NotEmpty() |> ignore
+//         do this.RuleFor(fun f -> f.Fotos).NotEmpty() |> ignore
+
+
+//   module DTO  =
+//      [<CLIMutable>]
+//      type AlocacaoDto =
+//         {
+//            Id:int;Ferramentas:ICollection<Ferramenta> ;
+//            Responsavel:FuncionarioDto;ContratoLocacao:string;
+//            DataAlocacao:DateTime
+//         }
+//      [<AutoOpen>]
+//      module AlocacaoDto=
+//         let ToDomain alocDto : Alocacao =
+//            {
+//               Id=alocDto.Id;
+//               Responsavel=alocDto.Responsavel
+//               ContratoLocacao=alocDto.ContratoLocacao
+//               DataAlocacao=alocDto.DataAlocacao
+//               Ferramentas=alocDto.Ferramentas
+//            }
+//         let FromDomain  (aloc:Alocacao) =
+//            {
+//               Id=aloc.Id;
+//               Responsavel=aloc.Responsavel
+//               ContratoLocacao=aloc.ContratoLocacao
+//               DataAlocacao=aloc.DataAlocacao
+//               Ferramentas= aloc.Ferramentas |> List<Ferramenta>
+//            }
          
    

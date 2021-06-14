@@ -1,3 +1,4 @@
+using FluentValidation.AspNetCore;
 using Almocherifado.UI.Areas.Identity;
 using Almocherifado.UI.Data;
 using Append.Blazor.Printing;
@@ -18,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Syncfusion.Blazor;
 using AlmocharifadoApplication;
+using Almocherifado.UI.Components.Models;
 
 namespace Almocherifado.UI
 {
@@ -52,12 +54,13 @@ namespace Almocherifado.UI
 
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddRazorPages();
+            services.AddRazorPages().AddFluentValidation(
+                    options => options.RegisterValidatorsFromAssemblyContaining<CadastroFerramentaModel>());
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddSyncfusionBlazor();
+            services.AddSyncfusionBlazor().AddFluentValidation();
 
 
             services.AddBlazorise(options => options.ChangeTextOnKeyPress = false)

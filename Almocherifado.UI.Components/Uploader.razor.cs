@@ -1,27 +1,26 @@
-﻿
+﻿using Almocherifado.UI.Components.Helpers;
+
+using Microsoft.AspNetCore.Components;
+using Syncfusion.Blazor.Inputs;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
 namespace Almocherifado.UI.Components
 {
-
     public partial class Uploader
     {
-        private string getPath(FerramentaDto FerramentaInput, string fileName)
-        {
-            return @"./wwwroot/" + FerramentaInput.Nome + "_" + FerramentaInput.Marca
-                        + "_" + FerramentaInput.Modelo + "_" + fileName + ".png";
-        }
+        [Parameter] public string[] PathFotos { get; set; }
+        [Parameter] public EventCallback<IEnumerable<UploadFiles>> FotosChanged { get; set; }
 
-        private List<MemoryStream> fotos { get; set; } = new List<MemoryStream>();
-
+        public IEnumerable<UploadFiles> Files { get; private set; } = new UploadFiles[] { };
         private void OnChange(UploadChangeEventArgs args)
         {
-            fotos = new List<MemoryStream>();
-            foreach (var file in args.Files)
-            {
-                var ms = new MemoryStream();
-                file.Stream.WriteTo(ms);
-                fotos.Add(ms);
-
-            }
+            Files = args.Files;
+            FotosChanged.InvokeAsync(Files).Wait();   
         }
     }
 }
