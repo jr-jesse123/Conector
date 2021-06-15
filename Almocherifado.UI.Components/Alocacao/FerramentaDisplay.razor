@@ -1,0 +1,35 @@
+﻿
+<div class="row my-5 d-flex gx-3 justify-content-evenly">
+    <div class="col-3">
+        <div>*Patrimônio</div>
+        <input @onchange="OnPatrimonioChage" type="number" step="1" class="form-control">
+    </div>
+
+    
+    <div class="col-4 d-flex flex-column justify-content-between">
+        
+        
+            <p><b>Ferramenta:</b>@ferramentaAtual?.Nome</p>
+            <p><b>Marca:</b>@ferramentaAtual?.Marca</p>
+            <p class="mb-0"><b>Modelo:</b>@ferramentaAtual?.Modelo</p>
+        
+        </div>
+
+    <div class="col-5  d-flex flex-column justify-content-between">
+        @if (FeramentaDisponivel)
+        {
+            <h4 class="text-success fw-bold">Disponível para alocação</h4>
+            <button class="btn btn-outline-info w-75">Adicionar Ferramenta</button>
+        }
+        else
+        {
+            <h4 class="text-danger fw-bold">Ferramenta Alocada</h4>
+            <p><b>Responsável:</b>@AlocacaoAtual?.Responsavel.Nome</p>
+            <p><b>AlocadaEm:</b>@AlocacaoAtual.DataAlocacao.ToShortDateString()</p>
+        }
+
+    </div>
+    
+
+
+</div>

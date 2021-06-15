@@ -13,6 +13,9 @@ type IAlmocharifadoRepository =
    abstract member SalvarFerramenta:Ferramenta->unit
    abstract member GetAllFuncionarios:unit->Funcionario []
    abstract member SalvarFuncionario:Funcionario->unit
+   abstract member GetAllAlocacoes:unit->Alocacao []
+   abstract member SalvarAlocacao:Alocacao->unit
+
 
 
 module AlmocharifadoRepository=
@@ -27,12 +30,23 @@ module AlmocharifadoRepository=
       context.Funcionarios.Add funcionario
       context.SaveChanges() |> ignore
 
+
+   let GetAllAlocacoes (context:AlmocharifadoContext)  = context.Alocaoes.ToArray();
+   let SalvarAlocacao (context:AlmocharifadoContext)  alocacao = 
+      context.Alocaoes.Add alocacao
+      context.SaveChanges() |> ignore
+
+
 type AlmocharifadoRepository (context:AlmocharifadoContext) =
    interface IAlmocharifadoRepository
       with member this.GetAllFerramentas () = AlmocharifadoRepository.GetAllFerramentas context
            member this.SalvarFerramenta ferrament = AlmocharifadoRepository.SalvarFerramenta context ferrament
            member this.GetAllFuncionarios () = AlmocharifadoRepository.GetAllFuncionarios context
            member this.SalvarFuncionario funcionario = AlmocharifadoRepository.SalvarFuncionario context funcionario
+           member this.GetAllAlocacoes () = AlmocharifadoRepository.GetAllAlocacoes context
+           member this.SalvarAlocacao alocacao = AlmocharifadoRepository.SalvarAlocacao context alocacao
+
+
 
 module PatrimonioProvider =
    let GetProximoPatrimonioLivre (repo:IAlmocharifadoRepository) =

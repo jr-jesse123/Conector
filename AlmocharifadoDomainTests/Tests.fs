@@ -12,6 +12,9 @@ open Swensen.Unquote
 open System.Collections.Generic
 open AutoFixture
 open AlmocharifadoApplication
+open Xunit
+open Xunit
+
 
 
 let getContext ()=
@@ -135,8 +138,59 @@ type ApplicationTests() =
 
       
 
+[<Theory>]   
+[<InlineData(1)>]
+[<InlineData(2)>]
+[<InlineData(4)>]
+[<InlineData(9)>]
+let ``Ferramenta alocada é corretamente reconhecida como não disponível`` indice =
+   let alocacoes = Fixture().CreateMany<Alocacao>(10) |> Seq.toList
+
+   let ferramenta = alocacoes.[indice].Ferramentas |> Seq.head
+   
+   let atual = Ferramentas.FerramentaDisponivel alocacoes ferramenta
+
+   test <@ not atual @>
    
 
-
       
+[<Theory>]   
+[<InlineData(1)>]
+[<InlineData(2)>]
+[<InlineData(4)>]
+[<InlineData(9)>]
+let ``Ferramenta não alocada é corretamente reconhecida Como disponível`` indice =
+   let alocacoes = Fixture().CreateMany<Alocacao>(10) |> Seq.toList
+   let ferramenta = Fixture().Create<Ferramenta>()
+   let atual = Ferramentas.FerramentaDisponivel alocacoes ferramenta
+   test <@  atual @>
+   
+
+[<Theory>]   
+[<InlineData(1)>]
+[<InlineData(2)>]
+[<InlineData(4)>]
+let ``Ferramentas.GetAlocacaoDeFerramentaAlocada recupera a alocacao de uma ferramenta corretamente`` indice =
+   
+   let alocacoes = Fixture().CreateMany<Alocacao>(10) |> Seq.toList
+   
+   let ferramenta = alocacoes.[indice].Ferramentas |> Seq.head
+
+   let locacaoRecuperada = Ferramentas.GetAlocacaoDeFerramentaAlocada alocacoes ferramenta
+   
+   test <@ Option.isSome locacaoRecuperada @>
+   test <@ locacaoRecuperada = Some alocacoes.[indice] @>
+
+[<Fact>]      
+let ``Ferramentas.GetAlocacaoDeFerramentaAlocada retorna none em caso de ferramenta livre``  =
+   
+   let alocacoes = Fixture().CreateMany<Alocacao>(10) |> Seq.toList
+   
+   let ferramenta = Fixture().Create<Ferramenta>()
+
+   let locacaoRecuperada = Ferramentas.GetAlocacaoDeFerramentaAlocada alocacoes ferramenta   
+   test <@ Option.isNone locacaoRecuperada @>
+   
+      
+
 

@@ -1,26 +1,16 @@
 ﻿@page "/AlocarFerramenta"
+@using Entities
+
+@code{
+    
+
+}
 
 <div class="container h-100 mt-5">
     <h2> <b> ALOCAR FERRAMENTA</b></h2>
 
     <div class="row d-flex justify-content-between my-4 ">
-
-        <div class="row my-5 d-flex justify-content-evenly">
-            <div class="col-auto">
-                <div>*Patrimônio</div>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-            </div>
-            <div class="col-auto d-flex flex-column justify-content-between">
-                <p><b>Ferramenta:</b>TA SCOPE</p>
-                <p><b>Marca:</b>IMI Hydronic</p>
-                <p class="mb-0"><b>Modelo:</b>TA SCOPE</p>
-            </div>
-            <div class="col-auto  d-flex flex-column justify-content-between">
-                <h4 class="text-success fw-bold">Disponível para alocação</h4>
-                <button class="btn btn-outline-info w-75">Adicionar Ferramenta</button>
-            </div>
-        </div>
-
+        <FerramentaDisplay></FerramentaDisplay>
 
         <table class="table">
             <thead>

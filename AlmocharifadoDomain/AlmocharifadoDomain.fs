@@ -53,7 +53,21 @@ module Alocacoes=
          |> Seq.map (fun fer -> fer.Patrimonio)
          |> Seq.max |> (+) 1
          
+module Ferramentas=
+   let FerramentaDisponivel  (alocacoes:Alocacao seq)  ferramenta =
+      alocacoes
+      |> Seq.exists (fun aloc -> Seq.contains ferramenta aloc.Ferramentas) 
+      |> not
    
+   let GetAlocacaoDeFerramentaAlocada (alocacoes:Alocacao seq) ferramenta =
+      
+      match FerramentaDisponivel alocacoes ferramenta with 
+      |false -> 
+         alocacoes
+         |> Seq.filter (fun aloc -> Seq.contains ferramenta aloc.Ferramentas) 
+         |> Seq.exactlyOne
+         |> Some
+      |true -> None
 //namespace Dtos 
 //open Entities
 //open System
