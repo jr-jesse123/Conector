@@ -5,14 +5,27 @@
 @using Syncfusion.Blazor.Inputs
 @using Almocherifado.UI.Components
 @using Syncfusion.Blazor.Inputs
+@using Almocherifado.UI.Components.Funcionarios
 
-<CadastrarFerramentas @ref="refCadastro">
+
+@*<CadastrarFerramentas @ref="refCadastro">
 
     <Uploader>
-        <Uploader  FotosChanged="@((x) => OnFotosChanged(x))" ></Uploader>
+        <Uploader FotosChanged="@((x) => OnFotosChanged(x))"></Uploader>
     </Uploader>
 
-</CadastrarFerramentas>
+</CadastrarFerramentas>*@
+
+<CadastrarFuncionario @ref="refCadastrofUNCIONARIO">
+        <Uploader>
+            <Uploader Multiple="false" FotosChanged="@((x) => OnFotosChanged2(x))"></Uploader>
+        </Uploader>
+    </CadastrarFuncionario>
+
+
+
+
+
 
 
 @code{
@@ -24,6 +37,14 @@
     {
         refCadastro.ChangeFotos(value);
     }
+
+    CadastrarFuncionario refCadastrofUNCIONARIO;
+
+    //ElementReference cadastrarFerramenta { get; set; }
+    void OnFotosChanged2(IEnumerable<UploadFiles> value)
+    {
+        refCadastrofUNCIONARIO.ChangeFotos(value);
+    }
 }
 
 
@@ -33,12 +54,18 @@
 
 
 @*@switch (Route)
-                          {
-                          case "" :
+    {
+        case "" :
             <Almocherifado.UI.Components.Inicio></Almocherifado.UI.Components.Inicio>
             break;
         case "CadastrarFerramenta":
-            <CadastrarFerramentas />
+            <CadastrarFerramentas @ref="refCadastro">
+
+            <Uploader>
+                <Uploader  FotosChanged="@((x) => OnFotosChanged(x))" ></Uploader>
+            </Uploader>
+
+        </CadastrarFerramentas>
             break;
 
         case "ListarFerramenta":

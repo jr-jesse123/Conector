@@ -11,6 +11,8 @@ open System.Runtime.CompilerServices
 type IAlmocharifadoRepository =
    abstract member GetAllFerramentas:unit->Ferramenta []
    abstract member SalvarFerramenta:Ferramenta->unit
+   abstract member GetAllFuncionarios:unit->Funcionario []
+   abstract member SalvarFuncionario:Funcionario->unit
 
 
 module AlmocharifadoRepository=
@@ -19,12 +21,18 @@ module AlmocharifadoRepository=
    let SalvarFerramenta (context:AlmocharifadoContext) ferramenta = 
       context.Ferramentas.Add ferramenta |> ignore
       context.SaveChanges() |> ignore
-
+   
+   let GetAllFuncionarios (context:AlmocharifadoContext) = context.Funcionarios.ToArray()
+   let SalvarFuncionario (context:AlmocharifadoContext) funcionario = 
+      context.Funcionarios.Add funcionario
+      context.SaveChanges() |> ignore
 
 type AlmocharifadoRepository (context:AlmocharifadoContext) =
    interface IAlmocharifadoRepository
       with member this.GetAllFerramentas () = AlmocharifadoRepository.GetAllFerramentas context
            member this.SalvarFerramenta ferrament = AlmocharifadoRepository.SalvarFerramenta context ferrament
+           member this.GetAllFuncionarios () = AlmocharifadoRepository.GetAllFuncionarios context
+           member this.SalvarFuncionario funcionario = AlmocharifadoRepository.SalvarFuncionario context funcionario
 
 module PatrimonioProvider =
    let GetProximoPatrimonioLivre (repo:IAlmocharifadoRepository) =

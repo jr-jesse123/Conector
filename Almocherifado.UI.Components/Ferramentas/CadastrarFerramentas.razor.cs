@@ -9,6 +9,37 @@ using System.Linq;
 using AutoMapper;
 using Entities;
 using System;
+using Microsoft.AspNetCore.Components.Forms;
+
+namespace Almocherifado.UI.Components.Forms
+{
+    public abstract class FormBase : ComponentBase
+    {
+
+        [Inject] protected NavigationManager navMan { get; set; }
+        [Inject] protected IAlmocharifadoRepository repo { get; set; }
+        [Inject] protected IMapper mapper { get; set; }
+
+
+
+        [Parameter] public RenderFragment Uploader { get; set; }
+
+        protected EditForm form;
+
+        protected virtual void OnSubmit() 
+        {
+            formClass = "was-validated d-flex";
+            //form.EditContext.Validate();
+        }
+
+        protected string formClass = "d-flex";
+        protected void OnCancelClic()
+        {
+            navMan.NavigateTo("/");
+        }
+
+    }
+}
 
 namespace Almocherifado.UI.Components.Ferramentas
 {
@@ -20,7 +51,8 @@ namespace Almocherifado.UI.Components.Ferramentas
         [Inject] IProximoPatrimonioProvider patrimonioProvider { get; set; }
         [Inject] IAlmocharifadoRepository repo { get; set; }
 
-        
+
+        public EditForm form { get; private set; }
         public void ChangeFotos(IEnumerable<UploadFiles> novasFotos)
         {
             FerramentaInput.Fotos = novasFotos;
@@ -33,29 +65,21 @@ namespace Almocherifado.UI.Components.Ferramentas
             {
                 OnValidSubmit();
             }
-            OnInValidSubmit();
         }
 
-        private void OnInValidSubmit()
+        private void OnCancelClic() 
         {
-          
+            navMan.NavigateTo("/");
         }
+
         private void OnValidSubmit()
         {
             mapper.ConfigurationProvider.AssertConfigurationIsValid();
 
-            //var ferramentaDomain = mapper.Map<Ferramenta>(FerramentaInput);
+            var ferramentaDomain = mapper.Map<Ferramenta>(FerramentaInput);
 
-            var ferramentaDomain = new Ferramenta()
-            {
-                DataCompra = FerramentaInput.DataDaCompra,
-                Descricao = FerramentaInput.Descricao,
-                Fotos = FileHelper.getFotoFerramentaPath(FerramentaInput).ToArray(),
-                Marca = FerramentaInput.Marca,
-                Modelo = FerramentaInput.Modelo,
-                Nome = FerramentaInput.Nome,
-                Patrimonio = FerramentaInput.Patrimonio
-            };
+
+            FileHelper.SaveFilesToRoot(FerramentaInput.Fotos, ferramentaDomain.Fotos);
 
             repo.SalvarFerramenta(ferramentaDomain);
         }

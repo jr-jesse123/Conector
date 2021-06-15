@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Almocherifado.UI.Components.Models;
 using FluentValidation;
 using Syncfusion.Blazor.Inputs;
 
@@ -16,21 +15,40 @@ namespace Almocherifado.UI.Components.Models
         public IEnumerable<UploadFiles> Fotos { get; set; }
         public string Descricao { get; set; }
     }
-}
-
-namespace Almocherifado.UI.Components
-{
-    public class FerramentaValidator : AbstractValidator<CadastroFerramentaModel>
+    
+    public enum Cargo
     {
-        public FerramentaValidator() 
+        Nenhum,
+        AnalistaAdministrativo,
+        AuxiliarAdministrativo,
+        AuxiliarDeMeMecanico,
+        EletroTecncnico,
+        EncarregadoDeManutencao,
+        EngenhoeiroMecanico,
+        MecanicoDeArCondicionado,
+        MecanicoDeArCondicionadoSenior,
+        Operador
+    }
+
+    public record CadastroFuncionarioModel
+    {
+        public string Nome { get; set; }
+        public string CPF { get; set; }
+        public string Cargo { get; set; }
+        public string Email { get; set; }
+        public UploadFiles Foto { get; set; }
+    }
+
+    public class FuncionarioValidator : AbstractValidator<CadastroFuncionarioModel>
+    {
+        public FuncionarioValidator()
         {
             RuleFor(f => f.Nome).NotEmpty();
-            RuleFor(f => f.Marca).NotEmpty();
-            RuleFor(f => f.Modelo).NotEmpty();
-            RuleFor(f => f.DataDaCompra)
-                .InclusiveBetween(new DateTime(1990, 01, 01), DateTime.Now.Date);
-            RuleFor(f => f.Fotos).NotEmpty().WithMessage("É preciso adicionar ao menos uma foto");
-
+            RuleFor(f => f.CPF).IsValidCPF() ;
+            RuleFor(f => f.Cargo).NotEmpty();
+            RuleFor(f => f.Email).NotEmpty().EmailAddress();
+            RuleFor(f => f.Foto).NotEmpty();
         }
     }
+
 }

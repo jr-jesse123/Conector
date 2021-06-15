@@ -13,33 +13,38 @@ namespace Almocherifado.UI.Components.Helpers
             File.WriteAllBytes(filePath, ms.ToArray());
         }
 
-        private static string getPath(CadastroFerramentaModel ferramenta, int indice)
+        public static string getPath(CadastroFerramentaModel ferramenta, int indice)
         {
             var nome_patrimonio = $"{ferramenta.Nome}_{ferramenta.Patrimonio}";
             var path = $"wwwroot/{nome_patrimonio}_{indice}.png";
             return path;
         }
 
-        //public static (string[] paths ,Stream[] streams) getFotoFerramentaPath(CadastroFerramentaModel ferramenta, IEnumerable<UploadFiles> fotos)
-        //{
-            
-        //    var streams = fotos.Select(f => f.Stream);
 
-        //    var lista = new List<UploadFiles>(fotos);
-        //    var paths = new List<string>();
-        //    var indice = 0;
-        //    lista.ForEach(f => paths.Add(getPath(ferramenta, indice++)));
-
-        //    //File.WriteAllBytes(path, ms.ToArray());
-        //    return (paths.ToArray(),streams.ToArray());
-        //}
-
-        internal static IEnumerable<string> getFotoFerramentaPath(CadastroFerramentaModel cf)
+        public static IEnumerable<string> getFotoFerramentaPath(CadastroFerramentaModel cf)
         {
            var indice = 1;
            return cf.Fotos.Select(ft => getPath(cf, indice++));
         }
 
-        
+        internal static void SaveFilesToRoot(IEnumerable<UploadFiles> fotos1, string[] fotos2)
+        {
+            for (int i = 0; i < fotos2.Length; i++)
+            {
+                SaveFileToRoot(fotos1.ToArray()[i].Stream, fotos2[i]);
+            }
+        }
+
+        internal static void SaveFilesToRoot(CadastroFuncionarioModel funcionarioInput)
+        {
+            var path = getFotFuncionarioPath(funcionarioInput);
+            SaveFileToRoot(funcionarioInput.Foto.Stream, path);
+        }
+
+        public static string getFotFuncionarioPath(CadastroFuncionarioModel cfm)
+        {
+            var path = $"wwwroot/{cfm.CPF}.png";
+            return path;
+        }
     }
 }

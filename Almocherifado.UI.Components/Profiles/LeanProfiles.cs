@@ -17,11 +17,34 @@ namespace Almocherifado.UI.Components.Profiles
         {
 
 
+            CreateMap<CadastroFuncionarioModel, Funcionario>()
+                .ConvertUsing<CadastroFuncionarioConverter>();
+                
+
+
             CreateMap<CadastroFerramentaModel, Ferramenta>()
                 .ForMember(dst => dst.Id, opt => opt.Ignore())
                 .ForMember(dst => dst.DataCompra, (opt) => opt.MapFrom(cfm => cfm.DataDaCompra))
-                .ForMember(dst => dst.Fotos, opt => opt.MapFrom((cfm, fe) => FileHelper.getFotoFerramentaPath(cfm).ToArray()));
-                
+                .ForMember(dst => dst.EmManutencao, opt => opt.Ignore() )
+                .ForMember(dst => dst.Fotos, opt => 
+                           opt.MapFrom((cfm, fe) => FileHelper.getFotoFerramentaPath(cfm).ToArray())
+                           );
+        }
+    }
+
+    internal class CadastroFuncionarioConverter : ITypeConverter<CadastroFuncionarioModel, Funcionario>
+    {
+        public Funcionario Convert(CadastroFuncionarioModel source, Funcionario destination, ResolutionContext context)
+        {
+            return new Funcionario()
+            {
+                Nome = source.Nome,
+                Cargo = source.Cargo,
+                CPF = source.CPF,
+                Email = source.Email,
+                Foto = FileHelper.getFotFuncionarioPath(source)
+            };
+
         }
     }
 

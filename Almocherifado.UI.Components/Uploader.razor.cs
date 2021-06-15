@@ -13,6 +13,7 @@ namespace Almocherifado.UI.Components
 {
     public partial class Uploader
     {
+        [Parameter] public bool Multiple { get; set; } = true;
         [Parameter] public string[] PathFotos { get; set; }
         [Parameter] public EventCallback<IEnumerable<UploadFiles>> FotosChanged { get; set; }
 

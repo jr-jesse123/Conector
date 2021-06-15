@@ -20,6 +20,7 @@ namespace Almocherifado.UI.Tests
         {
             var ferramenta = new Fixture()
                 .Build<CadastroFerramentaModel>()
+                .Without(f => f.Fotos)
                 .With(f => f.Nome, "FerramentaTeste")
                 .Create();
 

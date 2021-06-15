@@ -78,7 +78,7 @@ namespace Almocherifado.UI
 
             
           
-            services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(typeof(CadastroFuncionarioModel));
 
             services.ConfigurarPatrimonio();
             //services.ConfigurarPatrimonio();

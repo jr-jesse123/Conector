@@ -14,6 +14,7 @@ type Ferramenta =
                            Modelo:string;DataCompra:DateTime;
                            Patrimonio:int;Fotos: string [];
                            Descricao:string
+                           EmManutencao:bool
                         }
 
 module Ferramenta =
@@ -21,7 +22,7 @@ module Ferramenta =
       match Seq.length fotos with
       | 0 -> Error "Ferramentas devem ter pelo menos uma foto."
       | _ -> Ok {Id=id;Nome=nome;Marca=marca;Modelo=modelo; DataCompra=dataCompra;Patrimonio=patrimonio;
-               Fotos=fotos;Descricao=descricao}
+               Fotos=fotos;Descricao=descricao; EmManutencao=false}
    
 [<CLIMutable>]
 type Funcionario = {Nome:string;CPF:string;Cargo:string;Email:string;Foto:string}

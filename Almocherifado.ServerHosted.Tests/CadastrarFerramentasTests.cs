@@ -28,7 +28,6 @@ namespace Almocherifado.UI.Tests
         void CadastroDeFerramentasProduzFerramentaCorretamente()
         {   //arrange
 
-
             var ferramenta = new Fixture()
                 .Build<CadastroFerramentaModel>()
                 .Without(f => f.Fotos)
