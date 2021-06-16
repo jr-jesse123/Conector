@@ -1,0 +1,31 @@
+﻿@using Entities
+@code{
+    [Parameter] public Funcionario Funcionario { get; set; } = new();
+    [Parameter] public Ferramenta[] Ferramentas { get; set; } = new Entities.Ferramenta[] { };
+    [Parameter] public Entities.Alocacao[] Alocacoes { get; set; } = new Entities.Alocacao[] { };
+}
+
+<tr>
+    <th>
+        <img src="" style="height: 100px;width:70px;" alt="">
+    </th>
+    <th style="text-align: left;width: 300px;">
+        <h6 style="text-transform: uppercase;">@Funcionario.Nome</h6>
+        @foreach (var item in Alocacoes)
+        {
+    <p><b>Contrato:</b>@(" " + item.ContratoLocacao)</p>
+        }
+        <p><b>CPF: </b> @(" " + Funcionario.CPF)</p>
+
+        vanessa.slcaiafa@gmail.com
+    </th>
+
+    <th class="pe-5" style="max-width: 127px;">
+        @foreach (var item in Ferramentas)
+        {
+        <p><b>@item.Nome</b> - Patrimônio @item.Patrimonio.ToString("00000")</p>
+        }
+
+        
+    </th>
+</tr>

@@ -24,7 +24,7 @@
         </div>
         <div class="col-auto">
 
-            <buton class="btn-dark btn">Novo Funcionário</buton>
+            <buton @onclick=@(() => NavMan.NavigateTo("CadastrarFuncionario")) class="btn-dark btn">Novo Funcionário</buton>
         </div>
     </div>
 
@@ -38,25 +38,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
+                @foreach (var funcEFer in funcionariosEFerramentas)
+                {
+                    <FuncionarioTr  Funcionario="funcEFer.Key" Alocacoes="funcionariosEAlocacoes[funcEFer.Key]" Ferramentas="funcEFer.Value"></FuncionarioTr>
+                }
 
-                    <th>
-                        <img src="" style="height: 100px;width:70px;" alt="">
-                    </th>
-                    <th style="text-align: left;width: 300px;">
-                        <h6 style="text-transform: uppercase;">Vanessa de soura Lima Caiafa</h6>
-                        <p><b>CPF:</b>000.000.000-00</p>
-                        <p><b>Contrato:</b>Impact Hub</p>
-                        vanessa.slcaiafa@gmail.com
-                    </th>
-
-                    <th class="pe-5" style="max-width: 127px;">
-                        <p><b>Ta Scope -</b>Patrimônio 0001</p>
-                        <p><b>Ta Scope -</b>Patrimônio 0001</p>
-                        <p><b>Ta Scope -</b>Patrimônio 0001</p>
-                    </th>
-                </tr>
-
+              
             </tbody>
         </table>
     </div>
