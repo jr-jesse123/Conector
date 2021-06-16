@@ -15,14 +15,15 @@ type Ferramenta =
                            Patrimonio:int;Fotos: string [];
                            Descricao:string
                            EmManutencao:bool
+                           Baixada:bool
                         }
 
-module Ferramenta =
-   let CriarFerramenta id nome marca modelo dataCompra patrimonio fotos descricao = 
-      match Seq.length fotos with
-      | 0 -> Error "Ferramentas devem ter pelo menos uma foto."
-      | _ -> Ok {Id=id;Nome=nome;Marca=marca;Modelo=modelo; DataCompra=dataCompra;Patrimonio=patrimonio;
-               Fotos=fotos;Descricao=descricao; EmManutencao=false}
+//module Ferramenta =
+//   let CriarFerramenta id nome marca modelo dataCompra patrimonio fotos descricao = 
+//      match Seq.length fotos with
+//      | 0 -> Error "Ferramentas devem ter pelo menos uma foto."
+//      | _ -> Ok {Id=id;Nome=nome;Marca=marca;Modelo=modelo; DataCompra=dataCompra;Patrimonio=patrimonio;
+//               Fotos=fotos;Descricao=descricao; EmManutencao=false; }
    
 [<CLIMutable>]
 type Funcionario = {Nome:string;CPF:string;Cargo:string;Email:string;Foto:string}
@@ -54,20 +55,28 @@ module Alocacoes=
          |> Seq.max |> (+) 1
          
 module Ferramentas=
+//TODO: TRAZER FILTROS PARA CA
+//   let FiltrarPorTextoLivre ferramentas =
+      
+
    let FerramentaDisponivel  (alocacoes:Alocacao seq)  ferramenta =
+      
       alocacoes
       |> Seq.exists (fun aloc -> Seq.contains ferramenta aloc.Ferramentas) 
       |> not
-   
-   let GetAlocacaoDeFerramentaAlocada (alocacoes:Alocacao seq) ferramenta =
-      
-      match FerramentaDisponivel alocacoes ferramenta with 
-      |false -> 
-         alocacoes
-         |> Seq.filter (fun aloc -> Seq.contains ferramenta aloc.Ferramentas) 
-         |> Seq.exactlyOne
-         |> Some
-      |true -> None
+
+
+   let GetAlocacaoDeFerramentaAlocada (alocacoes:Alocacao seq) ferramenta  =
+      //if isNull ferramenta  then 
+      //   None
+      //else
+         match FerramentaDisponivel alocacoes ferramenta with 
+         |false -> 
+            alocacoes
+            |> Seq.filter (fun aloc -> Seq.contains ferramenta aloc.Ferramentas) 
+            |> Seq.exactlyOne
+            |> Some
+         |true -> None
 //namespace Dtos 
 //open Entities
 //open System

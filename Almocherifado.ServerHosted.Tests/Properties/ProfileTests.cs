@@ -25,6 +25,32 @@ namespace Almocherifado.UI.Tests.Properties
             this.outputHelper = outputHelper;
         }
 
+        [Fact]
+        public void AlocacaoEhConvertidaCorretamente()
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new LeanProfile());
+            });
+
+            config.AssertConfigurationIsValid();
+
+            var mapper = config.CreateMapper();
+
+            var alocModel = new Fixture()
+                .Build<CadastroAlocacaoModel>()
+                .Create();
+
+            var alocDomain = mapper.Map<Alocacao>(alocModel);
+
+            alocDomain.ContratoLocacao.Should().Be(alocModel.ContratoLocacao);
+            alocDomain.DataAlocacao.Should().Be(alocModel.Data);
+            alocDomain.Ferramentas.Should().BeEquivalentTo(alocModel.Ferramentas);
+            alocDomain.Id.Should().Be(0);
+            alocDomain.Responsavel.Should().Be(alocModel.Responsavel);
+
+        }
+
 
         [Fact]
         public void FerramentaModelEhConvertidaParaDominioCorretamente()
@@ -51,7 +77,7 @@ namespace Almocherifado.UI.Tests.Properties
             domain.Descricao.Should().Be(ferramentaModel.Descricao);
 
             var indice = 1;
-            domain.Fotos.ToList().ForEach(ft => ft.Should().Be(FileHelper.getPath(ferramentaModel, indice++)));
+            //domain.Fotos.ToList().ForEach(ft => ft.Should().Be(ferramentaModel.));
 
             
             domain.Marca.Should().Be(ferramentaModel.Marca);
@@ -76,7 +102,6 @@ namespace Almocherifado.UI.Tests.Properties
 
             var fotosStub = new Mock<UploadFiles>();
 
-            fotosStub.Setup(f => f.ToString()).Returns("stub");
 
             var funcionarioModel = new Fixture()
                     .Build<CadastroFuncionarioModel>()
@@ -87,9 +112,6 @@ namespace Almocherifado.UI.Tests.Properties
 
             domain.Cargo.Should().Be(funcionarioModel.Cargo);
             domain.CPF.Should().Be(funcionarioModel.CPF);
-
-            var indice = 1;
-            domain.Foto.Should().Be(FileHelper.getFotFuncionarioPath(funcionarioModel));
 
 
             domain.Email.Should().Be(funcionarioModel.Email);

@@ -34,7 +34,7 @@ namespace Almocherifado.UI.Components.Funcionarios
             {
                 var funcionarioDomain = mapper.Map<Funcionario>(FuncionarioInput);
 
-                FileHelper.SaveFilesToRoot(FuncionarioInput);
+                FileHelper.SaveFileToRoot(FuncionarioInput.Foto.Stream, FuncionarioInput.Foto.FileInfo.Name);
 
                 repo.SalvarFuncionario(funcionarioDomain);
             }

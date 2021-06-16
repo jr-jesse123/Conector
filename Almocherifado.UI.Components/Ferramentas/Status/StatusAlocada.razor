@@ -1,0 +1,24 @@
+﻿@code{
+    [Parameter] public Entities.Alocacao Alocacao { get; set; }
+    [Parameter] public bool EmManutencao { get; set; } 
+
+}
+
+<div class="fw-normal text-danger ">
+    <input type="checkbox"  class="bg-danger">
+    <span style="font-size: 12px;">Em manutenção</span>
+</div>
+<div>
+    <p class="my-0">
+        <b style="font-size: 12px;"> Responsável:</b>
+    </p>
+    <span class="fw-normal" style="font-size: 12px;">@Alocacao.Responsavel.Nome</span>
+</div>
+<div>
+    <p class="my-0">
+        <b style="font-size: 12px;"> Alocada Em:</b>
+    </p>
+    <span class="fw-normal" style="font-size: 12px;">
+        @Alocacao.ContratoLocacao
+    </span>
+</div>

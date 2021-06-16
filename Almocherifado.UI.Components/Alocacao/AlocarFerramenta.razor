@@ -1,8 +1,8 @@
 ﻿@page "/AlocarFerramenta"
 @using Entities
-
+@inherits FormBase
 @code{
-    
+
 
 }
 
@@ -10,7 +10,7 @@
     <h2> <b> ALOCAR FERRAMENTA</b></h2>
 
     <div class="row d-flex justify-content-between my-4 ">
-        <FerramentaDisplay></FerramentaDisplay>
+        <FerramentaDisplay  OnFerramentaSelecionada="(fer) => FerramentasSelecionadas.Add(fer)"></FerramentaDisplay>
 
         <table class="table">
             <thead>
@@ -22,68 +22,89 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-
-                    <td>
-                        <b>0023</b>
-                    </td>
-                    <th style="text-align: left;width: 300px;">
-                        <p class="fs-5">Manifold</p>
-                    </th>
-
-                    <td style="max-width: 127px;">
-                        <p class="fs-5">EOS</p>
-                    </td>
-
-                    <td style="max-width: 127px;">
-                        <p style="text-transform: uppercase;" class="fs-5">eos-vmg-2-r22-b</p>
-                    </td>
-                </tr>
-
+                @foreach (var item in FerramentasSelecionadas)
+                {
+                   <FerramentaAlocacaoTr Ferramenta="item" ></FerramentaAlocacaoTr>
+                }
             </tbody>
         </table>
-        <div class="row">
-            <div class="col-4">
-                <div class="mb-3">
-                    <label class="form-label">* Responsável</label>
-                    <select class="form-select">
-                        <option disabled selected>
-                            Selecione O responsável
-                        </option>
-                    </select>
+        <EditForm class="@formClass" Model="alocacaoInput" @ref="form" OnSubmit="OnSubmit">
+            <FluentValidationValidator></FluentValidationValidator>
+            
+         
+
+            <div class="row">
+                <div class="col-4">
+                    <div class="mb-3">
+                        <label class="form-label">* Responsável</label>
+                        <InputSelect @bind-Value="teste" class="form-select">
+                            <option value="" disabled selected>Escolha o Responsável</option>
+
+                            @if (Funcionarios != null)
+                            {
+                                @foreach (var funcionario in Funcionarios)
+                                {
+                                    <option value="@funcionario.CPF">
+                                        @funcionario.Nome
+                                    </option>
+                                }
+                            }
+                        </InputSelect>
+                        <div class="invalid-feedback">
+                            <ValidationMessage For="() => alocacaoInput.Responsavel"></ValidationMessage>
+                        </div>
+
+                    </div>
                 </div>
-            </div>
-            <div class="col-4">
-                <div class="mb-3">
-                    <label class="form-label">* Contrato/Locação</label>
-                    <input type="email" class="form-control">
+                <div class="col-4">
+                    <div class="mb-3">
+                        <label class="form-label">* Contrato/Locação</label>
+                        <InputText @bind-Value="alocacaoInput.ContratoLocacao" type="text" class="form-control" />
+                        <div class="invalid-feedback">
+                            <ValidationMessage For="() => alocacaoInput.ContratoLocacao"></ValidationMessage>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="col-4">
-                <div class="mb-3">
-                    <label class="form-label">* Data Locação</label>
-                    <input type="date" class="form-control">
+                <div class="col-4">
+                    <div class="mb-3">
+                        <label class="form-label">* Data Locação</label>
+                        <InputDate @bind-Value="alocacaoInput.Data" class="form-control">
+
+                        </InputDate>
+                        <div class="invalid-feedback">
+                            <ValidationMessage For="() => alocacaoInput.Data"></ValidationMessage>
+                        </div>
+                    </div>
 
                 </div>
 
-            </div>
-            <div class="btn btn-lg btn-outline-primary mt-4 " style="height: 100px;">
-                <div class="text-end">
-                    <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9.84375 7.5C9.84375 8.1216 9.59682 8.71774 9.15728 9.15728C8.71774 9.59682 8.1216 9.84375 7.5 9.84375C6.8784 9.84375 6.28226 9.59682 5.84272 9.15728C5.40318 8.71774 5.15625 8.1216 5.15625 7.5C5.15625 6.8784 5.40318 6.28226 5.84272 5.84272C6.28226 5.40318 6.8784 5.15625 7.5 5.15625C8.1216 5.15625 8.71774 5.40318 9.15728 5.84272C9.59682 6.28226 9.84375 6.8784 9.84375 7.5Z" fill="#136FCC" />
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M0 7.5C0 7.5 2.8125 2.34375 7.5 2.34375C12.1875 2.34375 15 7.5 15 7.5C15 7.5 12.1875 12.6562 7.5 12.6562C2.8125 12.6562 0 7.5 0 7.5ZM7.5 10.7812C8.37024 10.7812 9.20484 10.4355 9.82019 9.82019C10.4355 9.20484 10.7812 8.37024 10.7812 7.5C10.7812 6.62976 10.4355 5.79516 9.82019 5.17981C9.20484 4.56445 8.37024 4.21875 7.5 4.21875C6.62976 4.21875 5.79516 4.56445 5.17981 5.17981C4.56445 5.79516 4.21875 6.62976 4.21875 7.5C4.21875 8.37024 4.56445 9.20484 5.17981 9.82019C5.79516 10.4355 6.62976 10.7812 7.5 10.7812Z" fill="#136FCC" />
-                    </svg> visualizar
+
+                <div class="row w-100">
+                    <div class="invalid-feedback w-100 text-center fs-5">
+                        <ValidationMessage For="() => alocacaoInput.Ferramentas"></ValidationMessage>
+                    </div>
                 </div>
-                <h4 mt-0>
-                    Termo de Responsabilidade
-                </h4>
 
-            </div>
-            <div class="d-flex justify-content-end mt-4">
-                <button class="btn btn-outline-danger mx-4">Cancelar</button>
-                <button class="btn btn-primary">Salvar</button>
-            </div>
+                <div class="btn btn-lg btn-outline-primary mt-4 " style="height: 100px;">
+                    <div class="text-end">
+                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.84375 7.5C9.84375 8.1216 9.59682 8.71774 9.15728 9.15728C8.71774 9.59682 8.1216 9.84375 7.5 9.84375C6.8784 9.84375 6.28226 9.59682 5.84272 9.15728C5.40318 8.71774 5.15625 8.1216 5.15625 7.5C5.15625 6.8784 5.40318 6.28226 5.84272 5.84272C6.28226 5.40318 6.8784 5.15625 7.5 5.15625C8.1216 5.15625 8.71774 5.40318 9.15728 5.84272C9.59682 6.28226 9.84375 6.8784 9.84375 7.5Z" fill="#136FCC" />
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M0 7.5C0 7.5 2.8125 2.34375 7.5 2.34375C12.1875 2.34375 15 7.5 15 7.5C15 7.5 12.1875 12.6562 7.5 12.6562C2.8125 12.6562 0 7.5 0 7.5ZM7.5 10.7812C8.37024 10.7812 9.20484 10.4355 9.82019 9.82019C10.4355 9.20484 10.7812 8.37024 10.7812 7.5C10.7812 6.62976 10.4355 5.79516 9.82019 5.17981C9.20484 4.56445 8.37024 4.21875 7.5 4.21875C6.62976 4.21875 5.79516 4.56445 5.17981 5.17981C4.56445 5.79516 4.21875 6.62976 4.21875 7.5C4.21875 8.37024 4.56445 9.20484 5.17981 9.82019C5.79516 10.4355 6.62976 10.7812 7.5 10.7812Z" fill="#136FCC" />
+                        </svg> visualizar
+                    </div>
+                    <h4 mt-0>
+                        Termo de Responsabilidade
+                    </h4>
 
-        </div>
+                </div>
+
+
+
+                <div class="d-flex justify-content-end mt-4">
+                    <button type="button"  @onclick="OnCancelClic" class="btn btn-outline-danger mx-4">Cancelar</button>
+                    <button type="button" @onclick="OnSubmit"  class="btn btn-primary">Salvar</button>
+                </div>
+            </div>
+        </EditForm>
     </div>
 </div>

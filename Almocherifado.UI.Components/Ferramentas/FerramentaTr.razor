@@ -1,0 +1,38 @@
+﻿@using Almocherifado.UI.Components.Ferramentas.Status
+ 
+@code{
+    [Parameter] public EventCallback<Entities.Ferramenta> OnCheckChanged { get; set; }
+}
+<tr>
+    <td><input @onchange="() => OnCheckChanged.InvokeAsync(Ferramenta)" type="checkbox"></td>
+    <th>
+        <FotoCarroussel LinkFotos="Ferramenta.Fotos"></FotoCarroussel>
+    </th>
+    <td>
+        <h5>@Ferramenta.Nome</h5>
+        <p class="mt-3 mb-0">Adquirida em:</p>
+        <span class="fw-normal">@Ferramenta.DataCompra.ToString("MM/yyyy")</span>
+    </td>
+    <td>
+        <div>
+            <b>Marca:</b>
+            <span class="fw-normal">@Ferramenta.Marca</span>
+        </div>
+        <div>
+            <b>Modelo:</b>
+            <span class="fw-normal">@Ferramenta.Modelo</span>
+        </div>
+        <div>
+            <b>Patrimonio:</b>
+            <span class="fw-normal">@Ferramenta.Patrimonio</span>
+        </div>
+    </td>
+    <td style="max-width: 127px;">
+        <span class="fw-normal">
+            @Ferramenta.Descricao
+        </span>
+    </td>
+    <td style="max-width: 127px;">
+        @StatusFragment
+    </td>
+</tr>

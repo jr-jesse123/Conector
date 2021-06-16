@@ -2,7 +2,7 @@
 <div class="row my-5 d-flex gx-3 justify-content-evenly">
     <div class="col-3">
         <div>*Patrimônio</div>
-        <input @onchange="OnPatrimonioChage" type="number" step="1" class="form-control">
+        <input @oninput="OnPatrimonioChage"  type="number" step="1" class="form-control">
     </div>
 
     
@@ -16,16 +16,25 @@
         </div>
 
     <div class="col-5  d-flex flex-column justify-content-between">
-        @if (FeramentaDisponivel)
+
+        @if (ferramentaAtual is null)
         {
-            <h4 class="text-success fw-bold">Disponível para alocação</h4>
-            <button class="btn btn-outline-info w-75">Adicionar Ferramenta</button>
+            <h4 class="text-info fw-bold">Informe o Número do patrimônio</h4>
         }
         else
         {
-            <h4 class="text-danger fw-bold">Ferramenta Alocada</h4>
-            <p><b>Responsável:</b>@AlocacaoAtual?.Responsavel.Nome</p>
-            <p><b>AlocadaEm:</b>@AlocacaoAtual.DataAlocacao.ToShortDateString()</p>
+            @if (FeramentaDisponivel)
+            {
+                <h4 class="text-success fw-bold">Disponível para alocação</h4>
+                <button class="btn btn-outline-info w-75" @onclick="() => FerramentaSetada()">Adicionar Ferramenta</button>
+            }
+            else
+            {
+                <h4 class="text-danger fw-bold">Ferramenta Alocada</h4>
+                <p><b>Responsável:</b>@AlocacaoAtual?.Responsavel.Nome</p>
+                <p><b>AlocadaEm:</b>@AlocacaoAtual?.DataAlocacao.ToShortDateString()</p>
+            }
+
         }
 
     </div>

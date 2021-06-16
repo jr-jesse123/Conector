@@ -13,43 +13,19 @@ using Microsoft.AspNetCore.Components.Forms;
 
 namespace Almocherifado.UI.Components.Forms
 {
-    public abstract class FormBase : ComponentBase
-    {
-
-        [Inject] protected NavigationManager navMan { get; set; }
-        [Inject] protected IAlmocharifadoRepository repo { get; set; }
-        [Inject] protected IMapper mapper { get; set; }
-
-
-
-        [Parameter] public RenderFragment Uploader { get; set; }
-
-        protected EditForm form;
-
-        protected virtual void OnSubmit() 
-        {
-            formClass = "was-validated d-flex";
-            //form.EditContext.Validate();
-        }
-
-        protected string formClass = "d-flex";
-        protected void OnCancelClic()
-        {
-            navMan.NavigateTo("/");
-        }
-
-    }
 }
 
 namespace Almocherifado.UI.Components.Ferramentas
 {
     public partial class CadastrarFerramentas
     {
+        
         [Parameter] public RenderFragment Uploader { get; set; }
         [Inject] NavigationManager navMan { get; set; }
         [Inject] IMapper mapper { get; set; }
         [Inject] IProximoPatrimonioProvider patrimonioProvider { get; set; }
         [Inject] IAlmocharifadoRepository repo { get; set; }
+        [Inject] IFerramentaRepository ferraemntaRepo { get; set; }
 
 
         public EditForm form { get; private set; }
@@ -79,9 +55,14 @@ namespace Almocherifado.UI.Components.Ferramentas
             var ferramentaDomain = mapper.Map<Ferramenta>(FerramentaInput);
 
 
-            FileHelper.SaveFilesToRoot(FerramentaInput.Fotos, ferramentaDomain.Fotos);
+            foreach (var item in FerramentaInput.Fotos)
+            {
+                FileHelper.SaveFileToRoot(item.Stream, item.FileInfo.Name);
+            }
 
-            repo.SalvarFerramenta(ferramentaDomain);
+            ferraemntaRepo.SalvarFerramenta(ferramentaDomain);
+
+            navMan.NavigateTo("ListarFerramenta");
         }
         
         private string formClass = "d-flex";

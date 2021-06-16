@@ -1,0 +1,20 @@
+﻿@using Entities
+
+<tr>
+    <td>
+        <b>@Ferramenta.Patrimonio</b>
+    </td>
+    <th style="text-align: left;width: 300px;">
+        <p class="fs-5">@Ferramenta.Nome</p>
+    </th>
+    <td style="max-width: 127px;">
+        <p class="fs-5">@Ferramenta.Marca</p>
+    </td>
+    <td style="max-width: 127px;">
+        <p style="text-transform: uppercase;" class="fs-5">@Ferramenta.Modelo</p>
+    </td>
+</tr>
+
+@code {
+    [Parameter] public Ferramenta Ferramenta { get; set; }
+}

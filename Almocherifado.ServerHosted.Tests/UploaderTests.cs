@@ -30,7 +30,7 @@ namespace Almocherifado.UI.Tests
 
             var ms = new MemoryStream(bytes);
 
-            FileHelper.SaveFileToRoot(ms, "wwwroot/teste.png");
+            FileHelper.SaveFileToRoot(ms, "teste.png");
             
             //FileHelper.getFotoFerramentaPath(ferramenta);
 

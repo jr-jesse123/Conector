@@ -17,9 +17,13 @@
         Selecione ou solte aqui a(s) imagem(s)
     </div>
 
+
+    @*<InputFile OnChange="@LoadFiles" multiple />*@
+
+
     <SfUploader AllowMultiple="Multiple" ID="UploadFiles" AutoUpload=true DropArea="#DropArea"
-                AllowedExtensions=".jpg">
-        <UploaderEvents  ValueChange="@OnChange">
-        </UploaderEvents>
-    </SfUploader>
+                    AllowedExtensions=".jpg">
+            <UploaderEvents  ValueChange="@OnChange">
+            </UploaderEvents>
+        </SfUploader>
 </div>

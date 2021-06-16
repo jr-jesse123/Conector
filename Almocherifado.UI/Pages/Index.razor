@@ -8,24 +8,16 @@
 @using Almocherifado.UI.Components.Funcionarios
 @using Almocherifado.UI.Components.Alocacao
 
-<AlocarFerramenta>
-
-</AlocarFerramenta>
-
+@*<ListarFerramentas></ListarFerramentas>*@
 
 @*<CadastrarFerramentas @ref="refCadastro">
 
-    <Uploader>
-        <Uploader FotosChanged="@((x) => OnFotosChanged(x))"></Uploader>
-    </Uploader>
-
-</CadastrarFerramentas>*@
-
-@*<CadastrarFuncionario @ref="refCadastrofUNCIONARIO">
         <Uploader>
-            <Uploader Multiple="false" FotosChanged="@((x) => OnFotosChanged2(x))"></Uploader>
+            <Uploader FotosChanged="@((x) => OnFotosChanged(x))"></Uploader>
         </Uploader>
-    </CadastrarFuncionario>*@
+
+    </CadastrarFerramentas>*@
+
 
 
 
@@ -54,42 +46,43 @@
 
 
 
-
-
-
-
-@*@switch (Route)
-    {
-        case "" :
-            <Almocherifado.UI.Components.Inicio></Almocherifado.UI.Components.Inicio>
-            break;
-        case "CadastrarFerramenta":
-            <CadastrarFerramentas @ref="refCadastro">
+@switch (Route)
+{
+    case "":
+        <Almocherifado.UI.Components.Inicio></Almocherifado.UI.Components.Inicio>
+        break;
+    case "CadastrarFerramenta":
+        <CadastrarFerramentas @ref="refCadastro">
 
             <Uploader>
-                <Uploader  FotosChanged="@((x) => OnFotosChanged(x))" ></Uploader>
+                <Uploader Multiple="true" FotosChanged="@((x) => OnFotosChanged(x))"></Uploader>
             </Uploader>
 
         </CadastrarFerramentas>
-            break;
+        break;
 
-        case "ListarFerramenta":
-            <ListarFerramentas />
-            break;
-        case "CadastrarFuncionario":
-            <h1>Nada aqui ainad</h1>
-            break;
-        case "ListarFuncionario":
-            <Almocherifado.UI.Components.Funcionarios.ListarFuncionarios></Almocherifado.UI.Components.Funcionarios.ListarFuncionarios>
-            break;
-        case "AlocarFerramenta":
-            <Almocherifado.UI.Components.Alocacao.AlocarFerramenta />
-            break;
-        case "DevolverFerramenta":
-            <h1>Nada aqui ainda</h1>
-            break;
-        default:
-            <h1>Rota não encontrada</h1>
-            break;
-    }*@
+    case "ListarFerramenta":
+        <ListarFerramentas />
+        break;
+    case "CadastrarFuncionario":
+        <CadastrarFuncionario @ref="refCadastrofUNCIONARIO">
+            <Uploader>
+                <Uploader Multiple="false" FotosChanged="@((x) => OnFotosChanged2(x))"></Uploader>
+            </Uploader>
+        </CadastrarFuncionario>
+
+        break;
+    case "ListarFuncionario":
+        <h1>Nada aqui ainad</h1>
+        break;
+    case "AlocarFerramenta":
+        <Almocherifado.UI.Components.Alocacao.AlocarFerramenta />
+        break;
+    case "DevolverFerramenta":
+        <h1>Nada aqui ainda</h1>
+        break;
+    default:
+        <h1>Rota não encontrada</h1>
+        break;
+}
 
