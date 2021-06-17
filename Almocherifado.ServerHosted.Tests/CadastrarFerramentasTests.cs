@@ -40,7 +40,8 @@ namespace Almocherifado.UI.Tests
             ctx.JSInterop.Mode = JSRuntimeMode.Loose;
 
             PrepararDependencias(ctx);
-
+            var FerramentarepositoryStub = new Mock<IFerramentaRepository>();
+            ctx.Services.AddSingleton(FerramentarepositoryStub.Object);
             var cut = ctx.RenderComponent<CadastrarFerramentas>();
             CadastrarFerramenta(ferramenta, cut);
 

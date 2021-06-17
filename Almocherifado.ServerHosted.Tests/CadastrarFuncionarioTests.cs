@@ -31,6 +31,8 @@ namespace Almocherifado.UI.Tests
             using var ctx = new TestContext();
             ctx.JSInterop.Mode = JSRuntimeMode.Loose;
 
+            var FerramentarepositoryStub = new Mock<IFerramentaRepository>();
+            ctx.Services.AddSingleton(FerramentarepositoryStub.Object);
             var repositoryStub = new Mock<IAlmocharifadoRepository>();
             var mapperStub = new Mock<IMapper>();
             var validatorStub = new Mock<FluentValidation.IValidator<CadastroFuncionarioModel>>();

@@ -19,7 +19,8 @@ namespace Almocherifado.UI.Tests
         public void CompoenenteRenderizaCorretamente()
         {
             using var ctx = new TestContext();
-
+            var FerramentarepositoryStub = new Mock<IFerramentaRepository>();
+            ctx.Services.AddSingleton(FerramentarepositoryStub.Object);
             var repositoryStub = new Mock<IAlmocharifadoRepository>();
             var mapperStub = new Mock<IMapper>();
             var validatorStub = new Mock<FluentValidation.IValidator<CadastroAlocacaoModel>>();
