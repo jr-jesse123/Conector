@@ -26,23 +26,18 @@
         {
             @if (FeramentaDisponivel)
             {
-                @MensagemFerramentaDisponível
-                <h4 class="text-success fw-bold">Disponível para alocação</h4>
-                <button class="btn btn-outline-info w-75" @onclick="() => FerramentaSetada()">@TextoBtnConfrimacao</button>
+                @MensagemFerramentaDisponível(ferramentaAtual)
+                
             }
             else
             {
-                @MensagemFerramentaInDisponível
-                <h4 class="text-danger fw-bold">Ferramenta Alocada</h4>
-                <p><b>Responsável:</b>@AlocacaoAtual?.Responsavel.Nome</p>
-                <p><b>AlocadaEm:</b>@AlocacaoAtual?.DataAlocacao.ToShortDateString()</p>
+                @MensagemFerramentaInDisponível((ferramentaAtual, AlocacaoAtual))
+                
             }
 
         }
 
     </div>
-
-
 
 </div>
 
@@ -50,13 +45,11 @@
 
 @code{
     [Parameter]
-    public RenderFragment MensagemFerramentaDisponível { get; set; } =
-    @<h4 class="text-success fw-bold">Disponível para alocação</h4>;
+    public RenderFragment<Entities.Ferramenta> MensagemFerramentaDisponível { get; set; } 
 
 
 [Parameter]
-public RenderFragment MensagemFerramentaInDisponível { get; set; } =
-    @<h4 class="text-danger fw-bold">Ferramenta Alocada</h4>;
+public RenderFragment<(Entities.Ferramenta ferramenta,Entities.Alocacao alocacao)> MensagemFerramentaInDisponível { get; set; } 
 
     [Parameter] public string TextoBtnConfrimacao { get; set; } = "Adicionar Ferramenta";
 }

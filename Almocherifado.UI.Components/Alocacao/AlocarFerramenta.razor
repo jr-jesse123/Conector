@@ -10,9 +10,23 @@
     <h2> <b> ALOCAR FERRAMENTA</b></h2>
 
     <div class="row d-flex justify-content-between my-4 ">
-        <FerramentaDisplay  OnFerramentaSelecionada="(fer) => FerramentasSelecionadas.Add(fer)"></FerramentaDisplay>
+        <FerramentaDisplay>
+            <MensagemFerramentaDisponível >
+                
+                <h4 class="text-success fw-bold">Disponível para alocação</h4>
+                <button class="btn btn-outline-info w-75" @onclick="@(() => FerramentasSelecionadas.Add(@context))">"Adicionar Ferramenta"</button>
 
-        <table class="table">
+            </MensagemFerramentaDisponível>
+
+
+            <MensagemFerramentaInDisponível >
+                <h4 class="text-danger fw-bold">Ferramenta Alocada</h4>
+                <p><b>Responsável:</b>@context.alocacao?.Responsavel.Nome</p>
+                <p><b>AlocadaEm:</b>@context.alocacao?.DataAlocacao.ToShortDateString()</p>
+            </MensagemFerramentaInDisponível>
+        </FerramentaDisplay>
+
+        <table class="table mb-5">
             <thead>
                 <tr>
                     <th scope="col">PATRIMÔNIO</th>
@@ -24,14 +38,14 @@
             <tbody>
                 @foreach (var item in FerramentasSelecionadas)
                 {
-                   <FerramentaAlocacaoTr Ferramenta="item" ></FerramentaAlocacaoTr>
+                <FerramentaAlocacaoTr Ferramenta="item"></FerramentaAlocacaoTr>
                 }
             </tbody>
         </table>
         <EditForm class="@formClass" Model="alocacaoInput" @ref="form" OnSubmit="OnSubmit">
             <FluentValidationValidator></FluentValidationValidator>
-            
-         
+
+
 
             <div class="row">
                 <div class="col-4">
@@ -42,11 +56,11 @@
 
                             @if (Funcionarios != null)
                             {
-                                @foreach (var funcionario in Funcionarios)
+                            @foreach (var funcionario in Funcionarios)
                                 {
-                                    <option value="@funcionario.CPF">
-                                        @funcionario.Nome
-                                    </option>
+                            <option value="@funcionario.CPF">
+                                @funcionario.Nome
+                            </option>
                                 }
                             }
                         </InputSelect>
@@ -101,8 +115,8 @@
 
 
                 <div class="d-flex justify-content-end mt-4">
-                    <button type="button"  @onclick="OnCancelClic" class="btn btn-outline-danger mx-4">Cancelar</button>
-                    <button type="button" @onclick="OnSubmit"  class="btn btn-primary">Salvar</button>
+                    <button type="button" @onclick="OnCancelClic" class="btn btn-outline-danger mx-4">Cancelar</button>
+                    <button type="button" @onclick="OnSubmit" class="btn btn-primary">Salvar</button>
                 </div>
             </div>
         </EditForm>

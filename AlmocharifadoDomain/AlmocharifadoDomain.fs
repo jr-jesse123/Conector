@@ -29,11 +29,15 @@ type Ferramenta =
 type Funcionario = {Nome:string;CPF:string;Cargo:string;Email:string;Foto:string}
 
 [<CLIMutable>]
+type Devolucao = {Id:int;Ferramenta:Ferramenta;Data:DateTime;Observacoe:string }
+
+[<CLIMutable>]
 type Alocacao = 
    {
       Id:int;Ferramentas:Ferramenta seq;
       Responsavel:Funcionario;ContratoLocacao:string;
       DataAlocacao:DateTime
+      Devolucoes:Devolucao seq
    }
 
 module Alocacoes=

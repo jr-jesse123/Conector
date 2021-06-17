@@ -27,6 +27,8 @@ namespace InfraEstrutura
                 .HasConversion(x => x.Aggregate((a, b) => a + ";" + b), x => x.Split(new char[] { ';' }) );
 
             builder.Entity<Funcionario>().HasKey(f => f.CPF);
+
+            
         }
 
         

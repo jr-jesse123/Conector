@@ -19,8 +19,8 @@ open Xunit
 
 let getContext ()=
    let options = DbContextOptionsBuilder<AlmocharifadoContext>()
-                  //.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Almocharifado2Tests;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False").Options
-                  .UseInMemoryDatabase("Almocharifado2Tests").Options
+                  .UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Almocharifado2Tests;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False").Options
+                  //.UseInMemoryDatabase("Almocharifado2Tests").Options
    let context = new AlmocharifadoContext(options)
    do context.Database.EnsureDeleted() |> ignore
    do context.Database.EnsureCreated() |> ignore
@@ -66,10 +66,16 @@ type InfraEstruturaTests() =
       let ferramenta2 = Fixture().Build<Ferramenta>().With((fun x -> x.Id),0).Create() 
       let ferramentas = [ferramenta;ferramenta2]
 
+      //let devolucao1 = Fixture().Build<Devolucao>()
+      //                  .With((fun x -> x.Id),0).Create() 
+      //let devolucao2 = Fixture().Build<Devolucao>()
+      //                  .With((fun x -> x.Id),0).Create() 
+
       let aloc = 
              Fixture().Build<Alocacao>()
                   .With((fun x -> x.Id),0)
                   .With((fun x -> x.Ferramentas), List(ferramentas) :> seq<Ferramenta> )
+                  .With((fun x -> x.Devolucoes), List() :> seq<Devolucao> )
                   .Create()
                   
                

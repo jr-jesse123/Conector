@@ -14,17 +14,17 @@ namespace Almocherifado.UI.Components.Alocacao
     public partial class AlocarFerramenta : FormBase
     {
         string _teste;
-        string teste 
+        string teste
         {
             get
             {
-                return _teste; 
-            } 
+                return _teste;
+            }
             set
             {
                 OnFuncionarioSelect(value);
                 _teste = value;
-            } 
+            }
         }
         [Inject] IAlmocharifadoRepository repo { get; set; }
         [Inject] IFerramentaRepository ferramentaRepo { get; set; }
@@ -54,7 +54,7 @@ namespace Almocherifado.UI.Components.Alocacao
                 var alocacao = mapper.Map<Entities.Alocacao>(alocacaoInput);
 
                 repo.SalvarAlocacao(alocacao);
-            } 
+            }
 
         }
 
