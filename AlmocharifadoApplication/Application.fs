@@ -7,6 +7,7 @@ open Entities
 open InfraEstrutura
 open Microsoft.Extensions.DependencyInjection
 open System.Runtime.CompilerServices
+open System
 
 type IFerramentaRepository =
    abstract member SalvarFerramenta:Ferramenta->unit
@@ -14,6 +15,7 @@ type IFerramentaRepository =
    abstract member BaixarFerramenta:Ferramenta->unit
    abstract member EnviarFerramentaParaManutencao:Ferramenta->unit
    abstract member FinalizarManutencao:Ferramenta->unit
+   abstract member DevolverFerramentas:Devolucao[]->unit
    
 
 type IAlmocharifadoRepository =
@@ -25,6 +27,8 @@ type IAlmocharifadoRepository =
 
 
 open System.Linq
+open System
+
 module AlmocharifadoRepository=
    let GetAllFerramentas (context:AlmocharifadoContext) = context.Ferramentas.ToArray()
    let SalvarFerramenta (context:AlmocharifadoContext) ferramenta = 
@@ -38,7 +42,8 @@ module AlmocharifadoRepository=
 
 
    let GetAllAlocacoes (context:AlmocharifadoContext)  = context.Alocaoes.ToArray();
-   let SalvarAlocacao (context:AlmocharifadoContext)  alocacao = 
+   let SalvarAlocacao (context:AlmocharifadoContext)  (alocacao:Alocacao) = 
+      if alocacao.Ferramentas.Count() = 0 then failwith "não pode existir alocação sem ferramenta"
       context.Alocaoes.Add alocacao
       context.SaveChanges() |> ignore
 
@@ -50,14 +55,27 @@ module AlmocharifadoRepository=
       context.SaveChanges() |> ignore
 
    let EnviarParaManutencaoFerrammenta (context:AlmocharifadoContext) ferramenta = 
-      let ferramentabaixada = {ferramenta with EmManutencao = true}
-      context.Update ferramentabaixada
+      let ferramentaEmManutencao = {ferramenta with EmManutencao = true}
+      let ferramentaOld = context.Ferramentas.Find(ferramenta.Id)
+      context.Entry(ferramentaOld).CurrentValues.SetValues(ferramentaEmManutencao)
       context.SaveChanges() |> ignore
 
    let RetornarFerrammentaDaManutencao (context:AlmocharifadoContext) ferramenta = 
-      let ferramentabaixada = {ferramenta with EmManutencao = false}
+      let ferramentaEmManutencao = {ferramenta with EmManutencao = false}
+      let ferramentaOld = context.Ferramentas.Find(ferramenta.Id)
+      context.Entry(ferramentaOld).CurrentValues.SetValues(ferramentaEmManutencao)
+      context.SaveChanges() |> ignore
+
+
+   let DevolverFerramentas (context:AlmocharifadoContext)  devolucoes = 
       
-      context.Update ferramentabaixada
+      for devolucao in devolucoes do
+         let alocacao = context.Alocaoes|> Seq.find (fun aloc -> aloc.Ferramentas.Contains(devolucao.Ferramenta)) 
+         let devoluoes :seq<Devolucao> = devolucao :: (List.ofSeq alocacao.Devolucoes) :> _
+         let alocacaoOld = context.Alocaoes.Find(alocacao.Id)
+         context.Entry(alocacaoOld).CurrentValues.SetValues(devoluoes)
+      
+      
       context.SaveChanges() |> ignore
 
 type FerramentaRepository (context:AlmocharifadoContext) =
@@ -67,6 +85,8 @@ type FerramentaRepository (context:AlmocharifadoContext) =
       member this.BaixarFerramenta ferramenta =  AlmocharifadoRepository.BaixarFerrammenta context ferramenta
       member this.EnviarFerramentaParaManutencao ferramenta = AlmocharifadoRepository.EnviarParaManutencaoFerrammenta context ferramenta
       member this.FinalizarManutencao ferramenta = AlmocharifadoRepository.RetornarFerrammentaDaManutencao context ferramenta
+      member this.DevolverFerramentas devolucoes =  AlmocharifadoRepository.DevolverFerramentas context devolucoes
+         
    
 
 type AlmocharifadoRepository (context:AlmocharifadoContext) =

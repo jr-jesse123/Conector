@@ -6,6 +6,7 @@ using Syncfusion.Blazor.Inputs;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Components.Forms;
+using System.Threading.Tasks;
 
 namespace Almocherifado.UI.Components.Funcionarios
 {
@@ -20,23 +21,35 @@ namespace Almocherifado.UI.Components.Funcionarios
         "Mecânico de ar condicionado sênior", "Operador"
         };
 
+  
         public void ChangeFotos(IEnumerable<UploadFiles> fotos)
         {
             FuncionarioInput.Foto = fotos.First();
         }
         public EditForm Form { get; private set; }
 
-        protected override void OnSubmit()
+        protected override async void OnSubmitAsync()
         {
-            base.OnSubmit();
+            base.OnSubmitAsync();
 
             if (form.EditContext.Validate())
             {
                 var funcionarioDomain = mapper.Map<Funcionario>(FuncionarioInput);
 
                 FileHelper.SaveFileToRoot(FuncionarioInput.Foto.Stream, FuncionarioInput.Foto.FileInfo.Name);
-
-                repo.SalvarFuncionario(funcionarioDomain);
+                 
+                try
+                {
+                    repo.SalvarFuncionario(funcionarioDomain);
+                    FuncionarioInput = new CadastroFuncionarioModel();
+                    formClass = formClass.Replace("was-validated", "");
+                    toast.Show("Funcionario Criado Corretamente", "Sucesso");
+                }
+                catch (System.Exception ex)
+                {
+                    toast.Show(ex.Message, "Erro");
+                }
+                 
             }
             
         }

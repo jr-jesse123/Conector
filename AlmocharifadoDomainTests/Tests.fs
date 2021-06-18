@@ -19,8 +19,8 @@ open Xunit
 
 let getContext ()=
    let options = DbContextOptionsBuilder<AlmocharifadoContext>()
-                  .UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Almocharifado2Tests;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False").Options
-                  //.UseInMemoryDatabase("Almocharifado2Tests").Options
+                  //.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Almocharifado2Tests;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False").Options
+                  .UseInMemoryDatabase("Almocharifado2Tests").Options
    let context = new AlmocharifadoContext(options)
    do context.Database.EnsureDeleted() |> ignore
    do context.Database.EnsureCreated() |> ignore

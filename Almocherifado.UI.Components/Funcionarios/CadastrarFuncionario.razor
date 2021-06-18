@@ -1,13 +1,18 @@
 ﻿@inherits FormBase
 @using BlazorInputMask
 
+@code{
+    Toast toast;
+            }
+
+<Toast @ref="toast"></Toast>
 
 <div class="container h-100 w-100">
 
     <h2 class="fw-bold my-4">CADASTRO DE FUNCIONÁRIOS</h2>
     <div class="row h-100 w-100" style="margin-left: 0px; margin-right: 0px; ">
 
-        <EditForm @ref="form" id="Form" Model="@FuncionarioInput" OnSubmit="OnSubmit">
+        <EditForm @ref="form" id="Form" Model="@FuncionarioInput" OnSubmit="OnSubmitAsync">
             <FluentValidationValidator />
             <ValidationSummary></ValidationSummary>
             <div class=@formClass>
@@ -53,11 +58,11 @@
                             </div>
                         </InvalidValidFeedBack>
                         <InputField>
-                            <InputSelect  id="CargoInput" required @bind-Value="@FuncionarioInput.Cargo"  class="form-select" >
-                                <option disabled selected value="" > Selecione o Cargo</option>
+                            <InputSelect id="CargoInput" required @bind-Value="@FuncionarioInput.Cargo" class="form-select">
+                                <option disabled selected value=""> Selecione o Cargo</option>
                                 @foreach (var item in cargos)
                                 {
-                                    <option value="@item" >@item</option>
+                                    <option value="@item">@item</option>
                                 }
                             </InputSelect>
                         </InputField>
@@ -86,11 +91,11 @@
                     <div class="invalid-feedback">
                         <ValidationMessage For="() => FuncionarioInput.Foto" />
                     </div>
-                    
+
 
                     <div id="botoes" class="w-100 d-flex justify-content-end mt-5">
                         <button @onclick="OnCancelClic" class="btn btn-outline-danger mx-4">Cancelar</button>
-                        <button type="button" @onclick="OnSubmit" class="btn btn-dark">Continuar</button>
+                        <button type="button" @onclick="OnSubmitAsync" class="btn btn-dark">Continuar</button>
                     </div>
 
                 </div>
@@ -99,10 +104,3 @@
     </div>
 </div>
 
-
-@code{
-}
-
-@code {
-
-}

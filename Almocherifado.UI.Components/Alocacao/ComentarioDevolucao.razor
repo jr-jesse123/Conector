@@ -1,0 +1,15 @@
+﻿@using Entities;
+
+
+@code{
+    [Parameter] public Ferramenta Ferramenta { get; set;}
+    [Parameter] public string Comentario { get; set; }
+}
+
+<div class="row">
+    <div class="col-auto">
+        <label>Observacoes para @Ferramenta:</label>
+        <textarea @bind="Comentario" @bind:event="oninput"
+                  class="form-control" style="width:446px;height:113px"></textarea>
+    </div>
+</div>

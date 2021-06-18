@@ -13,6 +13,8 @@ namespace Almocherifado.UI.Components.Alocacao
 {
     public partial class AlocarFerramenta : FormBase
     {
+        Toast toast;
+
         string _teste;
         string teste
         {
@@ -43,21 +45,32 @@ namespace Almocherifado.UI.Components.Alocacao
         }
 
 
-        protected override void OnSubmit()
+        protected override async void OnSubmitAsync()
         {
-            base.OnSubmit();
+            base.OnSubmitAsync();
 
             alocacaoInput.Ferramentas = FerramentasSelecionadas;
 
             if (form.EditContext.Validate())
             {
                 var alocacao = mapper.Map<Entities.Alocacao>(alocacaoInput);
-
-                repo.SalvarAlocacao(alocacao);
+                try
+                {
+                    repo.SalvarAlocacao(alocacao);
+                    alocacaoInput = new() { Data = DateTime.Today };
+                    FerramentasSelecionadas.Clear();
+                    formClass = formClass.Replace("was-validated", "");
+                    toast.Show("Ferramenta(s) alocada(s) correetamente", "sucesso");
+                }
+                catch (Exception ex)
+                {
+                    toast.Show(ex.Message, "Erro");
+                }
+                
             }
 
         }
 
-        List<Ferramenta> FerramentasSelecionadas { get; set; } = new List<Ferramenta>();
+        HashSet<Ferramenta> FerramentasSelecionadas { get; set; } = new HashSet<Ferramenta>();
     }
 }

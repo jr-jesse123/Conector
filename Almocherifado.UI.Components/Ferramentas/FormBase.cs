@@ -7,21 +7,16 @@ namespace Almocherifado.UI.Components.Forms
 {
     public abstract class FormBase : ComponentBase
     {
-
-        
-
         [Inject] protected NavigationManager navMan { get; set; }
         [Inject] protected IAlmocharifadoRepository repo { get; set; }
         [Inject] protected IFerramentaRepository ferramentaRepo { get; set; }
         [Inject] protected IMapper mapper { get; set; }
 
-
-
         [Parameter] public RenderFragment Uploader { get; set; }
 
         protected EditForm form;
 
-        protected virtual void OnSubmit() 
+        protected virtual void OnSubmitAsync() 
         {
             formClass = "was-validated d-flex";
             //form.EditContext.Validate();

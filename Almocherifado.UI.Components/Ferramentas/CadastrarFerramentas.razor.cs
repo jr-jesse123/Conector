@@ -39,7 +39,7 @@ namespace Almocherifado.UI.Components.Ferramentas
             formClass = "was-validated d-flex";
             if (form.EditContext.Validate())
             {
-                OnValidSubmit();
+                OnValidSubmitAsync();
             }
         }
 
@@ -48,7 +48,7 @@ namespace Almocherifado.UI.Components.Ferramentas
             navMan.NavigateTo("/");
         }
 
-        private void OnValidSubmit()
+        private async void OnValidSubmitAsync()
         {
             mapper.ConfigurationProvider.AssertConfigurationIsValid();
 
@@ -60,11 +60,36 @@ namespace Almocherifado.UI.Components.Ferramentas
                 FileHelper.SaveFileToRoot(item.Stream, item.FileInfo.Name);
             }
 
-            ferraemntaRepo.SalvarFerramenta(ferramentaDomain);
+            try
+            {
+                //TODO: LIDAR COM CONCORRÊNCIA DO PATRIMÔNIO.. O QUE ACONTECE SE DUAS PESSOAS ESTIVEREM CADASTRANDOA O MESMO TEMPO?
+                ferraemntaRepo.SalvarFerramenta(ferramentaDomain);
+                toast.Show("Ferramenta cadastrada corretamente", "sucesso");
+                var proxPatri = patrimonioProvider.GetProximoPatrimonio();
 
-            navMan.NavigateTo("ListarFerramenta");
+                if (proxPatri == ProximoPatrimonio)
+                {
+                    throw new Exception("falha na atualização de patrimônio apóos a inclusão de ferramenta");
+                }
+
+                ProximoPatrimonio = patrimonioProvider.GetProximoPatrimonio();
+                FerramentaInput = new() 
+                {
+                    DataDaCompra = DateTime.Today.AddDays(1) , 
+                    Patrimonio= ProximoPatrimonio
+                };
+                
+                formClass= formClass.Replace("was-validated", "");
+                 
+            }
+            catch (Exception ex)
+            {
+                toast.Show(ex.Message, "ERRO");
+            }
         }
-        
+
+        Toast toast;
+
         private string formClass = "d-flex";
         int ProximoPatrimonio { get; set; }
         public CadastroFerramentaModel FerramentaInput { get; private set; } = new() { DataDaCompra = DateTime.Today.AddDays(1)};

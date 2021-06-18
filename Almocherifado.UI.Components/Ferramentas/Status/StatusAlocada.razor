@@ -1,7 +1,14 @@
 ﻿@code{
     [Parameter] public Entities.Alocacao Alocacao { get; set; }
-    [Parameter] public bool EmManutencao { get; set; } 
+    [Parameter] public bool EmManutencao { get; set; }
 
+    protected override void OnParametersSet()
+    {
+        if (Alocacao is null)
+        {
+            System.Diagnostics.Debugger.Break();
+        }
+    }
 }
 
 <div class="fw-normal text-danger ">

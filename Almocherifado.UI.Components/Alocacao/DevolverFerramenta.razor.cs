@@ -13,51 +13,29 @@ namespace Almocherifado.UI.Components.Alocacao
 {
     public partial class DevolverFerramenta : FormBase
     {
-        string _teste;
-        string teste 
-        {
-            get
-            {
-                return _teste; 
-            } 
-            set
-            {
-                OnFuncionarioSelect(value);
-                _teste = value;
-            } 
-        }
+     
+
         [Inject] IAlmocharifadoRepository repo { get; set; }
         [Inject] IFerramentaRepository ferramentaRepo { get; set; }
-        IEnumerable<Funcionario> Funcionarios = new List<Funcionario>();
+        DevolucaoInputModel devolucaoInput { get; set; } = new()  ;
 
-        CadastroAlocacaoModel alocacaoInput { get; set; } = new() { Data = DateTime.Today };
 
-        protected override void OnInitialized()
+
+     
+
+        protected override void OnSubmitAsync()
         {
-            Funcionarios = repo.GetAllFuncionarios();
-        }
+            base.OnSubmitAsync();
 
-        protected void OnFuncionarioSelect(string cpf)
-        {
-            alocacaoInput.Responsavel = Funcionarios.Single(f => f.CPF == (string)cpf);
-        }
-
-
-        protected override void OnSubmit()
-        {
-            base.OnSubmit();
-
-            alocacaoInput.Ferramentas = FerramentasSelecionadas;
+            devolucaoInput.FerramentasEComentarios = FerramentasEComentarios;
 
             if (form.EditContext.Validate())
             {
-                var alocacao = mapper.Map<Entities.Alocacao>(alocacaoInput);
-
-                repo.SalvarAlocacao(alocacao);
+                var devolucoes = mapper.Map<Devolucao[]>(devolucaoInput);
+                
             } 
 
         }
-
-        List<Ferramenta> FerramentasSelecionadas { get; set; } = new List<Ferramenta>();
+        Dictionary<Ferramenta,string> FerramentasEComentarios { get; set; } = new();
     }
 }

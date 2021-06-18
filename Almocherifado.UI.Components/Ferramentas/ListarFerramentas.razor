@@ -87,6 +87,11 @@
                                 else if (!Entities.Ferramentas.FerramentaDisponivel(Alocacoes, item))
                                 {
                                     var alocacao = Entities.Ferramentas.GetAlocacaoDeFerramentaAlocada(Alocacoes, item);
+
+                                    if (alocacao.Value is null)
+                                    {
+                                        System.Diagnostics.Debugger.Break();
+                                    }
                                     <StatusAlocada EmManutencao="item.EmManutencao" Alocacao="alocacao.Value"></StatusAlocada>
                                         
                                 }

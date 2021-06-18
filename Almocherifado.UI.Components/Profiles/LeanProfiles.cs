@@ -15,8 +15,12 @@ namespace Almocherifado.UI.Components.Profiles
     {
         public LeanProfile()
         {
+            CreateMap<DevolucaoInputModel, Devolucao[]>()
+                .ConvertUsing<DevolucaoInputModelConverter>();
+
             CreateMap<CadastroAlocacaoModel, Entities.Alocacao>()
                 .ForMember(dst => dst.DataAlocacao, opt => opt.MapFrom(cam => cam.Data))
+                .ForMember(dst => dst.Devolucoes, opt => opt.MapFrom((x) => Array.Empty<Devolucao>()))
                 .ForMember(dst => dst.Id, opt => opt.Ignore());
 
             CreateMap<CadastroFuncionarioModel, Funcionario>()
@@ -25,20 +29,21 @@ namespace Almocherifado.UI.Components.Profiles
             CreateMap<CadastroFerramentaModel, Ferramenta>()
                 .ConvertUsing<CadastroFerramentaConverter>();
 
-                //.ForMember(dst => dst.Id, opt => opt.Ignore())
-                //.ForMember(dst => dst.EmManutencao, opt => opt.Ignore())
-                //.ForMember(dst => dst.Baixada, opt => opt.Ignore())
-                //.ForMember(dst => dst.DataCompra, (opt) => opt.MapFrom(cfm => cfm.DataDaCompra))
-                //.ForMember(dst => dst.EmManutencao, opt => opt.Ignore() )
-                //.ForMember(dst => dst.Fotos, opt => 
-                //           opt.MapFrom((cfm, fe) => FileHelper.getFotoFerramentaPath(cfm).ToArray())
-                //           );
         }
     }
 
 
 
-    
+    public class DevolucaoInputModelConverter : ITypeConverter<DevolucaoInputModel, Devolucao[]>
+    {
+        public Devolucao[] Convert(DevolucaoInputModel source, Devolucao[] destination, ResolutionContext context)
+        {
+           return  source.FerramentasEComentarios
+                .Select(fec => new Devolucao(0, fec.Key, DateTime.Now, fec.Value))
+                .ToArray();
+        }
+    }
+
 
     public class CadastroFerramentaConverter : ITypeConverter<CadastroFerramentaModel, Ferramenta>
     {

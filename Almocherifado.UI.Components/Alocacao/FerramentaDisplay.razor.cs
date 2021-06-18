@@ -3,9 +3,7 @@ using Entities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.FSharp.Core;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Almocherifado.UI.Components.Alocacao
@@ -45,6 +43,9 @@ namespace Almocherifado.UI.Components.Alocacao
                 if (ferramentaAtual is null)
                     return null;
 
+                if (Alocacoes.Length == 0)
+                    return null;
+
                 var alocOptions = Entities.Ferramentas.GetAlocacaoDeFerramentaAlocada(Alocacoes, ferramentaAtual);
                 if (FSharpOption<Entities.Alocacao>.get_IsSome(alocOptions))
                     return alocOptions.Value;
@@ -52,15 +53,12 @@ namespace Almocherifado.UI.Components.Alocacao
                     return null;
             } 
         }
-                
-
+           
         protected override void OnInitialized()
         {
             Ferramentas = ferramentaRepository.GetAllFerramentas().ToArray();
             Alocacoes = Repositorio.GetAllAlocacoes().ToArray();
         }
-
-        
 
         void OnPatrimonioChage(ChangeEventArgs args)
         {

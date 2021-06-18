@@ -6,39 +6,38 @@
         <input @oninput="OnPatrimonioChage" type="number" step="1" class="form-control">
     </div>
 
-
     <div class="col-4 d-flex flex-column justify-content-between">
-
 
         <p><b>Ferramenta:</b>@ferramentaAtual?.Nome</p>
         <p><b>Marca:</b>@ferramentaAtual?.Marca</p>
         <p class="mb-0"><b>Modelo:</b>@ferramentaAtual?.Modelo</p>
-        1
+        
     </div>
 
     <div class="col-5  d-flex flex-column justify-content-between">
 
         @if (ferramentaAtual is null)
         {
-            <h4 class="text-info fw-bold">Informe o Número do patrimônio</h4>
+            <h4 class="text-info fw-bold">Informe um Número de patrimônio válido</h4>
         }
         else
         {
             @if (FeramentaDisponivel)
             {
                 @MensagemFerramentaDisponível(ferramentaAtual)
-                
+
+            }
+            else if(AlocacaoAtual is null)
+            {
+                <h1>ferramenta baixada</h1>
             }
             else
             {
                 @MensagemFerramentaInDisponível((ferramentaAtual, AlocacaoAtual))
-                
             }
-
-        }
+    }
 
     </div>
-
 </div>
 
 

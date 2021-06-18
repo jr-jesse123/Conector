@@ -54,6 +54,13 @@ namespace Almocherifado.UI.Components.Funcionarios
                     ));
 
             funcionariosEAlocacoes = new Dictionary<Funcionario, Entities.Alocacao[]>(alocacoesPorFuncionario);
+
+            foreach (var funcionario in funcionarios)
+            {
+                if (!funcionariosEAlocacoes.Keys.Contains(funcionario))
+                    funcionariosEAlocacoes.Add(funcionario, new Entities.Alocacao[] { });
+            }
+
         }
     }
 }

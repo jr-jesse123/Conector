@@ -62,25 +62,43 @@ module Ferramentas=
 //TODO: TRAZER FILTROS PARA CA
 //   let FiltrarPorTextoLivre ferramentas =
       
-
+   //TODO: ENVIAR MOTIVO PELO QUAL A FERRAMENTA ESTÁ BAIXADA
    let FerramentaDisponivel  (alocacoes:Alocacao seq)  ferramenta =
-      
-      alocacoes
-      |> Seq.exists (fun aloc -> Seq.contains ferramenta aloc.Ferramentas) 
-      |> not
+      if ferramenta.Baixada = true then
+        false
+      else
+         alocacoes 
+         |> Seq.sortByDescending (fun aloc -> aloc.Id)
+         |> Seq.tryFind (fun aloc -> Seq.contains ferramenta aloc.Ferramentas)
+         |> function  //TODO: EXTRAIR ESTA AVALIAÇÃO PARA ACTIVE PATTERN MATCHING
+         |Some aloc when isNull aloc.Devolucoes -> false
+         |Some aloc when isNull aloc.Devolucoes -> false //TODO: PENSAR EM COMO RESOLVER ESTE NULL
+         |Some aloc when aloc.Devolucoes 
+            |> Seq.exists  (fun dev -> dev.Ferramenta = ferramenta) -> true
+         |Some aloc when aloc.Devolucoes 
+            |> Seq.exists  (fun dev -> dev.Ferramenta = ferramenta) |> not -> false
+         |None -> true
+         | _ -> failwith "situação não prevista"
+         
+
+      //alocacoes
+      //|> Seq.exists (fun aloc -> Seq.contains ferramenta aloc.Ferramentas) 
+      //|> not
 
 
    let GetAlocacaoDeFerramentaAlocada (alocacoes:Alocacao seq) ferramenta  =
-      //if isNull ferramenta  then 
-      //   None
-      //else
-         match FerramentaDisponivel alocacoes ferramenta with 
-         |false -> 
-            alocacoes
-            |> Seq.filter (fun aloc -> Seq.contains ferramenta aloc.Ferramentas) 
-            |> Seq.exactlyOne
-            |> Some
-         |true -> None
+         
+         if ferramenta.Baixada then
+            None
+         else
+
+            match FerramentaDisponivel alocacoes ferramenta with 
+            |false -> 
+               alocacoes
+               |> Seq.filter (fun aloc -> Seq.contains ferramenta aloc.Ferramentas) 
+               |> Seq.exactlyOne
+               |> Some
+            |true -> None
 //namespace Dtos 
 //open Entities
 //open System
