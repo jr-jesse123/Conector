@@ -50,19 +50,19 @@ module AlmocharifadoRepository=
 
    let BaixarFerrammenta (context:AlmocharifadoContext) ferramenta =
       let ferramentabaixada = {ferramenta with Baixada = true}
-      let ferramentaold = context.Ferramentas.Find(ferramenta.Id)
+      let ferramentaold = context.Ferramentas.Find(ferramenta.Patrimonio)
       context.Entry(ferramentaold).CurrentValues.SetValues(ferramentabaixada)
       context.SaveChanges() |> ignore
 
    let EnviarParaManutencaoFerrammenta (context:AlmocharifadoContext) ferramenta = 
       let ferramentaEmManutencao = {ferramenta with EmManutencao = true}
-      let ferramentaOld = context.Ferramentas.Find(ferramenta.Id)
+      let ferramentaOld = context.Ferramentas.Find(ferramenta.Patrimonio)
       context.Entry(ferramentaOld).CurrentValues.SetValues(ferramentaEmManutencao)
       context.SaveChanges() |> ignore
 
    let RetornarFerrammentaDaManutencao (context:AlmocharifadoContext) ferramenta = 
       let ferramentaEmManutencao = {ferramenta with EmManutencao = false}
-      let ferramentaOld = context.Ferramentas.Find(ferramenta.Id)
+      let ferramentaOld = context.Ferramentas.Find(ferramenta.Patrimonio)
       context.Entry(ferramentaOld).CurrentValues.SetValues(ferramentaEmManutencao)
       context.SaveChanges() |> ignore
 

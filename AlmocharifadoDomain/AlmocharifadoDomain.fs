@@ -9,10 +9,9 @@ open System
 [<CLIMutable>]
 type Ferramenta = 
                         {
-                           Id:int
                            Nome:string;Marca:string;
                            Modelo:string;DataCompra:DateTime;
-                           Patrimonio:int;Fotos: string [];
+                           Patrimonio:string;Fotos: string [];
                            Descricao:string
                            EmManutencao:bool
                            Baixada:bool
@@ -55,7 +54,7 @@ module Alocacoes=
          1
       else
          ferramentas
-         |> Seq.map (fun fer -> fer.Patrimonio)
+         |> Seq.map (fun fer -> int fer.Patrimonio)
          |> Seq.max |> (+) 1
          
 module Ferramentas=

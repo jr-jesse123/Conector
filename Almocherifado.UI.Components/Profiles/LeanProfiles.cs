@@ -65,7 +65,7 @@ namespace Almocherifado.UI.Components.Profiles
                 Marca = source.Marca,
                 Modelo = source.Modelo,
                 DataCompra = source.DataDaCompra,
-                Patrimonio = source.Patrimonio,
+                Patrimonio = source.Patrimonio.ToString(),
                 Fotos = fotos,
                 Descricao = source.Descricao
             };

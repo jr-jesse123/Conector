@@ -23,7 +23,7 @@
     <th class="pe-5" style="max-width: 127px;">
         @foreach (var item in Ferramentas)
         {
-        <p><b>@item.Nome</b> - Patrimônio @item.Patrimonio.ToString("00000")</p>
+        <p><b>@item.Nome</b> - Patrimônio @Convert.ToInt32(item.Patrimonio).ToString("00000")</p>
         }
 
         

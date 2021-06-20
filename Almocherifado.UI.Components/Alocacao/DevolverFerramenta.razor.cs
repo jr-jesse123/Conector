@@ -13,15 +13,11 @@ namespace Almocherifado.UI.Components.Alocacao
 {
     public partial class DevolverFerramenta : FormBase
     {
-     
 
         [Inject] IAlmocharifadoRepository repo { get; set; }
         [Inject] IFerramentaRepository ferramentaRepo { get; set; }
         DevolucaoInputModel devolucaoInput { get; set; } = new()  ;
 
-
-
-     
 
         protected override void OnSubmitAsync()
         {
@@ -32,7 +28,10 @@ namespace Almocherifado.UI.Components.Alocacao
             if (form.EditContext.Validate())
             {
                 var devolucoes = mapper.Map<Devolucao[]>(devolucaoInput);
-                
+
+                ferramentaRepo.DevolverFerramentas(devolucoes);
+                devolucaoInput = new();
+                FerramentasEComentarios = new();
             } 
 
         }

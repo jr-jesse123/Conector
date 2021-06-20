@@ -83,7 +83,7 @@ namespace Almocherifado.UI.Tests.Properties
             domain.Marca.Should().Be(ferramentaModel.Marca);
             domain.Modelo.Should().Be(ferramentaModel.Modelo);
             domain.Nome.Should().Be(ferramentaModel.Nome);
-            domain.Patrimonio.Should().Be(ferramentaModel.Patrimonio);
+            domain.Patrimonio.Should().Be(ferramentaModel.Patrimonio.ToString());
         }
 
 

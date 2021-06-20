@@ -65,7 +65,7 @@ namespace Almocherifado.UI.Components.Alocacao
             if (string.IsNullOrWhiteSpace((string)args.Value))
                 return;
 
-            ferramentaAtual = Ferramentas.Where(f => f.Patrimonio == Convert.ToInt32(args.Value)).SingleOrDefault();
+            ferramentaAtual = Ferramentas.Where(f => f.Patrimonio == (string)args.Value).SingleOrDefault();
             
         }
 
