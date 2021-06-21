@@ -20,11 +20,15 @@ using Microsoft.Extensions.Hosting;
 using Syncfusion.Blazor;
 using AlmocharifadoApplication;
 using Almocherifado.UI.Components.Models;
+using Microsoft.Extensions.Logging.Console;
+using Microsoft.Extensions.Logging;
+using System;
 
 namespace Almocherifado.UI
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -74,7 +78,9 @@ namespace Almocherifado.UI
             services.AddDbContext<AlmocharifadoContext>
                     (builder => builder
                         //.UseSqlite("data =2  "));
-                        .UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Almocharifado2;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"));
+                        .UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Almocharifado2;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False")
+                        .LogTo(log => Console.WriteLine(log))
+                        ); 
 
             
           

@@ -70,11 +70,17 @@ module AlmocharifadoRepository=
    let DevolverFerramentas (context:AlmocharifadoContext)  devolucoes = 
       
       for devolucao in devolucoes do
-         let alocacao = context.Alocaoes|> Seq.find (fun aloc -> aloc.Ferramentas.Contains(devolucao.Ferramenta)) 
-         let devoluoes :seq<Devolucao> = devolucao :: (List.ofSeq alocacao.Devolucoes) :> _
+         let alocacao = context.Alocaoes 
+                        |> Seq.find (fun aloc -> aloc.Ferramentas.Contains(devolucao.Ferramenta)) 
+         
+         //let Devolucoes :seq<Devolucao> = 
+         //   match isNull alocacao.Devolucoes with
+         //   |false -> devolucao :: (List.ofSeq alocacao.Devolucoes) :>_
+         //   |true -> [devolucao] :>_
+
          let alocacaoOld = context.Alocaoes.Find(alocacao.Id)
-         context.Entry(alocacaoOld).CurrentValues.SetValues(devoluoes)
-      
+         context.Devolucaos.Add devolucao
+         context.Entry(devolucao).Property("AlocacaoId").CurrentValue <- alocacaoOld.Id
       
       context.SaveChanges() |> ignore
 

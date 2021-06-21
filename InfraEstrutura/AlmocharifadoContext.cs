@@ -1,6 +1,9 @@
-﻿using Entities;
+﻿using AutoFixture;
+using Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.FSharp.Collections;
+using Newtonsoft.Json;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -8,13 +11,13 @@ namespace InfraEstrutura
 {
     public class AlmocharifadoContext : DbContext
     {
-        
+     
         public AlmocharifadoContext(
             DbContextOptions<AlmocharifadoContext> options) : base(options)
         {
-            
+            ChangeTracker.LazyLoadingEnabled = false;
         }
-
+        public DbSet<Devolucao> Devolucaos { get; set; }
         public DbSet<Funcionario> Funcionarios { get; set; }
         public DbSet<Ferramenta> Ferramentas { get; set; }
         public DbSet<Alocacao> Alocaoes { get; set; }
@@ -29,12 +32,11 @@ namespace InfraEstrutura
             builder.Entity<Funcionario>().HasKey(f => f.CPF);
 
             
-                
-            //    .HasConversion(f => new { f.Baixada, f.DataCompra, f.Descricao, f.EmManutencao, f.Fotos.Aggregate((a, b) => a + ";" + b), );
-            ;
-            builder.Entity<Alocacao>().Property(a => a.Devolucoes)
-                .HasConversion((devs) => ArrayModule.OfSeq<Devolucao>(devs), (devs) => SeqModule.OfArray<Devolucao>(devs));
+
+            builder.Entity<Alocacao>().HasMany(a => a.Devolucoes); ;
             
+
+
         }
 
         

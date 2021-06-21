@@ -10,11 +10,8 @@ open AutoFixture
 open Entities
 open Swensen.Unquote
 open System.Collections.Generic
-open AutoFixture
-open AlmocharifadoApplication
-open Xunit
-open Xunit
-open AlmocharifadoApplication
+open Microsoft.EntityFrameworkCore
+open Microsoft.EntityFrameworkCore.Diagnostics
 
 
 
@@ -60,42 +57,42 @@ type InfraEstruturaTests() =
       //test <@ ferramentaRecuperado.Id <> 0 @>
       test <@ ferramentaRecuperado   = ferramenta @>
             
-   //[<Fact>]
-   //let ``Alocacao é salvo  corretamente`` () =
+   [<Fact>]
+   let ``Alocacao é salvo  corretamente`` () =
       
-   //   let ferramenta = Fixture().Build<Ferramenta>()
-   //                     //.With((fun x -> x.Id),0)
-   //                     .Create() 
-   //   let ferramenta2 = Fixture().Build<Ferramenta>()
-   //                              //.With((fun x -> x.Id),0)
-   //                              .Create() 
-   //   let ferramentas = [ferramenta;ferramenta2]
+      let ferramenta = Fixture().Build<Ferramenta>()
+                        //.With((fun x -> x.Id),0)
+                        .Create() 
+      let ferramenta2 = Fixture().Build<Ferramenta>()
+                                 //.With((fun x -> x.Id),0)
+                                 .Create() 
+      let ferramentas = [ferramenta;ferramenta2]
 
-   //   //let devolucao1 = Fixture().Build<Devolucao>()
-   //   //                  .With((fun x -> x.Id),0).Create() 
-   //   //let devolucao2 = Fixture().Build<Devolucao>()
-   //   //                  .With((fun x -> x.Id),0).Create() 
+      //let devolucao1 = Fixture().Build<Devolucao>()
+      //                  .With((fun x -> x.Id),0).Create() 
+      //let devolucao2 = Fixture().Build<Devolucao>()
+      //                  .With((fun x -> x.Id),0).Create() 
 
-   //   let aloc = 
-   //          Fixture().Build<Alocacao>()
-   //               .With((fun x -> x.Id),0)
-   //               .With((fun x -> x.Ferramentas), List(ferramentas) :> seq<Ferramenta> )
-   //               .With((fun x -> x.Devolucoes), List() :> seq<Devolucao> )
-   //               .Create()
+      let aloc = 
+             Fixture().Build<Alocacao>()
+                  .With((fun x -> x.Id),0)
+                  .With((fun x -> x.Ferramentas), List(ferramentas) :> seq<Ferramenta> )
+                  .With((fun x -> x.Devolucoes), List() :> seq<Devolucao> )
+                  .Create()
                   
                
 
-   //   context.Alocaoes.Add(aloc)
-   //   context.SaveChanges()
+      context.Alocaoes.Add(aloc)
+      context.SaveChanges()
     
-   //   test <@ aloc.Id <> 0 @>
+      test <@ aloc.Id <> 0 @>
       
-   //   let alocRecuperado = context.Alocaoes.Find(aloc.Id)
+      let alocRecuperado = context.Alocaoes.Find(aloc.Id)
       
-   //   test <@ aloc = alocRecuperado @>
+      test <@ aloc = alocRecuperado @>
 
-   //   test <@ context.Ferramentas.CountAsync().Result = 2 @>
-   //   test <@ context.Funcionarios.CountAsync().Result = 1 @>
+      test <@ context.Ferramentas.CountAsync().Result = 2 @>
+      test <@ context.Funcionarios.CountAsync().Result = 1 @>
 
    interface IDisposable with member this.Dispose()= context.Database.EnsureDeleted() |> ignore
      
@@ -147,6 +144,65 @@ type ApplicationTests() =
 
       let proximo = Alocacoes.GetProximoPatrimonio (ferramentas)
       test <@ proximo = expected @>
+
+    
+    
+   [<Fact>]
+   let ``Ferramenta é devolvida corretamente`` () =
+      let context = getContext()
+    
+      let ferramenta = Fixture().Build<Ferramenta>()
+                           .Create() 
+      let ferramenta2 = Fixture().Build<Ferramenta>()
+                           .Create() 
+      let ferramentas = [ferramenta;ferramenta2]
+    
+      let aloc = Fixture().Build<Alocacao>()
+                     .With((fun x -> x.Id),0)
+                     .With((fun x -> x.Ferramentas), List(ferramentas) :> seq<Ferramenta> )
+                     .With((fun x -> x.Devolucoes), List() :> seq<Devolucao> )
+                     .Create()
+       
+      context.Alocaoes.Add aloc |> ignore
+      context.SaveChanges()
+    
+      
+
+      let devolucao = {Id=0;Ferramenta=ferramenta;Data=DateTime.Now;Observacoe=""}
+
+      let alocacao = context.Alocaoes|> Seq.find (fun aloc -> aloc.Ferramentas |> Seq.contains(devolucao.Ferramenta)) 
+      let Devolucoes :seq<Devolucao> = devolucao :: (List.ofSeq alocacao.Devolucoes) :> _
+
+      let novoAloc = {alocacao with  Devolucoes=Devolucoes; }
+      let alocacaoOld = context.Find<Alocacao>(alocacao.Id)
+
+
+
+
+      test <@  novoAloc.Devolucoes |> Seq.length = 1  @>
+      printfn "%i"  devolucao.Id
+      context.Devolucaos.Add devolucao
+      printfn "%i"  devolucao.Id
+      test <@  context.Entry(devolucao).State = EntityState.Added @>
+      
+      context.Entry(devolucao).Property("AlocacaoId").CurrentValue <- aloc.Id
+      let current = context.Entry(devolucao).Property("AlocacaoId").CurrentValue
+      
+      context.SaveChanges()
+
+
+      let aloc = context.Alocaoes.ToListAsync().Result |> Seq.exactlyOne
+
+      test<@ aloc.Devolucoes |> Seq.length = 1 @>
+
+      let devolvida = Ferramentas.FerramentaDisponivel [aloc] ferramenta
+
+      test <@ devolvida @>
+
+
+      
+       
+
 
       
 
@@ -205,22 +261,84 @@ let ``Ferramentas.GetAlocacaoDeFerramentaAlocada retorna none em caso de ferrame
    
       
 
-
 [<Fact>]
-let ``Ferramenta é devolvida corretamente`` () =
+let ``Responsável é corretamente recuperado em alocacao `` =
+   let respo = Fixture().Create<Funcionario>();
+
+   let ferramenta = Fixture().Build<Ferramenta>()
+                              .Create() 
+   let ferramenta2 = Fixture().Build<Ferramenta>()
+                        .Create() 
+   let ferramentas = [ferramenta;ferramenta2]
+   
+
+   let ferramentas  = Fixture().CreateMany<Ferramenta>();
+ 
+   let aloc = Fixture().Build<Alocacao>()
+                  .With((fun x -> x.Id),0)
+                  .With((fun x -> x.Ferramentas), List(ferramentas) :> seq<Ferramenta>)
+                  .With<Funcionario>((fun x -> x.Responsavel), respo )
+                  .With((fun x -> x.Devolucoes), List() :> seq<Devolucao> )
+                  .Create()
+
    let context = getContext()
-   
-   let fixture = Fixture()
-
-   let alocacao = Fixture().Create<Alocacao>() 
-
-   //let ferramentas = alocacao.Ferramentas;
-
-   //let alocacao = fixture.Build<Entities.Alocacao>().Create()
-
-   
-
-   context.Alocaoes.Add alocacao
+   context.Add aloc
    context.SaveChanges()
-   |> ignore
-   //AlmocharifadoRepository.DevolverFerramentas.
+
+   //let contex = getContext()
+   let aloc = context.Alocaoes.SingleAsync().Result
+
+   test <@ aloc.Responsavel = respo @>
+
+type Teste2()=
+
+   [<Fact>]
+   let ``Responsável é corretamente recuperado em alocacao `` () =
+      let respo = Fixture().Create<Funcionario>();
+
+      let ferramentas  = Fixture().CreateMany<Ferramenta>();
+    
+      let aloc = Fixture().Build<Alocacao>()
+                     .With((fun x -> x.Id),0)
+                     .With((fun x -> x.Ferramentas), List(ferramentas) :> seq<Ferramenta>)
+                     .With<Funcionario>((fun x -> x.Responsavel), respo )
+                     .With((fun x -> x.Devolucoes), List() :> seq<Devolucao> )
+                     .Create()
+   
+      let context = getContext()
+      context.Add aloc
+      context.SaveChanges()
+
+      //let context2 = getContext()
+      let aloc = context.Alocaoes.SingleAsync().Result
+
+      test <@ aloc.Responsavel = respo @>
+
+
+
+
+
+   
+   //[<Fact>]
+   //let ``Ferramenta é devolvida corretamente `` () =
+   //   let respo = Fixture().Create<Funcionario>();
+
+   //   let ferramentas  = Fixture().CreateMany<Ferramenta>();
+    
+   //   let aloc = Fixture().Build<Alocacao>()
+   //                  .With((fun x -> x.Id),0)
+   //                  .With((fun x -> x.Ferramentas), List(ferramentas) :> seq<Ferramenta>)
+   //                  .With<Funcionario>((fun x -> x.Responsavel), respo )
+   //                  .With((fun x -> x.Devolucoes), List() :> seq<Devolucao> )
+   //                  .Create()
+   
+   //   let context = getContext()
+   //   context.Add aloc
+   //   context.SaveChanges()
+
+   //   //let context2 = getContext()
+   //   let aloc = context.Alocaoes.SingleAsync().Result
+
+   //   test <@ aloc.Responsavel = respo @>
+   //   test <@ aloc.Ferramentas |> Seq.length = 3 @>
+   //   test <@ aloc.Devolucoes |> Seq.length = 1 @>

@@ -2,6 +2,7 @@
 
 namespace Entities
 open System
+open System.Collections.Generic
 
 
 //type Fotos = private Fotos of string []

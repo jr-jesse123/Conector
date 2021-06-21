@@ -4,14 +4,16 @@ using InfraEstrutura;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace InfraEstrutura.Migrations
 {
     [DbContext(typeof(AlmocharifadoContext))]
-    partial class AlmocharifadoContextModelSnapshot : ModelSnapshot
+    [Migration("20210620202222_corre")]
+    partial class corre
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,7 +69,7 @@ namespace InfraEstrutura.Migrations
 
                     b.HasIndex("FerramentaPatrimonio");
 
-                    b.ToTable("Devolucaos");
+                    b.ToTable("Devolucao");
                 });
 
             modelBuilder.Entity("Entities.Ferramenta", b =>
