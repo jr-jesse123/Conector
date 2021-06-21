@@ -13,6 +13,15 @@ namespace Almocherifado.UI.Components.Ferramentas
     public partial class ListarFerramentas
     {
 
+        void ToogleManutencao(Ferramenta ferramenta,bool valor)
+        {
+            if (valor)
+                Ferramentasrepo.EnviarFerramentaParaManutencao(ferramenta);
+            else
+                Ferramentasrepo.FinalizarManutencao(ferramenta);
+        }
+
+
         bool enabledAtribute { get => !(FerramentasChecadas.Count > 0) ; }
 
         Modal modalBaixa;

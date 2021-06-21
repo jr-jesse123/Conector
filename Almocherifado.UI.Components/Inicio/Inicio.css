@@ -1,0 +1,15 @@
+﻿
+.card table > tbody > tr > td:nth-child(1) {
+    text-align: right;
+}
+
+thead {
+    background-color: #05374D;
+    color: white;
+}
+
+th {
+    text-align: center;
+    font-weight: normal;
+    font-size: 14px;
+}

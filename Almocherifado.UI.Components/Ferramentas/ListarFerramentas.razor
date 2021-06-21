@@ -92,12 +92,15 @@
                                     {
                                         System.Diagnostics.Debugger.Break();
                                     }
-                                    <StatusAlocada EmManutencao="item.EmManutencao" Alocacao="alocacao.Value"></StatusAlocada>
+                                    <StatusAlocada OnChange="@((vlr)=> ToogleManutencao(item,vlr))"
+                                                   EmManutencao="item.EmManutencao" Alocacao="alocacao.Value">
+
+                                    </StatusAlocada>
                                         
                                 }
                                 else
                                 {
-                                    <StatusDisponivel></StatusDisponivel>
+                                    <StatusDisponivel ></StatusDisponivel>
                                     
                                 }
                             </StatusFragment>

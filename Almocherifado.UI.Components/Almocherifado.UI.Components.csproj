@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <Content Include="Ferramentas\ListarFerramentas.razor.css" />
-    <Content Include="Inicio.razor.css" />
     <Content Include="Layout\MenuLateral\MenuLateral.razor.css" />
     <Content Include="Uploader.razor.css" />
   </ItemGroup>
