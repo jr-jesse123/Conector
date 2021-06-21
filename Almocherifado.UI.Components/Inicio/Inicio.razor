@@ -22,7 +22,7 @@
                 <div class="my-3">
                     <label for="exampleInputEmail1" class="form-label">
                         <b>*</b>Patrimônio
-                        <input type="text" class="form-control my-2">
+                        <input @oninput="(text) => OnPatrimonioChage(text)" type="number" class="form-control my-2">
                     </label>
                 </div>
 
@@ -34,7 +34,7 @@
                         <table>
                             <tr>
                                 <td>
-                                    <b class="fs-3">263</b>
+                                    <b class="fs-3">@FerramentasCadastradas</b>
                                 </td>
                                 <td>
                                     <p class="mx-3 my-auto">FERRAMENTAS CADASTRADAS</p>
@@ -42,7 +42,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <b class="fs-3 text-success">63</b>
+                                    <b class="fs-3 text-success">@FerramentasDisponiveis</b>
                                 </td>
                                 <td>
                                     <p class="mx-3 my-auto">FERRAMENTAS DISPONÍVEIS</p>
@@ -50,7 +50,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <b class="fs-3 text-danger">200</b>
+                                    <b class="fs-3 text-danger">@FerramentasAlocadas</b>
                                 </td>
                                 <td>
                                     <p class="mx-3 my-auto">FERRAMENTAS ALOCADAS</p>
@@ -62,44 +62,38 @@
             </div>
         </div>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">FERRAMENTA</th>
-                    <th scope="col">RESPONSÁVEL</th>
-                    <th scope="col">CONTRATO</th>
-                    <th scope="col">ALOCAÇÃO</th>
-                    <th scope="col">DEVOLUÇÃO</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
+        @if (AlocacoesAtuais is not null && AlocacoesAtuais.Length > 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">FERRAMENTA</th>
+                        <th scope="col">RESPONSÁVEL</th>
+                        <th scope="col">CONTRATO</th>
+                        <th scope="col">ALOCAÇÃO</th>
+                        <th scope="col">DEVOLUÇÃO</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-                    <th>
-                        MAINFOLD - 0023
-                    </th>
-                    <th style="text-align: left;width: 300px;">
-                        Vanessa de Souza Lima
-                    </th>
+                    @foreach (var item in AlocacoesAtuais)
+                    {
+                        <tr>
+                            <HistoricoFerramentaTr Alocacao="item" Ferramenta="ferramentaAtual"></HistoricoFerramentaTr>
+                        </tr>
+                    }
 
-                    <th>
-                        Impact Hub
-                    </th>
 
-                    <th>
-                        01/03/2021
-                    </th>
 
-                    <th>
-                        20/03/2021
-                    </th>
-                </tr>
-            </tbody>
-        </table>
 
+                </tbody>
+            </table>
+        }
     </div>
-
-    <div class="d-flex justify-content-end">
-        <button class="btn btn-primary">Gerar Relatório</button>
+    @if (AlocacoesAtuais is not null && AlocacoesAtuais.Length > 0)
+    {
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-primary">Gerar Relatório</button>
+        </div>
+    }
     </div>
-</div>

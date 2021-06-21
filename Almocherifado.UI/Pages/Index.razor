@@ -9,7 +9,6 @@
 @using Almocherifado.UI.Components.Alocacao
 
 
-<Inicio></Inicio>
 
 @*<ListarFerramentas></ListarFerramentas>*@
 
@@ -51,41 +50,44 @@
 
 @switch (Route)
 {
-    case "":
-        <Almocherifado.UI.Components.Inicio></Almocherifado.UI.Components.Inicio>
+    case "/":
+        <Almocherifado.UI.Components.Inicio.Inicio></Almocherifado.UI.Components.Inicio.Inicio>
+        break;
+    case null:
+        <Almocherifado.UI.Components.Inicio.Inicio></Almocherifado.UI.Components.Inicio.Inicio>
         break;
     case "CadastrarFerramenta":
-        <CadastrarFerramentas @ref="refCadastro">
+            <CadastrarFerramentas @ref="refCadastro">
 
-            <Uploader>
-                <Uploader Multiple="true" FotosChanged="@((x) => OnFotosChanged(x))"></Uploader>
-            </Uploader>
+                <Uploader>
+                    <Uploader Multiple="true" FotosChanged="@((x) => OnFotosChanged(x))"></Uploader>
+                </Uploader>
 
-        </CadastrarFerramentas>
-        break;
+            </CadastrarFerramentas>
+            break;
 
-    case "ListarFerramenta":
-        <ListarFerramentas />
-        break;
-    case "CadastrarFuncionario":
-        <CadastrarFuncionario @ref="refCadastrofUNCIONARIO">
-            <Uploader>
-                <Uploader Multiple="false" FotosChanged="@((x) => OnFotosChanged2(x))"></Uploader>
-            </Uploader>
-        </CadastrarFuncionario>
+        case "ListarFerramenta":
+            <ListarFerramentas />
+            break;
+        case "CadastrarFuncionario":
+            <CadastrarFuncionario @ref="refCadastrofUNCIONARIO">
+                <Uploader>
+                    <Uploader Multiple="false" FotosChanged="@((x) => OnFotosChanged2(x))"></Uploader>
+                </Uploader>
+            </CadastrarFuncionario>
 
-        break;
-    case "ListarFuncionario":
-        <ListarFuncionarios></ListarFuncionarios>
-        break;
-    case "AlocarFerramenta":
-        <Almocherifado.UI.Components.Alocacao.AlocarFerramenta />
-        break;
-    case "DevolverFerramenta":
-        <DevolverFerramenta></DevolverFerramenta>
-        break;
-    default:
-        <h1>Rota não encontrada</h1>
-        break;
-}
+            break;
+        case "ListarFuncionario":
+            <ListarFuncionarios></ListarFuncionarios>
+            break;
+        case "AlocarFerramenta":
+            <Almocherifado.UI.Components.Alocacao.AlocarFerramenta />
+            break;
+        case "DevolverFerramenta":
+            <DevolverFerramenta></DevolverFerramenta>
+            break;
+        default:
+            <h1>Rota não encontrada</h1>
+            break;
+    }
 

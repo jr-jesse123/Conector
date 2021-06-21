@@ -27,6 +27,10 @@
             </MensagemFerramentaInDisponível>
         </FerramentaDisplay>
 
+        @if (FerramentasEComentarios.Count > 0)
+	{
+		 
+	
         <table class="table mb-5">
             <thead>
                 <tr>
@@ -43,6 +47,7 @@
                 }
             </tbody>
         </table>
+        }
         <EditForm class="@formClass" Model="devolucaoInput" @ref="form" OnSubmit="OnSubmitAsync">
             <FluentValidationValidator></FluentValidationValidator>
 

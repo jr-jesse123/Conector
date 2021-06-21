@@ -30,6 +30,10 @@
             </MensagemFerramentaInDisponível>
         </FerramentaDisplay>
 
+        @if (FerramentasSelecionadas.Count > 0)
+	{
+		 
+	
         <table class="table mb-5">
             <thead>
                 <tr>
@@ -46,6 +50,7 @@
                 }
             </tbody>
         </table>
+        }
         <EditForm class="@formClass" Model="alocacaoInput" @ref="form" OnSubmit="OnSubmitAsync">
             <FluentValidationValidator></FluentValidationValidator>
 

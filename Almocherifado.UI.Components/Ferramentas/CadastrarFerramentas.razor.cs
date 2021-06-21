@@ -54,11 +54,11 @@ namespace Almocherifado.UI.Components.Ferramentas
 
             var ferramentaDomain = mapper.Map<Ferramenta>(FerramentaInput);
 
-
-            foreach (var item in FerramentaInput.Fotos)
+            for (int i = 0; i < FerramentaInput.Fotos.Count(); i++)
             {
-                FileHelper.SaveFileToRoot(item.Stream, item.FileInfo.Name);
+                FileHelper.SaveFileToRoot(FerramentaInput.Fotos.ElementAt(i).Stream, ferramentaDomain.Fotos[i]);
             }
+            
 
             try
             {

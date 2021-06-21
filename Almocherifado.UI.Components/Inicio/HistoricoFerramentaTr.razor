@@ -1,0 +1,41 @@
+﻿@using  Entities
+
+@code{
+    [Parameter] public Ferramenta Ferramenta { get; set; } 
+    [Parameter] public Alocacao Alocacao { get; set; } 
+
+
+}
+
+
+<td>
+    @Ferramenta.Nome - @Ferramenta.Patrimonio
+    MAINFOLD - 0023
+</td>
+<td style="text-align: left;width: 300px;">
+    @if (Alocacao.Responsavel is not null)
+    {
+        @Alocacao.Responsavel.Nome
+    }
+
+</td>
+
+<td>
+    
+    @Alocacao.ContratoLocacao
+</td>
+
+<td>
+    
+    @Alocacao.DataAlocacao.ToShortDateString()
+</td>
+
+
+<td>
+    20/03/2021
+    @if (Alocacao.Devolucoes?.FirstOrDefault(d => d.Ferramenta == Ferramenta) is not null)
+    {
+        @Alocacao.Devolucoes.FirstOrDefault(d => d.Ferramenta == Ferramenta).Data.ToShortDateString();
+    }
+
+</td>
