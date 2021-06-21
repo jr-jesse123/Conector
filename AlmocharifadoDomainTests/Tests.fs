@@ -181,7 +181,7 @@ type ApplicationTests() =
 
       test <@  novoAloc.Devolucoes |> Seq.length = 1  @>
       printfn "%i"  devolucao.Id
-      context.Devolucaos.Add devolucao
+      context.Devolucoes.Add devolucao
       printfn "%i"  devolucao.Id
       test <@  context.Entry(devolucao).State = EntityState.Added @>
       

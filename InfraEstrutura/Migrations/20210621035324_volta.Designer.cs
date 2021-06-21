@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfraEstrutura.Migrations
 {
     [DbContext(typeof(AlmocharifadoContext))]
-    [Migration("20210611040900_initial3")]
-    partial class initial3
+    [Migration("20210621035324_volta")]
+    partial class volta
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -44,7 +44,7 @@ namespace InfraEstrutura.Migrations
                     b.ToTable("Alocaoes");
                 });
 
-            modelBuilder.Entity("Entities.Ferramenta", b =>
+            modelBuilder.Entity("Entities.Devolucao", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -54,11 +54,43 @@ namespace InfraEstrutura.Migrations
                     b.Property<int?>("AlocacaoId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FerramentaPatrimonio")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Observacoe")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AlocacaoId");
+
+                    b.HasIndex("FerramentaPatrimonio");
+
+                    b.ToTable("Devolucoes");
+                });
+
+            modelBuilder.Entity("Entities.Ferramenta", b =>
+                {
+                    b.Property<string>("Patrimonio")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("AlocacaoId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Baixada")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("DataCompra")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmManutencao")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Fotos")
                         .HasColumnType("nvarchar(max)");
@@ -72,10 +104,7 @@ namespace InfraEstrutura.Migrations
                     b.Property<string>("Nome")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Patrimonio")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
+                    b.HasKey("Patrimonio");
 
                     b.HasIndex("AlocacaoId");
 
@@ -113,6 +142,19 @@ namespace InfraEstrutura.Migrations
                     b.Navigation("Responsavel");
                 });
 
+            modelBuilder.Entity("Entities.Devolucao", b =>
+                {
+                    b.HasOne("Entities.Alocacao", null)
+                        .WithMany("Devolucoes")
+                        .HasForeignKey("AlocacaoId");
+
+                    b.HasOne("Entities.Ferramenta", "Ferramenta")
+                        .WithMany()
+                        .HasForeignKey("FerramentaPatrimonio");
+
+                    b.Navigation("Ferramenta");
+                });
+
             modelBuilder.Entity("Entities.Ferramenta", b =>
                 {
                     b.HasOne("Entities.Alocacao", null)
@@ -122,6 +164,8 @@ namespace InfraEstrutura.Migrations
 
             modelBuilder.Entity("Entities.Alocacao", b =>
                 {
+                    b.Navigation("Devolucoes");
+
                     b.Navigation("Ferramentas");
                 });
 #pragma warning restore 612, 618

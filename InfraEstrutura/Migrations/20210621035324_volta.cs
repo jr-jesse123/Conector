@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace InfraEstrutura.Migrations
 {
-    public partial class initial3 : Migration
+    public partial class volta : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -47,25 +47,53 @@ namespace InfraEstrutura.Migrations
                 name: "Ferramentas",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Patrimonio = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Marca = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Modelo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DataCompra = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Patrimonio = table.Column<int>(type: "int", nullable: false),
                     Fotos = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmManutencao = table.Column<bool>(type: "bit", nullable: false),
+                    Baixada = table.Column<bool>(type: "bit", nullable: false),
                     AlocacaoId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Ferramentas", x => x.Id);
+                    table.PrimaryKey("PK_Ferramentas", x => x.Patrimonio);
                     table.ForeignKey(
                         name: "FK_Ferramentas_Alocaoes_AlocacaoId",
                         column: x => x.AlocacaoId,
                         principalTable: "Alocaoes",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Devolucoes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FerramentaPatrimonio = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Data = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Observacoe = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AlocacaoId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Devolucoes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Devolucoes_Alocaoes_AlocacaoId",
+                        column: x => x.AlocacaoId,
+                        principalTable: "Alocaoes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Devolucoes_Ferramentas_FerramentaPatrimonio",
+                        column: x => x.FerramentaPatrimonio,
+                        principalTable: "Ferramentas",
+                        principalColumn: "Patrimonio",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -75,6 +103,16 @@ namespace InfraEstrutura.Migrations
                 column: "ResponsavelCPF");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Devolucoes_AlocacaoId",
+                table: "Devolucoes",
+                column: "AlocacaoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Devolucoes_FerramentaPatrimonio",
+                table: "Devolucoes",
+                column: "FerramentaPatrimonio");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Ferramentas_AlocacaoId",
                 table: "Ferramentas",
                 column: "AlocacaoId");
@@ -82,6 +120,9 @@ namespace InfraEstrutura.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Devolucoes");
+
             migrationBuilder.DropTable(
                 name: "Ferramentas");
 

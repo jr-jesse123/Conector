@@ -17,7 +17,7 @@ namespace InfraEstrutura
         {
             ChangeTracker.LazyLoadingEnabled = false;
         }
-        public DbSet<Devolucao> Devolucaos { get; set; }
+        public DbSet<Devolucao> Devolucoes { get; set; }
         public DbSet<Funcionario> Funcionarios { get; set; }
         public DbSet<Ferramenta> Ferramentas { get; set; }
         public DbSet<Alocacao> Alocaoes { get; set; }

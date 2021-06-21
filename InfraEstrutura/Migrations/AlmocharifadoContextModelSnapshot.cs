@@ -67,7 +67,7 @@ namespace InfraEstrutura.Migrations
 
                     b.HasIndex("FerramentaPatrimonio");
 
-                    b.ToTable("Devolucaos");
+                    b.ToTable("Devolucoes");
                 });
 
             modelBuilder.Entity("Entities.Ferramenta", b =>

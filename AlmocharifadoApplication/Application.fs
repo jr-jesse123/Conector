@@ -2,7 +2,7 @@
 
 
 namespace AlmocharifadoApplication
-
+open Microsoft.EntityFrameworkCore
 open Entities
 open InfraEstrutura
 open Microsoft.Extensions.DependencyInjection
@@ -41,7 +41,16 @@ module AlmocharifadoRepository=
       context.SaveChanges() |> ignore
 
 
-   let GetAllAlocacoes (context:AlmocharifadoContext)  = context.Alocaoes.ToArray();
+   let GetAllAlocacoes (context:AlmocharifadoContext)  = 
+      let alocacoes = context.Alocaoes.ToArray();
+      let devolucoes = context.Devolucoes.ToList()
+      alocacoes
+      //let getdevsDealoc aloc =
+      //   let devolucoes  = context.Devolucoes.FromSqlRaw()
+
+      //alocacoes  |> 
+
+
    let SalvarAlocacao (context:AlmocharifadoContext)  (alocacao:Alocacao) = 
       if alocacao.Ferramentas.Count() = 0 then failwith "não pode existir alocação sem ferramenta"
       context.Alocaoes.Add alocacao
@@ -79,7 +88,7 @@ module AlmocharifadoRepository=
          //   |true -> [devolucao] :>_
 
          let alocacaoOld = context.Alocaoes.Find(alocacao.Id)
-         context.Devolucaos.Add devolucao
+         context.Devolucoes.Add devolucao
          context.Entry(devolucao).Property("AlocacaoId").CurrentValue <- alocacaoOld.Id
       
       context.SaveChanges() |> ignore
