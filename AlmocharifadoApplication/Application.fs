@@ -53,6 +53,7 @@ module AlmocharifadoRepository=
 
    let SalvarAlocacao (context:AlmocharifadoContext)  (alocacao:Alocacao) = 
       if alocacao.Ferramentas.Count() = 0 then failwith "não pode existir alocação sem ferramenta"
+      if alocacao.Responsavel = Unchecked.defaultof<Funcionario> then failwith "não pode existir alocação sem responsável"
       context.Alocaoes.Add alocacao
       context.SaveChanges() |> ignore
 

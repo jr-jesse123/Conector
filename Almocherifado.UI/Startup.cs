@@ -75,10 +75,11 @@ namespace Almocherifado.UI
             services.AddBlazorDownloadFile();
             services.AddScoped<IPrintingService, PrintingService>();
 
+
+            
             services.AddDbContext<AlmocharifadoContext>
                     (builder => builder
-                        //.UseSqlite("data =2  "));
-                        .UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Almocharifado2;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False")
+                        .UseSqlServer(Configuration.GetConnectionString("AlmocharifadoDb"))
                         .LogTo(log => Console.WriteLine(log))
                         ); 
 
@@ -95,8 +96,10 @@ namespace Almocherifado.UI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, 
              ApplicationDbContext applicationDbContext,
-            UserManager<IdentityUser> userManager)
+            UserManager<IdentityUser> userManager, AlmocharifadoContext context)
         {
+
+            context.Database.EnsureCreated();
 
             Syncfusion.Licensing.SyncfusionLicenseProvider
                 .RegisterLicense("NDUyMjY2QDMxMzkyZTMxMmUzMFB3VlplMFgwZm9KYVR6UVZ3dG1pcTcvSzg0elBLaTFsSi9maTRUVVZUcHc9");

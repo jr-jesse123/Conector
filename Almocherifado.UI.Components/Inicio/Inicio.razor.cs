@@ -38,8 +38,8 @@ namespace Almocherifado.UI.Components.Inicio
 
         protected override void OnInitialized()
         {
-            Ferramentas = FerramentaRepository.GetAllFerramentas();
-            Alocacoes = AlmocharifadoRepository.GetAllAlocacoes();
+            Ferramentas = FerramentaRepository.GetAllFerramentas().ToArray();
+            Alocacoes = AlmocharifadoRepository.GetAllAlocacoes().ToArray();
 
             FerramentasCadastradas = Ferramentas.Length;
             FerramentasDisponiveis = Ferramentas.Where(f => Entities.Ferramentas.FerramentaDisponivel(Alocacoes, f)).Count();

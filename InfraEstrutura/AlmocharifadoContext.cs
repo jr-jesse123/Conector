@@ -15,7 +15,7 @@ namespace InfraEstrutura
         public AlmocharifadoContext(
             DbContextOptions<AlmocharifadoContext> options) : base(options)
         {
-            ChangeTracker.LazyLoadingEnabled = false;
+            //ChangeTracker.LazyLoadingEnabled = false;
         }
         public DbSet<Devolucao> Devolucoes { get; set; }
         public DbSet<Funcionario> Funcionarios { get; set; }
@@ -33,8 +33,9 @@ namespace InfraEstrutura
 
             
 
-            builder.Entity<Alocacao>().HasMany(a => a.Devolucoes); ;
-            
+            builder.Entity<Alocacao>().HasMany(a => a.Devolucoes); 
+            builder.Entity<Alocacao>().HasMany(a => a.Ferramentas); 
+
 
 
         }

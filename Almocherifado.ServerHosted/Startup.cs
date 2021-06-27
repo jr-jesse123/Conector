@@ -5,7 +5,6 @@ using Almocherifado.InfraEstrutura.Repositorios;
 using Almocherifado.ServerHosted.Areas.Identity;
 using Almocherifado.ServerHosted.Data;
 using Almocherifado.ServerHosted.Helpers.FileHelpers;
-using Almocherifado.ServerHosted.Services;
 using Append.Blazor.Printing;
 using AutoMapper;
 using BlazorDownloadFile;

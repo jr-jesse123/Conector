@@ -7,9 +7,9 @@ namespace Almocherifado.UI.Components.Models
     {
         public CadastroAlocacaoModelValidator()
         {
-            RuleFor(aloc => aloc.Ferramentas).NotEmpty();
-            RuleFor(aloc => aloc.Responsavel).NotEmpty();
-            RuleFor(aloc => aloc.ContratoLocacao).NotEmpty();
+            RuleFor(aloc => aloc.Ferramentas).NotNull().Empty();
+            RuleFor(aloc => aloc.Responsavel).NotNull().Empty();
+            RuleFor(aloc => aloc.ContratoLocacao).NotNull().NotEmpty();
             RuleFor(aloc => aloc.Data).InclusiveBetween(new DateTime(1990, 1, 1), DateTime.Today);
         }
     }
