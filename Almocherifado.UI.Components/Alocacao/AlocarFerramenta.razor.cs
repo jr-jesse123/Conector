@@ -13,9 +13,6 @@ namespace Almocherifado.UI.Components.Alocacao
     public partial class AlocarFerramenta : FormBase
     {
 
-        //[Inject] IPrintingService PrintingService { get; set; }
-
-
         Toast toast;
 
         string _teste;

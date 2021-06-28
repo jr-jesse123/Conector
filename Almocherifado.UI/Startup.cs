@@ -99,7 +99,7 @@ namespace Almocherifado.UI
             UserManager<IdentityUser> userManager, AlmocharifadoContext context)
         {
 
-            context.Database.EnsureCreated();
+            context.Database.Migrate();
 
             Syncfusion.Licensing.SyncfusionLicenseProvider
                 .RegisterLicense("NDUyMjY2QDMxMzkyZTMxMmUzMFB3VlplMFgwZm9KYVR6UVZ3dG1pcTcvSzg0elBLaTFsSi9maTRUVVZUcHc9");
