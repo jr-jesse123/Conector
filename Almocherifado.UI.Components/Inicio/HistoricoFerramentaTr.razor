@@ -31,7 +31,6 @@
 
 
 <td>
-    20/03/2021
     @if (Alocacao.Devolucoes?.FirstOrDefault(d => d.Ferramenta == Ferramenta) is not null)
     {
         @Alocacao.Devolucoes.FirstOrDefault(d => d.Ferramenta == Ferramenta).Data.ToShortDateString();

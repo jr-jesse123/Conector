@@ -6,6 +6,12 @@ using System.Linq;
 
 namespace Almocherifado.UI.Components.Inicio
 {
+    public static class StringExtensions
+    {
+        public static bool Contem(this string textoOriginal, string outroTexto)
+            => textoOriginal.ToUpper().Contains(outroTexto.ToUpper());
+    }
+
     public  partial class Inicio
     {
         [Inject] public IAlmocharifadoRepository AlmocharifadoRepository { get; set; }
@@ -18,8 +24,9 @@ namespace Almocherifado.UI.Components.Inicio
         int FerramentasDisponiveis { get; set; }
         int FerramentasAlocadas { get; set; }
 
+        string TextoPesquisado { get; set; }
 
-        Ferramenta ferramentaAtual { get; set; } = new Ferramenta();
+        Ferramenta[] ferramentasAtuais { get; set; } = new Ferramenta[] { };
         Entities.Alocacao[] AlocacoesAtuais { get; set; } = new Entities.Alocacao[] { };
         
 
@@ -29,23 +36,26 @@ namespace Almocherifado.UI.Components.Inicio
             if (string.IsNullOrWhiteSpace((string)args.Value))
                 return;
 
-            ferramentaAtual = Ferramentas.Where(f => f.Patrimonio == (string)args.Value).SingleOrDefault();
-            AlocacoesAtuais = Alocacoes.Where(a => a.Ferramentas.Any(f => f == ferramentaAtual)).ToArray();
+            ferramentasAtuais = Ferramentas.Where(f => f.Patrimonio == (string)args.Value).ToArray();
+            AlocacoesAtuais = Alocacoes.Where(a => a.Ferramentas.Any(f => ferramentasAtuais.Contains(f))).ToArray();
 
 
         }
-        void OnPesquisaChage(ChangeEventArgs args)
+        void OnPesquisaChage(object args)
         {
-            if (string.IsNullOrWhiteSpace((string)args.Value))
-                return;
+            //var text = ((string)args.Value);
 
-            ferramentaAtual = Ferramentas.Where(f => f.Patrimonio == (string)args.Value).SingleOrDefault();
+            //if (string.IsNullOrWhiteSpace(text))
+            //    return;
 
+            //var ferramentas =   Ferramentas.Where(f => f.Nome.Contem(text) || f.Marca.Contem(text) || f.Modelo.Contem(text)).ToArray();
+            //var alocacoes = Alocacoes.Where(a => a.Responsavel.Nome.Contem(text) ||
+            //                                a.ContratoLocacao.Contem(text) ||
+            //                                a.Ferramentas.Any(f => ferramentas.Contains(f)))
+            //                          .ToArray();
 
-
-            AlocacoesAtuais = Alocacoes.Where(a => a.Ferramentas.Any(f => f == ferramentaAtual)).ToArray();
-
-
+            //ferramentasAtuais = ferramentas;
+            //AlocacoesAtuais = alocacoes;
         }
 
 
