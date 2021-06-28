@@ -1,95 +1,69 @@
-﻿using AlmocharifadoApplication;
-using Almocherifado.UI.Components.Alocacao;
-using Almocherifado.UI.Components.Models;
+﻿using Almocherifado.UI.Components.Models;
+using AutoFixture;
 using AutoFixture.Xunit2;
-using AutoMapper;
 using Bunit;
-using FluentValidation;
-using Microsoft.Extensions.DependencyInjection;
-using Moq;
-using Syncfusion.Blazor;
-using System;
+using FluentAssertions;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Almocherifado.UI.Tests
 {
+
+    public class InvalidAlocacaoGenerator : IEnumerable<object[]>
+    {
+        public IEnumerator<object[]> GetEnumerator()
+        {
+            yield return new object[]
+            {
+                new Fixture()
+                .Build<CadastroAlocacaoModel>()
+                .Create()
+            };
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+    }
+
     public class CadastrarAlocacaoTests
     {
+        private readonly ITestOutputHelper outputHelper;
 
-        [Theory, AutoData]
-        public void Validacao_Impede_Cadastros_De_Alocacoes_Incorretas()
+        public CadastrarAlocacaoTests(ITestOutputHelper outputHelper)
         {
-            
-            var cut = new AlocarFerramentaComponentBuilder()                
+            this.outputHelper = outputHelper;
+        }
+
+        [Theory, ClassData(typeof(InvalidAlocacaoGenerator))]
+        public void Validacao_Impede_Cadastros_De_Alocacoes_Incorretas(CadastroAlocacaoModel model)
+        {
+            using var builder = new AlocarFerramentaComponentBuilder();
+            using var cut = builder
+                .WithRealValidator()
+                .WithResponaveis(model.Responsavel)
                 .Build();
-            throw new NotImplementedException();
-        }
 
-        public class AlocarFerramentaComponentBuilder
-        {
-            public Mock<IFerramentaRepository> FerramentaRepositoryMock { get; set; } =
-                new Mock<IFerramentaRepository>();
-            public  Mock<IMapper> mapperStub { get; set; } = new Mock<IMapper>();
-            public Mock<IValidator<CadastroAlocacaoModel>> validatorStub { get; set; } =
-                    new Mock<IValidator<CadastroAlocacaoModel>>();
-            public Mock<ISyncfusionStringLocalizer> localizerStrub { get; set; } =
-                new Mock<ISyncfusionStringLocalizer>();
-            public Mock<SyncfusionBlazorService> syncblazorStub { get; set; } = 
-                new Mock<SyncfusionBlazorService>();
-            public Mock<IAlmocharifadoRepository> almocharifadoStub { get; set; } =
-                new Mock<IAlmocharifadoRepository>();
-            public IRenderedComponent<AlocarFerramenta> Build()
-            {
+            cut.Find("#responsavel").Change(model.Responsavel.CPF) ;
 
-                using var ctx = new TestContext();
+            cut.Find("#contratoLocacao").Change(model.ContratoLocacao);
+            cut.Find("#dataLocacao").Change(model.Data);
 
-                ctx.Services.AddSingleton(FerramentaRepositoryMock.Object);
-                ctx.Services.AddSingleton(almocharifadoStub.Object);
-                ctx.Services.AddSingleton(validatorStub.Object);
-                ctx.Services.AddSingleton(mapperStub.Object);
-                ctx.Services.AddSingleton(localizerStrub.Object);
-                ctx.Services.AddSingleton(syncblazorStub.Object);
+            cut.Find("#SalvarBtn").Click();
 
+            var messages = cut.Instance.form.EditContext.GetValidationMessages();
 
-                var cut = ctx.RenderComponent<AlocarFerramenta>(
-                    );
+            messages.Should().HaveCount(1);
+            messages.Should().Contain("Precisamos de ao menos uma ferramenta para realizar uma alocação");
 
-                return cut;
-            }
-        }
-
-        [Fact]
-        public void CompoenenteRenderizaCorretamente()
-        {
-            using var ctx = new TestContext();
-            var FerramentarepositoryStub = new Mock<IFerramentaRepository>();
-            ctx.Services.AddSingleton(FerramentarepositoryStub.Object);
-            var repositoryStub = new Mock<IAlmocharifadoRepository>();
-            var mapperStub = new Mock<IMapper>();
-            var validatorStub = new Mock<FluentValidation.IValidator<CadastroAlocacaoModel>>();
-            validatorStub.Setup(v => v.Validate(It.IsAny<CadastroAlocacaoModel>()))
-                .Returns(new FluentValidation.Results.ValidationResult());
-
-            var localizerStrub = new Mock<Syncfusion.Blazor.ISyncfusionStringLocalizer>();
-            var syncblazorStub = new Mock<Syncfusion.Blazor.SyncfusionBlazorService>();
-
-            ctx.Services.AddSingleton(repositoryStub.Object);
-            ctx.Services.AddSingleton(validatorStub.Object);
-            ctx.Services.AddSingleton(mapperStub.Object);
-            ctx.Services.AddSingleton(localizerStrub.Object);
-            ctx.Services.AddSingleton(syncblazorStub.Object);
-
-
-            var cut = ctx.RenderComponent<AlocarFerramenta>(
-
-                );
         }
 
 
+        
 
 
     }
 }
+

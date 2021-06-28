@@ -60,7 +60,7 @@
                 <div class="col-4">
                     <div class="mb-3">
                         <label class="form-label">* Responsável</label>
-                        <InputSelect @bind-Value="teste" class="form-select">
+                        <InputSelect @bind-Value="teste" class="form-select" id="responsavel">
                             <option value="" disabled selected>Escolha o Responsável</option>
 
                             @if (Funcionarios != null)
@@ -82,7 +82,7 @@
                 <div class="col-4">
                     <div class="mb-3">
                         <label class="form-label">* Contrato/Locação</label>
-                        <InputText @bind-Value="alocacaoInput.ContratoLocacao" type="text" class="form-control" />
+                        <InputText @bind-Value="alocacaoInput.ContratoLocacao" type="text" class="form-control"   id="contratoLocacao" />
                         <div class="invalid-feedback">
                             <ValidationMessage For="() => alocacaoInput.ContratoLocacao"></ValidationMessage>
                         </div>
@@ -91,7 +91,7 @@
                 <div class="col-4">
                     <div class="mb-3">
                         <label class="form-label">* Data Locação</label>
-                        <InputDate @bind-Value="alocacaoInput.Data" class="form-control">
+                        <InputDate @bind-Value="alocacaoInput.Data" class="form-control"  id="dataLocacao">
 
                         </InputDate>
                         <div class="invalid-feedback">

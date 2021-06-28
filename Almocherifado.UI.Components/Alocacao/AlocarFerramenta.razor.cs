@@ -41,7 +41,8 @@ namespace Almocherifado.UI.Components.Alocacao
 
         protected void OnFuncionarioSelect(string cpf)
         {
-            alocacaoInput.Responsavel = Funcionarios.Single(f => f.CPF == (string)cpf);
+            var selected = Funcionarios.Single(f => f.CPF == cpf);
+            alocacaoInput.Responsavel = selected;
         }
 
 
