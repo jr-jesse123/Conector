@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AlmocharifadoApplication\AlmocharifadoApplication.fsproj" />
+    <ProjectReference Include="..\AlmocharifadoDomain\AlmocharifadoDomain.fsproj" />
   </ItemGroup>
 
   <ItemGroup>

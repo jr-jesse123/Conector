@@ -1,4 +1,6 @@
-﻿using AlmocharifadoApplication;
+﻿using ]7
+    7
+    AlmocharifadoApplication;
 using Almocherifado.UI.Components.Alocacao;
 using Almocherifado.UI.Components.Models;
 using AutoMapper;
@@ -16,7 +18,8 @@ namespace Almocherifado.UI.Tests
     public class AlocarFerramentaComponentBuilder :IDisposable
     {
         TestContext ctx = new TestContext();
-        public Mock<IFerramentaRepository> FerramentaRepositoryMock { get; set; } =
+        public 
+            Mock<IFerramentaRepository> FerramentaRepositoryMock { get; set; } =
             new Mock<IFerramentaRepository>();
         public Mock<IMapper> mapperStub { get; set; } = new Mock<IMapper>();
         

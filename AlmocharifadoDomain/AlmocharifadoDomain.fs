@@ -5,6 +5,14 @@ open System
 open System.Collections.Generic
 
 
+(*
+alocada
+em manutenção
+Disponível
+Baixada
+*)
+
+
 //type Fotos = private Fotos of string []
 
 [<CLIMutable>]
@@ -29,7 +37,7 @@ type Ferramenta =
 type Funcionario = {Nome:string;CPF:string;Cargo:string;Email:string;Foto:string}
 
 [<CLIMutable>]
-type Devolucao = {Id:int;Ferramenta:Ferramenta;Data:DateTime;Observacoe:string }
+type Devolucao = {Ferramenta:Ferramenta;Data:DateTime;Observacoe:string }
 
 [<CLIMutable>]
 type Alocacao = 

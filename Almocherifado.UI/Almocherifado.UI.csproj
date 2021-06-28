@@ -52,7 +52,6 @@
 
 
 	<ItemGroup>
-		<ProjectReference Include="..\AlmocharifadoApplication\AlmocharifadoApplication.fsproj" />
 		<ProjectReference Include="..\Almocherifado.UI.Components\Almocherifado.UI.Components.csproj" />
 	</ItemGroup>
 
