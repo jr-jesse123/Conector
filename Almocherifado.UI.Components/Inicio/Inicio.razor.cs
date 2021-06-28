@@ -34,6 +34,19 @@ namespace Almocherifado.UI.Components.Inicio
 
 
         }
+        void OnPesquisaChage(ChangeEventArgs args)
+        {
+            if (string.IsNullOrWhiteSpace((string)args.Value))
+                return;
+
+            ferramentaAtual = Ferramentas.Where(f => f.Patrimonio == (string)args.Value).SingleOrDefault();
+
+
+
+            AlocacoesAtuais = Alocacoes.Where(a => a.Ferramentas.Any(f => f == ferramentaAtual)).ToArray();
+
+
+        }
 
 
         protected override void OnInitialized()
