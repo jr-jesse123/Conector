@@ -20,7 +20,7 @@ namespace Almocherifado.UI.Tests
     {
 
         [Theory, AutoData]
-        public void Validacao_Impede_Cadastros_Incorretos()
+        public void Validacao_Impede_Cadastros_De_Alocacoes_Incorretas()
         {
             
             var cut = new AlocarFerramentaComponentBuilder()                

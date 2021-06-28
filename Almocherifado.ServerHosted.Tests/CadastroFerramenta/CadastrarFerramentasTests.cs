@@ -43,7 +43,7 @@ namespace Almocherifado.UI.Tests
 
         [Theory]
         [ClassData(typeof(InvalidModelGenerators))]
-        public void Validacao_Impede_Cadastros_Incorretos(CadastroFerramentaModel model)
+        public void Validacao_Impede_Cadastros_De_Ferramentas_Incorretos(CadastroFerramentaModel model)
         {
             var cut = new CadastrarFerramentaBuilder()
                 .WithRealValidator()
@@ -87,8 +87,8 @@ namespace Almocherifado.UI.Tests
                 .With(f => f.DataDaCompra, new Fixture().Create<DateTime>().Date)
                 .Create();
 
-
-            var cut = new CadastrarFerramentaBuilder()
+            using var builder = new CadastrarFerramentaBuilder();
+            using var cut =  builder
                 .ComProximoPatrimonio(15)
                 .Build();
 

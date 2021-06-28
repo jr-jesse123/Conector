@@ -14,7 +14,7 @@ namespace Almocherifado.UI.Components.Forms
 
         [Parameter] public RenderFragment Uploader { get; set; }
 
-        protected EditForm form;
+        public EditForm form;
 
         protected virtual void OnSubmitAsync() 
         {

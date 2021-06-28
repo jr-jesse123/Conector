@@ -26,7 +26,7 @@ namespace Almocherifado.UI.Components.Funcionarios
         {
             FuncionarioInput.Foto = fotos.First();
         }
-        public EditForm Form { get; private set; }
+        //public EditForm Form { get; private set; }
 
         protected override async void OnSubmitAsync()
         {

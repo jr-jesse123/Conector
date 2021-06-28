@@ -7,10 +7,11 @@ using Almocherifado.UI.Components.Models;
 using AutoMapper;
 using FluentValidation;
 using OneOf;
+using System;
 
 namespace Almocherifado.UI.Tests
 {
-    public class CadastrarFerramentaBuilder
+    public class CadastrarFerramentaBuilder : IDisposable
     {
         public TestContext ctx { get; set; } = new TestContext();
         public Mock<IProximoPatrimonioProvider> proximoPatrimonioStub { get; set; } =
@@ -63,6 +64,11 @@ namespace Almocherifado.UI.Tests
             ctx.Services.AddSingleton(FerramentarepositoryStub.Object);
 
             return ctx.RenderComponent<CadastrarFerramentas>();
+        }
+
+        public void Dispose()
+        {
+            ctx.Dispose();
         }
     }
 }
