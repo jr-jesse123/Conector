@@ -20,7 +20,7 @@ type Ferramenta =
                         {
                            Nome:string;Marca:string;
                            Modelo:string;DataCompra:DateTime;
-                           Patrimonio:string;Fotos: string [];
+                           Patrimonio:int;Fotos: string [];
                            Descricao:string
                            EmManutencao:bool
                            Baixada:bool

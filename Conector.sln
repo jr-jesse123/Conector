@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NovaImplementacao", "NovaIm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Almocherifado.Application", "Almocherifado.Application\Almocherifado.Application.csproj", "{B8758972-72C6-4D7D-85F9-3D40C1F8428F}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "Database\Database.sqlproj", "{D762C9D2-0A85-4B10-A0FF-C72711F1FF3A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,12 @@ Global
 		{B8758972-72C6-4D7D-85F9-3D40C1F8428F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8758972-72C6-4D7D-85F9-3D40C1F8428F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8758972-72C6-4D7D-85F9-3D40C1F8428F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D762C9D2-0A85-4B10-A0FF-C72711F1FF3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D762C9D2-0A85-4B10-A0FF-C72711F1FF3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D762C9D2-0A85-4B10-A0FF-C72711F1FF3A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D762C9D2-0A85-4B10-A0FF-C72711F1FF3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D762C9D2-0A85-4B10-A0FF-C72711F1FF3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D762C9D2-0A85-4B10-A0FF-C72711F1FF3A}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +103,7 @@ Global
 		{95A70015-12F9-4137-BB3F-A58C2BF17757} = {360DE7F8-7D6E-448E-8566-AC1E84C6B44A}
 		{360DE7F8-7D6E-448E-8566-AC1E84C6B44A} = {511AFA74-77D9-477E-AF7C-DBD1E17B62BA}
 		{B8758972-72C6-4D7D-85F9-3D40C1F8428F} = {3C642CCB-9285-4E3F-ADF3-BED626B3DD0C}
+		{D762C9D2-0A85-4B10-A0FF-C72711F1FF3A} = {360DE7F8-7D6E-448E-8566-AC1E84C6B44A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AE9DE8E1-8D8A-4FD8-B401-84631A52ED6C}

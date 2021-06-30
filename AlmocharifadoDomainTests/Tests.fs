@@ -1,18 +1,96 @@
 
 
-module Tests
 
+
+
+module Tests
+open Almocharifado.InfraEstrutura
 open System
 open Xunit
-open Microsoft.EntityFrameworkCore
-open AutoFixture
-open Swensen.Unquote
-open System.Collections.Generic
-open Microsoft.EntityFrameworkCore
-open Microsoft.EntityFrameworkCore.Diagnostics
+open Xunit.Abstractions
+open AutoMapper
+open Entities
+open FsCheck
+
+
+open FsCheck.Xunit
+open System.Data.SqlClient
+open Xunit.Sdk
+open System.Reflection
+open System.IO
+open System.Data.SqlClient
+open System.Data.SqlClient
+
+let sqlCon () =   new SqlConnection(Repository.conStr)
+
+
+type InteGrationTestDatabase ()=
+   let con = sqlCon ()
+   let rd = Random()
+   let dbName = $"TESTE_{rd.Next()}"
+
+   
+   let dbName = $"TESTES_{rd.Next()}"
+   
+   let CreateCMD = $" IF not EXISTS (SELECT name FROM master.sys.databases WHERE name = N'TESTES') \
+   Create DataBase {dbName}"
+   do con.Open()
+   let cmd = new SqlCommand(CreateCMD,con)
+   do cmd.ExecuteNonQuery() |> ignore
+      cmd.Dispose()
+
+
+   let script = 
+      $"USE {dbName}" + Environment.NewLine +
+      File.ReadAllText("./DbScripts/FerramentasTable.sql")
+     
+   let cmd = new SqlCommand(script,con)
+   do cmd.ExecuteNonQuery() |> ignore
+   
+
+   interface IDisposable with 
+      member this.Dispose () =
+         let sqlcmd = $" USE MASTER \
+                         DROP database {dbName}"
+
+         let cmd = SqlCommand(sqlcmd,con)
+         
+         cmd.ExecuteNonQuery() |> ignore
+         con.Dispose()
+   member _.DataBaseConection = con
 
 
 
+  
+
+
+
+type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
+   let dbfixture = new InteGrationTestDatabase()
+   let sqlcon = dbfixture.DataBaseConection
+
+   let mapper = MapperConfiguration(fun cfg -> cfg.AddProfile<RepositoryProfile>()).CreateMapper()
+
+   [<Fact>]
+   let ``Teste  de configuração RepositorryProfile`` ()=
+      let config = new MapperConfiguration(fun  cfg -> cfg.AddProfile<RepositoryProfile>())
+      config.AssertConfigurationIsValid()
+   
+   [<Fact>]
+   let ``Ferramenta é corretamente parseada e salva no banco de dados`` ()  =
+      //String.length ferramenta.Nome > 5 ==> lazy
+        
+      ()
+   interface IDisposable with member this.Dispose () =
+      
+      (dbfixture :> IDisposable).Dispose()
+                  //let ferramentastore = mapper.Map<FerramentaStore>(ferramenta)
+
+
+
+      
+   //interface IClassFixture<DatabaseFixture>   
+      
 //let getContext ()=
 //   let options = DbContextOptionsBuilder<AlmocharifadoContext>()
 //                  //.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Almocharifado2Tests;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False").Options
