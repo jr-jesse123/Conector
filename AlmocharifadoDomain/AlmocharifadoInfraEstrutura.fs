@@ -122,13 +122,6 @@ module RepositoryHelper=
 module internal Repository=
    open RepositoryHelper
    let conStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PatrimonioDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
-   
-   module FerramentaRepository=  
-      let insertDML  =    "insert into Ferramentas (Nome,Marca,Modelo,Descricao,DataCompra) \
-                          values(@Nome, @Marca, @Modelo, @Descricao, @DataCompra); \
-                          select top 1 PatrimonioId from Ferramentas \
-                          order by PatrimonioId Desc ;"
-
 
    let GetCommand dMLtext  (valores:Expr list) =
       let cmd = new SqlCommand(dMLtext)
@@ -150,8 +143,15 @@ module internal Repository=
       conection.Close()
       out
 
+   module FerramentaRepository=  
+      let insertDML  =    "insert into Ferramentas (Nome,Marca,Modelo,Descricao,DataCompra) \
+                          values(@Nome, @Marca, @Modelo, @Descricao, @DataCompra); \
+                          select top 1 PatrimonioId from Ferramentas \
+                          order by PatrimonioId Desc ;"
 
-
+      let InserirFErramenta conection valores = 
+         GetCommand insertDML valores 
+         |> ExecutarComando conection
       
 
 type  AlmocharifadoRepository() =
