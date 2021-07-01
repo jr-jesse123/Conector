@@ -119,9 +119,29 @@ module RepositoryHelper=
    let GetNamesAndValues (propriedades:Expr list) =
          propriedades |> List.map GetNameAndValueTuple
 
+open System.Data
+open System
+
 module internal Repository=
    open RepositoryHelper
-   let conStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PatrimonioDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
+   let conStr db= @$"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog={db};Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
+ 
+   let GetTable (conection:SqlConnection) (cmd:SqlCommand) =
+      try
+         conection.Open()
+      with
+      | :? InvalidOperationException as ex ->
+         conection.Close()
+         conection.Open() 
+
+      cmd.Connection <- conection
+      use adapter = new SqlDataAdapter(cmd)
+      let dt = new DataTable()
+      adapter.Fill dt |> ignore
+      dt
+
+
+
 
    let GetCommand dMLtext  (valores:Expr list) =
       let cmd = new SqlCommand(dMLtext)
@@ -129,7 +149,7 @@ module internal Repository=
          
       cmd.Parameters.AddRange  values
       cmd
-      
+   
    let ExecutarComando (conection:SqlConnection) (cmd:SqlCommand) =
       try
          conection.Open()
@@ -143,16 +163,42 @@ module internal Repository=
       conection.Close()
       out
 
+
+
    module FerramentaRepository=  
       let insertDML  =    "insert into Ferramentas (Nome,Marca,Modelo,Descricao,DataCompra) \
                           values(@Nome, @Marca, @Modelo, @Descricao, @DataCompra); \
                           select top 1 PatrimonioId from Ferramentas \
                           order by PatrimonioId Desc ;"
+      
+      let readAllDML = "Select * from Ferramentas"
+
+      let tableRowToFEramenta (row:DataRow) : Ferramenta =
+         
+         {
+            Nome = row.["Nome"].ToString();
+            Modelo =  row.["Modelo"].ToString();
+            Marca =  row.["Marca"].ToString(); 
+            DataCompra =  Convert.ToDateTime row.["DataCompra"]   ;
+            Patrimonio =  Convert.ToInt32 row.["PatrimonioId"];
+            Fotos = [||];
+            Descricao =  row.["Descricao"].ToString();
+            EmManutencao = Convert.ToBoolean row.["EmManutencao"] ;
+            Baixada = false;
+         }
+
+
 
       let InserirFErramenta conection valores = 
          GetCommand insertDML valores 
          |> ExecutarComando conection
       
+      let getAllFerramentas conection = 
+         let table = GetCommand readAllDML []
+                     |> GetTable conection
+
+         [for row in table.Rows do yield tableRowToFEramenta row]
+
 
 type  AlmocharifadoRepository() =
    
