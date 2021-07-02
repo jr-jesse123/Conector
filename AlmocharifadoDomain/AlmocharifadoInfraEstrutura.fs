@@ -20,17 +20,15 @@ open System.Data.SqlClient
 
 
 [<CLIMutable>]
-type FerramentaStore =
+type FerramentaInsert =
                   {
-                       PatrimonioId:int;
+                       Patrimonio:int
                        Nome:string;
                        Marca:string;
                        Modelo:string;
                        DataCompra:DateTime;
                        Fotos: string [];
                        Descricao:string
-                       EmManutencao:bool
-                       Baixada:bool
                     }
 
 
@@ -76,10 +74,10 @@ open MapperExtensions
 type RepositoryProfile() as this=
    
    inherit Profile() 
-   do ignore  <|
-               this.CreateMap<Ferramenta,FerramentaStore>() 
-                     .ForMemberFs((fun d -> d.PatrimonioId),
-                                  (fun opts -> opts.MapFrom<int>(fun m ->  m.Patrimonio )))
+   //do ignore  <|
+   //            this.CreateMap<Ferramenta,FerramentaInsert>() 
+   //                  .ForMemberFs((fun d -> d.PatrimonioId),
+   //                               (fun opts -> opts.MapFrom<int>(fun m ->  m.Patrimonio )))
                
                
                   
@@ -111,9 +109,12 @@ module RepositoryHelper=
       | x when (x:string).StartsWith("@") ->  SqlParameter(nome, vlr)
       | _ -> SqlParameter("@" + nome, vlr)
 
+    
+
    let GetNameAndValueTuple (e:Expr) =
       match e with
        | PropertyGet (eo, pi, li) -> pi.Name , e.CompileUntyped()
+       | ValueWithName (value, tipo , name) -> name  , value   
        | _ -> failwith "not a let-bound value"
    
    let GetNamesAndValues (propriedades:Expr list) =
@@ -121,6 +122,7 @@ module RepositoryHelper=
 
 open System.Data
 open System
+open System.Data.Common
 
 module internal Repository=
    open RepositoryHelper
@@ -163,41 +165,76 @@ module internal Repository=
       conection.Close()
       out
 
+   let ExecutaComandos (conection:SqlConnection) (cmds:SqlCommand[]) = 
+      let transaction = conection.BeginTransaction()
+
+      try
+         for cmd in cmds do cmd.Transaction = transaction
+         for cmd in cmds do cmd.ExecuteNonQuery()
+         transaction.Commit()
+      with |ex -> transaction.Rollback()
 
 
-   module FerramentaRepository=  
-      let insertDML  =    "insert into Ferramentas (Nome,Marca,Modelo,Descricao,DataCompra) \
-                          values(@Nome, @Marca, @Modelo, @Descricao, @DataCompra); \
-                          select top 1 PatrimonioId from Ferramentas \
-                          order by PatrimonioId Desc ;"
-      
-      let readAllDML = "Select * from Ferramentas"
 
-      let tableRowToFEramenta (row:DataRow) : Ferramenta =
-         
+   module FerramentaRepository=
+      let inserFerramentatDML  = 
+            "insert into Ferramentas (PatrimonioId, Nome, Marca, Modelo, Descricao, DataCompra) \
+             values (@Patrimonio, @Nome, @Marca, @Modelo, @Descricao, @DataCompra);"
+                        
+      let insertFotoDML = "insert into Fotos_Ferramentas(FerramentaId,Caminho) \
+                           values (@Patrimonio, @Foto)"
+
+      let GetAllFerramentasDML = "Select * from Ferramentas"
+      let GetAllFotosDML = "Select * from [Fotos_Ferramentas]"
+
+      let tableToFotos (table:DataTable) : string[] =
+         [|for row in table.Rows do yield string row.["Caminho"]  |]
+
+      let tableRowToFEramenta (row:DataRow) fotos : Ferramenta =
          {
-            Nome = row.["Nome"].ToString();
-            Modelo =  row.["Modelo"].ToString();
-            Marca =  row.["Marca"].ToString(); 
+            Nome = string row.["Nome"] ;
+            Modelo = string  row.["Modelo"] ;
+            Marca = string  row.["Marca"] ; 
             DataCompra =  Convert.ToDateTime row.["DataCompra"]   ;
             Patrimonio =  Convert.ToInt32 row.["PatrimonioId"];
-            Fotos = [||];
-            Descricao =  row.["Descricao"].ToString();
+            Fotos = fotos;
+            Descricao = string row.["Descricao"] ;
             EmManutencao = Convert.ToBoolean row.["EmManutencao"] ;
             Baixada = false;
          }
 
 
 
-      let InserirFErramenta conection valores = 
-         GetCommand insertDML valores 
-         |> ExecutarComando conection
+      let InserirFErramenta conection (ferramenta:FerramentaInsert) = 
+            GetCommand inserFerramentatDML [
+               <@ferramenta.Patrimonio@>;
+               <@ferramenta.Nome@>;
+               <@ferramenta.Marca@>;
+               <@ferramenta.Modelo@>;
+               <@ferramenta.DataCompra@>;
+               <@ferramenta.Descricao@>;
+               ] 
+            |> ExecutarComando conection |> ignore
+            
+            for foto in ferramenta.Fotos do
+               GetCommand insertFotoDML [ <@ ferramenta.Patrimonio  @> ; <@  foto @>]
+               |> ExecutarComando conection |> ignore
+         
+          
       
       let getAllFerramentas conection = 
-         let table = GetCommand readAllDML []
+         let table = GetCommand GetAllFerramentasDML []
                      |> GetTable conection
 
-         [for row in table.Rows do yield tableRowToFEramenta row]
+         let fotosTable = GetCommand GetAllFotosDML []
+                          |> GetTable conection
+                    
+         [for row in table.Rows do
+            let fotos = fotosTable.AsEnumerable() 
+                        |> Seq.filter (fun dr -> dr.["FerramentaId"] = row.["PatrimonioId"])
+            let filteredTable = fotos.CopyToDataTable()
+            let fts = tableToFotos filteredTable
+            yield tableRowToFEramenta row fts  ]
 
 
 type  AlmocharifadoRepository() =

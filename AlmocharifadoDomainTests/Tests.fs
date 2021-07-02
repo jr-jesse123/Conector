@@ -93,6 +93,8 @@ module helpers=
 
 open Repository
 open System.Runtime.Intrinsics.Arm
+open System
+open AutoFixture
 
 type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
    let dbfixture = new InteGrationTestDatabase()
@@ -108,55 +110,50 @@ type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
    
    //[<Property(MaxTest = 100)>]
    [<Property(MaxTest=100)>]
-   let ``Ferramenta é corretamente parseada e salva no banco de dados`` (ferramenta:Ferramenta)  =
+   let ``Ferramenta é corretamente  salva no banco de dados`` (ferramenta:FerramentaInsert)  =
       helpers.getalltexts ferramenta |> Seq.forall helpers.naovazio ==> lazy
-      let ferramentaStore = mapper.Map<FerramentaStore>(ferramenta)
-      //TODO: INCLUIR FOTOS NOS TESTES
+
+      let ferramentainput = {ferramenta with Fotos=Fixture().Build<string>().CreateMany() |> Seq.toArray}
       
       try
-         FerramentaRepository.InserirFErramenta sqlcon [
-                                                            <@ ferramentaStore.Nome @>
-                                                            <@ ferramentaStore.Marca @>
-                                                            <@ ferramentaStore.Modelo @>
-                                                            <@ ferramentaStore.DataCompra @>
-                                                            <@ ferramentaStore.Descricao @>
-                                                         ] |> ignore
+         FerramentaRepository.InserirFErramenta sqlcon ferramentainput  
+            |> ignore
       
       with
-      | :? SqlException as ex when ex.Message.Contains("UNIQUE KEY constraint") -> ()
+      | :? SqlException as ex when
+            ex.Message.Contains("UNIQUE KEY constraint")
+            || ex.Message.Contains("duplicate key") -> ()
       | _ -> reraise()
       
  
    [<Property(MaxTest=100)>]
    let ``Ferramenta é corretamente recuperada do banco de dados`` 
-                                                (ferramenta:Ferramenta)  =
+                                                (ferramenta:FerramentaInsert)  =
       (helpers.getalltexts ferramenta
-         |> Seq.forall helpers.naovazio ) ==> lazy
+         |> Seq.forall helpers.naovazio  ) ==> lazy
 
 
-      let ferramentaStore = mapper.Map<FerramentaStore>(ferramenta)
+      let ferramentainput = {ferramenta with Fotos=Fixture().Build<string>().CreateMany() |> Seq.toArray}
+
+
+
 
       try
-         FerramentaRepository.InserirFErramenta sqlcon [
-                                                      <@ ferramentaStore.Nome @>
-                                                      <@ ferramentaStore.Marca @>
-                                                      <@ ferramentaStore.Modelo @>
-                                                      <@ ferramentaStore.DataCompra @>
-                                                      <@ ferramentaStore.Descricao @>
-                                                              ] |> ignore
+         FerramentaRepository.InserirFErramenta sqlcon ferramentainput|> ignore
            
          let ferramentas = FerramentaRepository.getAllFerramentas sqlcon
 
 
          ferramentas 
-                  |> List.exists (fun x -> x.Nome = ferramenta.Nome 
-                                             && x.Marca = ferramenta.Marca
-                                             && x.Modelo = ferramenta.Modelo
-                                             && ferramenta.DataCompra.ToString() = x.DataCompra.ToString()
-                                             && ferramenta.Descricao = x.Descricao)  
+                  |> List.exists (fun x -> x.Nome = ferramentainput.Nome 
+                                             && x.Marca = ferramentainput.Marca
+                                             && x.Modelo = ferramentainput.Modelo
+                                             && ferramentainput.DataCompra.ToString() = x.DataCompra.ToString()
+                                             && ferramentainput.Descricao = x.Descricao)  
 
       with
-      | :? SqlException as ex when ex.Message.Contains("UNIQUE KEY constraint") -> true
+      | :? SqlException as ex when 
+         ex.Message.Contains("UNIQUE KEY constraint") || ex.Message.Contains("duplicate key") -> true
       | _ -> reraise()
 
    static member insertData :seq<obj[]>=
@@ -182,7 +179,7 @@ type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
             Baixada = true } :> obj|]
 
            }
-   interface IDisposable with member this.Dispose () =
-                     (dbfixture :> IDisposable).Dispose()
+   interface IDisposable with 
+      member this.Dispose () = (dbfixture :> IDisposable).Dispose()
                   //let ferramentastore = mapper.Map<FerramentaStore>(ferramenta)
 

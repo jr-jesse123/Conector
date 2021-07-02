@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Ferramentas]
 (
-	[PatrimonioId] INT NOT NULL PRIMARY KEY NONCLUSTERED Identity(1,1),
+	[PatrimonioId] INT NOT NULL PRIMARY KEY ,
 	Nome varchar(100) not null unique,
 	Marca varchar(50) not null,
 	Modelo varchar(50) not null,
