@@ -34,7 +34,7 @@ type FerramentaInsert =
 
 
 [<CLIMutable>]
-type FuncionarioStore = 
+type FuncionarioInsert = 
                               {
                                  Nome:string;
                                  CPF:string;
@@ -74,8 +74,9 @@ open MapperExtensions
 type RepositoryProfile() as this=
    
    inherit Profile() 
-   do ignore  <|
-               this.CreateMap<Ferramenta,FerramentaInsert>() 
+   //do ignore  <|
+               //this.CreateMap<Ferramenta,FerramentaInsert>() 
+               
    //                  .ForMemberFs((fun d -> d.PatrimonioId),
    //                               (fun opts -> opts.MapFrom<int>(fun m ->  m.Patrimonio )))
                
@@ -91,8 +92,6 @@ type IFerramentaRepository =
    abstract member GetAllFerramentas:unit->Ferramenta []
    abstract member RegistrarBaixaDeFerramenta:Ferramenta->unit
    abstract member RegistrarManutencaoDeFerramenta:Ferramenta -> RegistroManutencao ->unit
-   //abstract member RegistrarFimManutencao:Ferramenta->unit
-   //abstract member DevolverFerramentas:Devolucao[]->unit
    
 
 type IAlmocharifadoRepository =
@@ -246,9 +245,32 @@ module internal Repository=
             |> CreateSimpleCommand conection
             |> ExecutarComando conection
             |> ignore
-            
-         
+   module AlmocharifadoRepository=
+      let GetAllFuncionarioDML = "Select * from Funcionarios"
+      let InsertFuncionarioDML = "insert into Funcionarios(CPF,Nome,Cargo,Email,Foto) \
+      	values(@CPF,@Nome, @Cargo, @Email, @Foto)"
+
       
+      let tableToFuncionarios (table:DataTable) : Funcionario[] =
+         let str = string
+         [|for row in table.Rows do 
+                     yield {CPF= str row.["Cpf"];Nome= str row.["Nome"];
+                            Cargo=str row.["Cargo"];Email=str row.["Email"];
+                            Foto= str row.["Foto"]}  |]
+
+
+      let GetAllFuncioarios conection = 
+               GetCommand GetAllFuncionarioDML []
+               |> GetTable conection
+               |> tableToFuncionarios 
+
+      let InsertFuncionario conection (funcionario) = 
+         GetCommand InsertFuncionarioDML [ 
+            <@ funcionario.CPF   @> ; <@ funcionario.Nome @> ;
+            <@ funcionario.Cargo@> ; <@ funcionario.Email @>;
+            <@ funcionario.Foto @>]
+         |> ExecutarComando conection
+         |> ignore
 
 open Repository
 open FerramentaRepository
@@ -260,7 +282,6 @@ type  AlmocharifadoRepository(conStr) =
       member this.GetAllFerramentas () = GetAllFerramentas conection 
       member this.RegistrarManutencaoDeFerramenta ferramenta registro = 
               RegistrarManutencao conection ferramenta.Patrimonio registro
-
       member thi.RegistrarBaixaDeFerramenta ferramenta = ()
       //member this.RegistrarFimManutencao = 
 

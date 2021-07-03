@@ -1,8 +1,4 @@
 
-
-
-
-
 module Tests
 open Almocharifado.InfraEstrutura
 open System
@@ -26,9 +22,12 @@ open Swensen.Unquote
 open System.Data.SqlClient
 open System.Diagnostics
 
+open Bogus.Extensions.Brazil
 
-
-   
+type TestsProfile() as this = 
+   inherit Profile()
+   do ignore <| this.CreateMap<Ferramenta,FerramentaInsert>() 
+   do ignore <| this.CreateMap<FuncionarioInsert,Funcionario>() 
 
 
 type InteGrationTestDatabase ()=
@@ -94,6 +93,10 @@ open Repository
 open System.Runtime.Intrinsics.Arm
 open System
 open AutoFixture
+open Bogus
+open Caleo
+open AutoBogus
+open AutoBogus
 
 type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
    let dbfixture = new InteGrationTestDatabase()
@@ -102,14 +105,14 @@ type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
    let mapper = MapperConfiguration(fun cfg -> cfg.AddProfile<RepositoryProfile>()).CreateMapper()
 
    [<Fact>]
-   let ``Teste  de configuração RepositorryProfile`` ()=
+   let ``Teste  de configuraï¿½ï¿½o RepositorryProfile`` ()=
       let config = new MapperConfiguration(fun  cfg -> cfg.AddProfile<RepositoryProfile>())
       config.AssertConfigurationIsValid()
    
    
    //[<Property(MaxTest = 100)>]
    [<Property(MaxTest=100)>]
-   let ``Ferramenta é corretamente  salva no banco de dados`` (ferramenta:FerramentaInsert)  =
+   let ``Ferramenta ï¿½ corretamente  salva no banco de dados`` (ferramenta:FerramentaInsert)  =
       helpers.getalltexts ferramenta |> Seq.forall helpers.naovazio ==> lazy
 
       let ferramentainput = {ferramenta with Fotos=Fixture().Build<string>().CreateMany() |> Seq.toArray}
@@ -126,7 +129,7 @@ type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
       
  
    [<Property>]
-   let ``Ferramenta é corretamente recuperada do banco de dados`` 
+   let ``Ferramenta ï¿½ corretamente recuperada do banco de dados`` 
                                                 (ferramenta:FerramentaInsert)  =
       (helpers.getalltexts ferramenta
          |> Seq.forall helpers.naovazio  ) ==> lazy
@@ -153,7 +156,7 @@ type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
 
    let rd = Random()
    [<Property>]
-   let ``Registro de ferramenta em manutenção executado e recuperado coreretamente``() =
+   let ``Registro de ferramenta em manutenï¿½ï¿½o executado e recuperado coreretamente``() =
          
          let ferramentas = Fixture().Build<Ferramenta>().CreateMany()
 
@@ -186,7 +189,7 @@ type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
          | _ -> reraise()
 
    [<Property>]
-   let ``Registro de saida de manutenção executado e recuperado coreretamente``() =
+   let ``Registro de saida de manutenï¿½ï¿½o executado e recuperado coreretamente``() =
            
       let ferramentas = Fixture().Build<Ferramenta>().CreateMany()
 
@@ -220,7 +223,7 @@ type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
          ex.Message.Contains("UNIQUE KEY constraint") || ex.Message.Contains("duplicate key") -> ()
       | _ -> reraise()
 
-   let ``Ferramenta é baixada corretamente `` ()=
+   let ``Ferramenta ï¿½ baixada corretamente `` ()=
 
          let ferramentas = Fixture().Build<Ferramenta>()
                                     .With((fun x -> x.Baixada), false)
@@ -256,7 +259,34 @@ type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
             ex.Message.Contains("UNIQUE KEY constraint") || ex.Message.Contains("duplicate key") -> ()
          | _ -> reraise()
    
+   #if INTERACTIVE
+   #r "nuget: Bogus"
+   #r "nuget: AutoBogus"
+   open Bogus
+   open AutoBogus
+   open Bogus.Extensions.Brazil
+   #endif
+
+   [<Property>]
+   let ``Funcionario ï¿½ armazenado e recuperado corretamente`` () =
+      let funcionarioInsert = AutoFaker<FuncionarioInsert>()
+                                 .Generate()
+      let funcionarioInsert = {funcionarioInsert with CPF=Faker().Person.Cpf(false)}
+
+      printfn "%A" funcionarioInsert
+      AlmocharifadoRepository.InsertFuncionario sqlcon funcionarioInsert
+
+
+      let funcionarios = AlmocharifadoRepository.GetAllFuncioarios sqlcon 
+
+      let testMap = MapperConfiguration(fun cfg -> cfg.AddProfile<TestsProfile>()).CreateMapper()
+      let funcionario = testMap.Map<Funcionario>(funcionarioInsert)
+      printfn "mapeado %A" funcionario
+      printfn "lista: %A" funcionarios
+      funcionarios |> Array.contains funcionario
+         
    interface IDisposable with 
       member this.Dispose () = (dbfixture :> IDisposable).Dispose()
                   //let ferramentastore = mapper.Map<FerramentaStore>(ferramenta)
+
 
