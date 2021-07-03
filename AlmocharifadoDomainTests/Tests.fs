@@ -158,11 +158,11 @@ type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
    [<Property>]
    let ``Registro de ferramenta em manuten��o executado e recuperado coreretamente``() =
          
-         let ferramentas = Fixture().Build<Ferramenta>().CreateMany()
+         let ferramentas = Fixture().Build<FerramentaInsert>().CreateMany() |> Array.ofSeq
 
          try
             let ferramentasInput = 
-               mapper.Map<FerramentaInsert[]>(ferramentas)
+               ferramentas
                |> Array.map (fun fer -> {fer with Fotos=Fixture().Build<string>().CreateMany() |> Seq.toArray })
 
             for ferInput in ferramentasInput do FerramentaRepository.InserirFErramenta sqlcon ferInput
@@ -191,11 +191,12 @@ type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
    [<Property>]
    let ``Registro de saida de manuten��o executado e recuperado coreretamente``() =
            
-      let ferramentas = Fixture().Build<Ferramenta>().CreateMany()
+      let ferramentas = Fixture().Build<FerramentaInsert>().CreateMany() |> Seq.toArray
 
       try
          let ferramentasInput = 
-            mapper.Map<FerramentaInsert[]>(ferramentas)
+            ferramentas
+            //mapper.Map<FerramentaInsert[]>(ferramentas)
             |> Array.map (fun fer -> {fer with Fotos=Fixture().Build<string>().CreateMany() |> Seq.toArray })
 
          for ferInput in ferramentasInput do FerramentaRepository.InserirFErramenta sqlcon ferInput
