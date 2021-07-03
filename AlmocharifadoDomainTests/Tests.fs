@@ -166,7 +166,7 @@ type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
             let ferramentasArmazenadas = FerramentaRepository.GetAllFerramentas sqlcon
       
             let emManutencao = ferramentasArmazenadas.[rd.Next (ferramentasArmazenadas.Length - 1)]
-            FerramentaRepository.RegistrarEntradaManutencao sqlcon emManutencao.Patrimonio RegistroManutencao.Entrada
+            FerramentaRepository.RegistrarManutencao sqlcon emManutencao.Patrimonio RegistroManutencao.Entrada
 
             let ferramentaEmManutencao = FerramentaRepository.GetAllFerramentas sqlcon
                                           |> Array.filter (fun fer -> fer.EmManutencao && fer.Patrimonio = emManutencao.Patrimonio )
@@ -186,40 +186,75 @@ type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
          | _ -> reraise()
 
    [<Property>]
-     let ``Registro de saida de manutenção executado e recuperado coreretamente``() =
+   let ``Registro de saida de manutenção executado e recuperado coreretamente``() =
            
-           let ferramentas = Fixture().Build<Ferramenta>().CreateMany()
+      let ferramentas = Fixture().Build<Ferramenta>().CreateMany()
 
-           try
-              let ferramentasInput = 
-                 mapper.Map<FerramentaInsert[]>(ferramentas)
-                 |> Array.map (fun fer -> {fer with Fotos=Fixture().Build<string>().CreateMany() |> Seq.toArray })
+      try
+         let ferramentasInput = 
+            mapper.Map<FerramentaInsert[]>(ferramentas)
+            |> Array.map (fun fer -> {fer with Fotos=Fixture().Build<string>().CreateMany() |> Seq.toArray })
 
-              for ferInput in ferramentasInput do FerramentaRepository.InserirFErramenta sqlcon ferInput
-              let ferramentasArmazenadas = FerramentaRepository.GetAllFerramentas sqlcon
-              for fer in ferramentasArmazenadas do 
-               FerramentaRepository.RegistrarEntradaManutencao sqlcon fer.Patrimonio RegistroManutencao.Entrada
+         for ferInput in ferramentasInput do FerramentaRepository.InserirFErramenta sqlcon ferInput
+         let ferramentasArmazenadas = FerramentaRepository.GetAllFerramentas sqlcon
+         for fer in ferramentasArmazenadas do 
+         FerramentaRepository.RegistrarManutencao sqlcon fer.Patrimonio RegistroManutencao.Entrada
 
-              let ManutencaoFinalizada = ferramentasArmazenadas.[rd.Next (ferramentasArmazenadas.Length - 1)]
-              FerramentaRepository.RegistrarEntradaManutencao sqlcon ManutencaoFinalizada.Patrimonio RegistroManutencao.Saida
+         let ManutencaoFinalizada = ferramentasArmazenadas.[rd.Next (ferramentasArmazenadas.Length - 1)]
+         FerramentaRepository.RegistrarManutencao sqlcon ManutencaoFinalizada.Patrimonio RegistroManutencao.Saida
 
-              let ferramentaEmManutencao = FerramentaRepository.GetAllFerramentas sqlcon
-                                            |> Array.filter (fun fer -> not fer.EmManutencao && fer.Patrimonio = ManutencaoFinalizada.Patrimonio )
-                                            |> Array.exactlyOne
+         let ferramentaEmManutencao = FerramentaRepository.GetAllFerramentas sqlcon
+                                       |> Array.filter (fun fer -> not fer.EmManutencao && fer.Patrimonio = ManutencaoFinalizada.Patrimonio )
+                                       |> Array.exactlyOne
                                             
 
-              test <@ManutencaoFinalizada.Nome = ferramentaEmManutencao.Nome 
-                 && ManutencaoFinalizada.Marca = ferramentaEmManutencao.Marca
-                 && ManutencaoFinalizada.Modelo = ferramentaEmManutencao.Modelo
-                 && ManutencaoFinalizada.DataCompra.ToString() = ferramentaEmManutencao.DataCompra.ToString()
-                 && ManutencaoFinalizada.Descricao = ferramentaEmManutencao.Descricao
-                 && ManutencaoFinalizada.Fotos = ferramentaEmManutencao.Fotos @>
+         test <@ManutencaoFinalizada.Nome = ferramentaEmManutencao.Nome 
+            && ManutencaoFinalizada.Marca = ferramentaEmManutencao.Marca
+            && ManutencaoFinalizada.Modelo = ferramentaEmManutencao.Modelo
+            && ManutencaoFinalizada.DataCompra.ToString() = ferramentaEmManutencao.DataCompra.ToString()
+            && ManutencaoFinalizada.Descricao = ferramentaEmManutencao.Descricao
+            && ManutencaoFinalizada.Fotos = ferramentaEmManutencao.Fotos @>
         
-           with
-           | :? SqlException as ex when 
-              ex.Message.Contains("UNIQUE KEY constraint") || ex.Message.Contains("duplicate key") -> ()
-           | _ -> reraise()
+      with
+      | :? SqlException as ex when 
+         ex.Message.Contains("UNIQUE KEY constraint") || ex.Message.Contains("duplicate key") -> ()
+      | _ -> reraise()
 
+   let ``Ferramenta é baixada corretamente `` ()=
+
+         let ferramentas = Fixture().Build<Ferramenta>()
+                                    .With((fun x -> x.Baixada), false)
+                                    .CreateMany()
+
+         try
+            let ferramentasInput = 
+               mapper.Map<FerramentaInsert[]>(ferramentas)
+               |> Array.map (fun fer -> {fer with Fotos=Fixture().Build<string>().CreateMany() |> Seq.toArray })
+
+            for ferInput in ferramentasInput do FerramentaRepository.InserirFErramenta sqlcon ferInput
+            let ferramentasArmazenadas = FerramentaRepository.GetAllFerramentas sqlcon
+            for fer in ferramentasArmazenadas do 
+            FerramentaRepository.RegistrarManutencao sqlcon fer.Patrimonio RegistroManutencao.Entrada
+
+            let FerramentaBaixada = ferramentasArmazenadas.[rd.Next (ferramentasArmazenadas.Length - 1)]
+            FerramentaRepository.RegistrarBaixaFerramenta sqlcon FerramentaBaixada.Patrimonio 
+
+            let ferBaixadaPersistida = FerramentaRepository.GetAllFerramentas sqlcon
+                                          |> Array.filter (fun fer -> not fer.EmManutencao && fer.Patrimonio = FerramentaBaixada.Patrimonio )
+                                          |> Array.exactlyOne
+                                               
+
+            test <@FerramentaBaixada.Nome = ferBaixadaPersistida.Nome 
+               && FerramentaBaixada.Marca = ferBaixadaPersistida.Marca
+               && FerramentaBaixada.Modelo = ferBaixadaPersistida.Modelo
+               && FerramentaBaixada.DataCompra.ToString() = ferBaixadaPersistida.DataCompra.ToString()
+               && FerramentaBaixada.Descricao = ferBaixadaPersistida.Descricao
+               && FerramentaBaixada.Fotos = ferBaixadaPersistida.Fotos @>
+           
+         with
+         | :? SqlException as ex when 
+            ex.Message.Contains("UNIQUE KEY constraint") || ex.Message.Contains("duplicate key") -> ()
+         | _ -> reraise()
    
    interface IDisposable with 
       member this.Dispose () = (dbfixture :> IDisposable).Dispose()

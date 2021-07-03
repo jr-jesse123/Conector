@@ -89,7 +89,7 @@ type RegistroManutencao =
 type IFerramentaRepository =
    abstract member SalvarFerramenta:FerramentaInsert->unit
    abstract member GetAllFerramentas:unit->Ferramenta []
-   //abstract member RegistrarFerramentaBaixada:Ferramenta->unit
+   abstract member RegistrarBaixaDeFerramenta:Ferramenta->unit
    abstract member RegistrarManutencaoDeFerramenta:Ferramenta -> RegistroManutencao ->unit
    //abstract member RegistrarFimManutencao:Ferramenta->unit
    //abstract member DevolverFerramentas:Devolucao[]->unit
@@ -201,7 +201,7 @@ module internal Repository=
             Fotos = fotos;
             Descricao = string row.["Descricao"] ;
             EmManutencao = Convert.ToBoolean row.["EmManutencao"] ;
-            Baixada = false;
+            Baixada = Convert.ToBoolean row.["Baixada"];
          }
 
 
@@ -235,11 +235,18 @@ module internal Repository=
             let fts = tableToFotos filteredTable
             yield tableRowToFEramenta row fts  |]
 
-      let RegistrarEntradaManutencao (conection:SqlConnection) patrimonio (registro:RegistroManutencao) = 
+      let RegistrarManutencao (conection:SqlConnection) patrimonio (registro:RegistroManutencao) = 
          sprintf "update Ferramentas set EmManutencao = %d where PatrimonioId = %i" (int registro) patrimonio
          |> CreateSimpleCommand conection
          |> ExecutarComando conection
          |> ignore
+
+      let RegistrarBaixaFerramenta (conection:SqlConnection) patrimonio= 
+            sprintf "update Ferramentas set Baixada = 1 where PatrimonioId = %i"  patrimonio
+            |> CreateSimpleCommand conection
+            |> ExecutarComando conection
+            |> ignore
+            
          
       
 
@@ -251,8 +258,10 @@ type  AlmocharifadoRepository(conStr) =
    interface IFerramentaRepository with 
       member this.SalvarFerramenta ferramentainsert = InserirFErramenta conection ferramentainsert
       member this.GetAllFerramentas () = GetAllFerramentas conection 
-      member this.RegistrarManutencaoDeFerramenta ferramenta registro = ()
-      //   RegistrarEntradaManutencao conection ferramenta.Patrimonio
+      member this.RegistrarManutencaoDeFerramenta ferramenta registro = 
+              RegistrarManutencao conection ferramenta.Patrimonio registro
+
+      member thi.RegistrarBaixaDeFerramenta ferramenta = ()
       //member this.RegistrarFimManutencao = 
 
    interface IDisposable with member this.Dispose () = conection.Dispose ()
