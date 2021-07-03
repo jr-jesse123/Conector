@@ -74,20 +74,24 @@ open MapperExtensions
 type RepositoryProfile() as this=
    
    inherit Profile() 
-   //do ignore  <|
-   //            this.CreateMap<Ferramenta,FerramentaInsert>() 
+   do ignore  <|
+               this.CreateMap<Ferramenta,FerramentaInsert>() 
    //                  .ForMemberFs((fun d -> d.PatrimonioId),
    //                               (fun opts -> opts.MapFrom<int>(fun m ->  m.Patrimonio )))
                
                
                   
 
+type RegistroManutencao = 
+   |Saida = 0
+   |Entrada = 1
+
 type IFerramentaRepository =
-   abstract member SalvarFerramenta:Ferramenta->unit
-   //abstract member GetAllFerramentas:unit->Ferramenta []
-   //abstract member BaixarFerramenta:Ferramenta->unit
-   //abstract member EnviarFerramentaParaManutencao:Ferramenta->unit
-   //abstract member FinalizarManutencao:Ferramenta->unit
+   abstract member SalvarFerramenta:FerramentaInsert->unit
+   abstract member GetAllFerramentas:unit->Ferramenta []
+   //abstract member RegistrarFerramentaBaixada:Ferramenta->unit
+   abstract member RegistrarManutencaoDeFerramenta:Ferramenta -> RegistroManutencao ->unit
+   //abstract member RegistrarFimManutencao:Ferramenta->unit
    //abstract member DevolverFerramentas:Devolucao[]->unit
    
 
@@ -108,8 +112,6 @@ module RepositoryHelper=
       match nome with 
       | x when (x:string).StartsWith("@") ->  SqlParameter(nome, vlr)
       | _ -> SqlParameter("@" + nome, vlr)
-
-    
 
    let GetNameAndValueTuple (e:Expr) =
       match e with
@@ -143,8 +145,6 @@ module internal Repository=
       dt
 
 
-
-
    let GetCommand dMLtext  (valores:Expr list) =
       let cmd = new SqlCommand(dMLtext)
       let values  =  GetNamesAndValues valores |> List.map (fun (x, y) -> SqlParameter(x,y)) |> Array.ofList
@@ -165,15 +165,16 @@ module internal Repository=
       conection.Close()
       out
 
-   let ExecutaComandos (conection:SqlConnection) (cmds:SqlCommand[]) = 
-      let transaction = conection.BeginTransaction()
+   //let ExecutaComandos (conection:SqlConnection) (cmds:SqlCommand[]) = 
+   //   let transaction = conection.BeginTransaction()
 
-      try
-         for cmd in cmds do cmd.Transaction = transaction
-         for cmd in cmds do cmd.ExecuteNonQuery()
-         transaction.Commit()
-      with |ex -> transaction.Rollback()
-
+   //   try
+   //      for cmd in cmds do cmd.Transaction <- transaction
+   //      for cmd in cmds do cmd.ExecuteNonQuery()
+   //      transaction.Commit()
+   //   with |ex -> transaction.Rollback()
+   let CreateSimpleCommand (conection:SqlConnection) sqltext = 
+         SqlCommand(sqltext,conection)
 
 
    module FerramentaRepository=
@@ -220,28 +221,41 @@ module internal Repository=
                GetCommand insertFotoDML [ <@ ferramenta.Patrimonio  @> ; <@  foto @>]
                |> ExecutarComando conection |> ignore
          
-          
-      
-      let getAllFerramentas conection = 
+      let GetAllFerramentas conection = 
          let table = GetCommand GetAllFerramentasDML []
                      |> GetTable conection
 
          let fotosTable = GetCommand GetAllFotosDML []
                           |> GetTable conection
                     
-         [for row in table.Rows do
+         [|for row in table.Rows do
             let fotos = fotosTable.AsEnumerable() 
                         |> Seq.filter (fun dr -> dr.["FerramentaId"] = row.["PatrimonioId"])
             let filteredTable = fotos.CopyToDataTable()
             let fts = tableToFotos filteredTable
-            yield tableRowToFEramenta row fts  ]
+            yield tableRowToFEramenta row fts  |]
 
+      let RegistrarEntradaManutencao (conection:SqlConnection) patrimonio (registro:RegistroManutencao) = 
+         sprintf "update Ferramentas set EmManutencao = %d where PatrimonioId = %i" (int registro) patrimonio
+         |> CreateSimpleCommand conection
+         |> ExecutarComando conection
+         |> ignore
+         
+      
 
-type  AlmocharifadoRepository() =
+open Repository
+open FerramentaRepository
+type  AlmocharifadoRepository(conStr) =
+   let conection = new SqlConnection(conStr)
    
    interface IFerramentaRepository with 
-      member this.SalvarFerramenta ferramenta = ()
-  
+      member this.SalvarFerramenta ferramentainsert = InserirFErramenta conection ferramentainsert
+      member this.GetAllFerramentas () = GetAllFerramentas conection 
+      member this.RegistrarManutencaoDeFerramenta ferramenta registro = ()
+      //   RegistrarEntradaManutencao conection ferramenta.Patrimonio
+      //member this.RegistrarFimManutencao = 
+
+   interface IDisposable with member this.Dispose () = conection.Dispose ()
 module AssemblyInfo=
 
    open System.Runtime.CompilerServices
