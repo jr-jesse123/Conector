@@ -18,7 +18,7 @@
       <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
       <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
     </div> -->
-    <div class="carousel-inner">
+    <div class="carousel-inner" style="object-fit:contain;max-height:100px !important;">
         
         <div class="carousel-item active">
             <img src="@( "/" + LinkFotos.First())" class="d-block w-100 " >
@@ -29,7 +29,7 @@
             @foreach (var item in LinkFotos.Skip(1))
             {
                 <div class="carousel-item">
-                    <img src="@("/" +item)" class="d-block w-100" >
+                    <img style="object-fit:contain;max-height:100px !important;" src="@("/" +item)" class="d-block w-100" >
                 </div>
             }
         }

@@ -97,7 +97,8 @@ namespace Almocherifado.UI.Components.Ferramentas
 
         protected override Task OnInitializedAsync()
         {
-            ProximoPatrimonio = ferraemntaRepo.GetAllFerramentas().Max(fer => fer.Patrimonio) + 1;
+            var FERRAMENTAS = ferraemntaRepo.GetAllFerramentas();
+            ProximoPatrimonio = FERRAMENTAS.Length > 0 ? FERRAMENTAS.Max(f => f.Patrimonio) + 1 : 1;
             FerramentaInput.Patrimonio = ProximoPatrimonio;
             return Task.CompletedTask;
         }

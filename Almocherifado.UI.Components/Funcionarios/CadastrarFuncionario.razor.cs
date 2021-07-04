@@ -17,9 +17,9 @@ namespace Almocherifado.UI.Components.Funcionarios
 
         private List<string> cargos = new()
         {
-        "Nenhum ", "Analista administrativo", "Auxiliar administrativo", "Auxilidar de mecânico", "Eletrotécnico",
-        "Encarregado de manutenção", "Encarregado de manutenção", "Engenheiro mecânico", "Mecânico de ar condicionado",
-        "Mecânico de ar condicionado sênior", "Operador"
+            "Nenhum ", "Analista administrativo", "Auxiliar administrativo", "Auxilidar de mecânico", "Eletrotécnico",
+            "Encarregado de manutenção", "Encarregado de manutenção", "Engenheiro mecânico", "Mecânico de ar condicionado",
+            "Mecânico de ar condicionado sênior", "Operador"
         };
 
   
@@ -35,13 +35,15 @@ namespace Almocherifado.UI.Components.Funcionarios
 
             if (form.EditContext.Validate())
             {
-                var funcionarioDomain = mapper.Map<FuncionarioInsert>(FuncionarioInput);
-
-                FileHelper.SaveFileToRoot(FuncionarioInput.Foto.Stream, funcionarioDomain.Foto);
+                var funcionarioInsert = mapper.Map<FuncionarioInsert>(FuncionarioInput);
+                if(!string.IsNullOrWhiteSpace(funcionarioInsert.Foto) )
+                {
+                    FileHelper.SaveFileToRoot(FuncionarioInput.Foto.Stream, funcionarioInsert.Foto);
+                }
                  
                 try
                 {
-                    repo.SalvarFuncionario(funcionarioDomain);
+                    repo.SalvarFuncionario(funcionarioInsert);
                     FuncionarioInput = new CadastroFuncionarioModel();
                     formClass = formClass.Replace("was-validated", "");
                     toast.Show("Funcionario Criado Corretamente", "Sucesso");

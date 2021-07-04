@@ -1,5 +1,5 @@
 ﻿#center {
-    width: calc(100% - 165px);
+    width: 89%;
 }
 
 header {
@@ -7,6 +7,8 @@ header {
     background-color: #05374D;
     margin-right: 165px;
 }
+
+
 
 aside {
     background-color: #05374D;
@@ -17,12 +19,12 @@ aside {
     background-color: white;
 /*//TODO: VERIFICAR SE ESSE VW TA CERTO NA ALTURA, MAS FUNCIONOU*/
     height: 100vw;
-    max-width: calc(100% - 165px);
-    margin-left: auto;
+    max-width: 89%;
+    margin-left: 11%;
 }
 
 #espace {
     float: right;
-    width: 165px;
+    width: 11%;
     height: 100%;
 }

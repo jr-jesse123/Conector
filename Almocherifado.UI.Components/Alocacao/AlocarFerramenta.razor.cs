@@ -13,6 +13,8 @@ namespace Almocherifado.UI.Components.Alocacao
     public partial class AlocarFerramenta : FormBase
     {
 
+        FerramentaDisplay ferramentaDisplay;
+
         Toast toast;
 
         string _teste;
@@ -67,7 +69,7 @@ namespace Almocherifado.UI.Components.Alocacao
                 {
                     toast.Show(ex.Message, "Erro");
                 }
-                
+                ferramentaDisplay.RefreshMe();
             }
 
         }

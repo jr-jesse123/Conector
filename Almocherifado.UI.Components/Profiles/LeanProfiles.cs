@@ -82,7 +82,7 @@ namespace Almocherifado.UI.Components.Profiles
             {
                 Nome = source.Nome,
                 Cargo = source.Cargo,
-                CPF = source.CPF,
+                CPF = source.CPF.Replace(".","").Replace("-",""),
                 Email = source.Email,
                 Foto = foto
             };

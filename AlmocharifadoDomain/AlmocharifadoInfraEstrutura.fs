@@ -206,13 +206,17 @@ module internal Repository=
 
 
       let InserirFErramenta conection (ferramenta:FerramentaInsert) = 
+            let Descricao = match Option.ofObj ferramenta.Descricao with
+                              |Some x -> x
+                              |None -> ""
+
             GetCommand inserFerramentatDML [
                <@ferramenta.Patrimonio@>;
                <@ferramenta.Nome@>;
                <@ferramenta.Marca@>;
                <@ferramenta.Modelo@>;
                <@ferramenta.DataCompra@>;
-               <@ferramenta.Descricao@>;
+               <@ Descricao @>;
                ] 
             |> ExecutarComando conection |> ignore
             

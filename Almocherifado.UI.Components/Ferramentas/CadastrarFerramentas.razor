@@ -58,7 +58,7 @@
                             <div class="mb-3">
                                 <label for="DataDaCompraInput" class="form-label"><b>*</b>Data da Compra:</label>
                                 
-                                <InputDate min="1990-01-01" max="@DateTime.Now.Date.ToString("yyyy-MM-dd")"  @bind-Value="FerramentaInput.DataDaCompra" id="DataDaCompraInput" type="text" class="form-control" />
+                                <InputDate style="font-size:15px" min="1990-01-01" max="@DateTime.Now.Date.ToString("yyyy-MM-dd")"  @bind-Value="FerramentaInput.DataDaCompra" id="DataDaCompraInput" type="text" class="form-control" />
                                 <div class="invalid-feedback">
                                     <ValidationMessage For="() => FerramentaInput.DataDaCompra" />
                                 </div>

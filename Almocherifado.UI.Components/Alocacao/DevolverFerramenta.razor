@@ -61,14 +61,17 @@
 
                 @foreach (var ferramenta in FerramentasEComentarios)
                 {
-                    <ComentarioDevolucao Ferramenta="ferramenta.Key" Comentario="@ferramenta.Value"/>
+                    <ComentarioDevolucao Ferramenta="ferramenta.Key" Comentario="@ferramenta.Value" />
                 }
 
+                @if (FerramentasEComentarios.Count > 0)
+                {
+                    <div class="d-flex justify-content-end mt-4">
+                        <button type="button" @onclick="OnCancelClic" class="btn btn-outline-danger mx-4">Cancelar</button>
+                        <button type="button" @onclick="OnSubmitAsync" class="btn btn-primary">Salvar</button>
+                    </div>
+                }
 
-                <div class="d-flex justify-content-end mt-4">
-                    <button type="button" @onclick="OnCancelClic" class="btn btn-outline-danger mx-4">Cancelar</button>
-                    <button type="button" @onclick="OnSubmitAsync" class="btn btn-primary">Salvar</button>
-                </div>
             </div>
         </EditForm>
     </div>
