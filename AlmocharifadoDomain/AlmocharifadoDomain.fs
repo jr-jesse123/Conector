@@ -40,13 +40,18 @@ type Funcionario = {Nome:string;CPF:string;Cargo:string;Email:string;Foto:string
 type Devolucao = {Ferramenta:Ferramenta;Data:DateTime;Observacoe:string }
 
 [<CLIMutable>]
+type FerramentaAlocada =  {Ferramenta:Ferramenta;DataDevolucao:DateTime option;Observacoes:string}
+   
+
+[<CLIMutable>]
 type Alocacao = 
    {
-      Id:int;Ferramentas:Ferramenta seq;
+      Id:int;
+      FerramentasAlocadas:FerramentaAlocada [];
       Responsavel:Funcionario;ContratoLocacao:string;
       DataAlocacao:DateTime
-      Devolucoes:Devolucao seq
    }
+
 
 module Alocacoes=
    

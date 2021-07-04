@@ -15,10 +15,6 @@ open Entities
 open System
 open System.Data.SqlClient
 
-
-
-
-
 [<CLIMutable>]
 type FerramentaInsert =
                   {
@@ -47,14 +43,11 @@ type FuncionarioInsert =
 type DevolucaoStore = {FerramentaId:int;Data:DateTime;Observacoe:string }
 
 [<CLIMutable>]
-type AlocacaoStore = 
+type AlocacaoInsert = 
    {
-      
-      Id:int;
-      FerramentasId:string seq;
+      Ferramentas:Ferramenta [];
       Responsavel:Funcionario;ContratoLocacao:string;
       DataAlocacao:DateTime
-      DevolucoesId:int seq
    }
 
 open System.Linq.Expressions
@@ -96,9 +89,9 @@ type IFerramentaRepository =
 
 type IAlmocharifadoRepository =
    abstract member GetAllFuncionarios:unit->Funcionario []
-   abstract member SalvarFuncionario:Funcionario->unit
-   abstract member GetAllAlocacoes:unit->Alocacao []
-   abstract member SalvarAlocacao:Alocacao->unit
+   abstract member SalvarFuncionario:FuncionarioInsert->unit
+   //abstract member GetAllAlocacoes:unit->Alocacao []
+   //abstract member SalvarAlocacao:Alocacao->unit
 
 
 open Microsoft.FSharp.Quotations
@@ -124,6 +117,9 @@ module RepositoryHelper=
 open System.Data
 open System
 open System.Data.Common
+open System.Data
+open System.Data
+open System
 
 module internal Repository=
    open RepositoryHelper
@@ -245,12 +241,14 @@ module internal Repository=
             |> CreateSimpleCommand conection
             |> ExecutarComando conection
             |> ignore
+   
+
    module AlmocharifadoRepository=
       let GetAllFuncionarioDML = "Select * from Funcionarios"
       let InsertFuncionarioDML = "insert into Funcionarios(CPF,Nome,Cargo,Email,Foto) \
       	values(@CPF,@Nome, @Cargo, @Email, @Foto)"
 
-      
+
       let tableToFuncionarios (table:DataTable) : Funcionario[] =
          let str = string
          [|for row in table.Rows do 
@@ -272,8 +270,75 @@ module internal Repository=
          |> ExecutarComando conection
          |> ignore
 
+      let InsertAlocacaoDML = "insert into Alocacoes(Responsavel,DataAlocacao) \
+      	                      values(@CPF,@DataAlocacao)"
+
+      let InsertAlocaccacoFerramentaDML = "insert into Alocacoes_Ferramentas(AlocacaoId, FerramentaId) \
+                                           values('@AlocacaoId','@Patrimonio')"
+
+      let GetAllAlocacoesDML = "Select * from Alocacoes"
+
+      let  getAllFerramentasAlocadasDML = "select * from Alocacoes_Ferramentas"
+      
+      let InsertAlocacao conection (alocacaco:AlocacaoInsert) = 
+      
+         let alocaccaoId = 
+            GetCommand InsertAlocacaoDML [
+                     <@alocacaco.Responsavel.CPF@>;
+                     <@alocacaco.DataAlocacao@> ] 
+            |> ExecutarComando conection 
+            |> Convert.ToInt32
+
+         for ferramenta in alocacaco.Ferramentas do
+            GetCommand InsertAlocaccacoFerramentaDML [ <@ alocaccaoId @> ; <@ ferramenta.Patrimonio  @> ]
+            |> ExecutarComando conection |> ignore 
+
+      let tableRowToAlocacao (row:DataRow) ferramentas responsavel : Alocacao = 
+               {
+                  Id = Convert.ToInt32 row.["Id"]; 
+                  Responsavel = responsavel;
+                  DataAlocacao = Convert.ToDateTime row.["DataAlocacao"];
+                  FerramentasAlocadas = ferramentas;
+                  ContratoLocacao = string row.["ContratoLocacao"]
+               }
+
+      /// retorna as ferramentas alocadas e o id da respectiva alocação
+      let ``Tabela para FerramentasAlocadas e IdAloaccoes`` ferramentas (table:DataTable) : (FerramentaAlocada * int) []=
+            [| for row in table.Rows 
+                  do yield { Ferramenta = ferramentas 
+                                          |> Array.find (fun (x:Ferramenta) -> x.Patrimonio = Convert.ToInt32 row.["FerramentaId"]);
+                                DataDevolucao = row.["DataDevolucao"] |> Option.ofObj |> Option.map Convert.ToDateTime;
+                                Observacoes = row.["Observacoes"] |> string
+                              } , Convert.ToInt32 row.["AloccacaoId"]
+            |]
+
+      let GetAllAlocacoes conection ferramentas responsaveis :Alocacao [] =
+         let Alocacoestable = GetCommand GetAllAlocacoesDML []
+                                 |> GetTable conection
+
+         let FerramentasAlocadas =
+            GetCommand getAllFerramentasAlocadasDML []
+            |> GetTable conection
+            |> ``Tabela para FerramentasAlocadas e IdAloaccoes`` ferramentas
+
+
+         [|for AlocacaoRow in Alocacoestable.Rows do
+            let ferramentas = 
+               FerramentasAlocadas
+               |> Array.filter (fun fa -> snd fa = Convert.ToInt32 AlocacaoRow.["Id"])
+               
+           
+            let responsavel = 
+               responsaveis 
+               |> Array.filter (fun (funcionario:Funcionario) -> funcionario.CPF = string AlocacaoRow.["ResponsavelCPF"] )
+               |> Array.exactlyOne 
+
+            yield tableRowToAlocacao AlocacaoRow (Array.map fst ferramentas) responsavel |]
+        
+
 open Repository
 open FerramentaRepository
+open AlmocharifadoRepository
 type  AlmocharifadoRepository(conStr) =
    let conection = new SqlConnection(conStr)
    
@@ -284,6 +349,11 @@ type  AlmocharifadoRepository(conStr) =
               RegistrarManutencao conection ferramenta.Patrimonio registro
       member thi.RegistrarBaixaDeFerramenta ferramenta = ()
       //member this.RegistrarFimManutencao = 
+
+   interface IAlmocharifadoRepository with
+      member this.GetAllFuncionarios () = GetAllFuncioarios conection
+      member this.SalvarFuncionario funcionario = InsertFuncionario conection funcionario
+
 
    interface IDisposable with member this.Dispose () = conection.Dispose ()
 module AssemblyInfo=
