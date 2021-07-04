@@ -7,20 +7,10 @@ open Xunit.Abstractions
 open AutoMapper
 open Entities
 open FsCheck
-
-
 open FsCheck.Xunit
 open System.Data.SqlClient
-open Xunit.Sdk
-open System.Reflection
 open System.IO
-open System.Data.SqlClient
-open System.Data.SqlClient
-open AutoFixture.Xunit2
-open AutoFixture.Xunit2
 open Swensen.Unquote
-open System.Data.SqlClient
-open System.Diagnostics
 
 open Bogus.Extensions.Brazil
 
@@ -28,6 +18,7 @@ type TestsProfile() as this =
    inherit Profile()
    do ignore <| this.CreateMap<Ferramenta,FerramentaInsert>() 
    do ignore <| this.CreateMap<FuncionarioInsert,Funcionario>() 
+   do ignore <| this.CreateMap<Funcionario,FuncionarioInsert>() 
 
 
 type InteGrationTestDatabase ()=
@@ -90,19 +81,15 @@ module helpers=
 
 
 open Repository
-open System.Runtime.Intrinsics.Arm
-open System
 open AutoFixture
 open Bogus
-open Caleo
-open AutoBogus
 open AutoBogus
 
 type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
    let dbfixture = new InteGrationTestDatabase()
    let sqlcon = dbfixture.DataBaseConection
 
-   let mapper = MapperConfiguration(fun cfg -> cfg.AddProfile<RepositoryProfile>()).CreateMapper()
+   let mapper = MapperConfiguration(fun cfg -> cfg.AddProfile<TestsProfile>()).CreateMapper()
 
    [<Fact>]
    let ``Teste  de configura��o RepositorryProfile`` ()=
@@ -285,7 +272,24 @@ type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
       printfn "mapeado %A" funcionario
       printfn "lista: %A" funcionarios
       funcionarios |> Array.contains funcionario
-         
+   
+   [<Property>]
+   let ``let alocacoes sao persistidas e recuperadas corretamente`` () =
+      let alocacao = AutoFaker<AlocacaoInsert>().Generate()
+      
+      let alocacao = {alocacao with Responsavel={alocacao.Responsavel with CPF=Faker().Person.Cpf(false)}}
+
+      try
+         let funcionarioInsert = mapper.Map<FuncionarioInsert>(alocacao.Responsavel)
+         let ferramentasInsert = mapper.Map<FerramentaInsert[]>(alocacao.Ferramentas)
+         AlmocharifadoRepository.InsertFuncionario sqlcon funcionarioInsert
+         for ferramenta in ferramentasInsert do FerramentaRepository.InserirFErramenta sqlcon ferramenta
+         AlmocharifadoRepository.InsertAlocacao sqlcon alocacao
+      with
+      | :? SqlException as ex when 
+         ex.Message.Contains("UNIQUE KEY constraint") || ex.Message.Contains("duplicate key") -> ()
+      | _ -> reraise()
+
    interface IDisposable with 
       member this.Dispose () = (dbfixture :> IDisposable).Dispose()
                   //let ferramentastore = mapper.Map<FerramentaStore>(ferramenta)

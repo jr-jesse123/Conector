@@ -270,11 +270,12 @@ module internal Repository=
          |> ExecutarComando conection
          |> ignore
 
-      let InsertAlocacaoDML = "insert into Alocacoes(Responsavel,DataAlocacao) \
-      	                      values(@CPF,@DataAlocacao)"
+      let InsertAlocacaoDML = "insert into Alocacoes(ResponsavelCPF,DataAlocacao,ContratoLocacao) \
+                               OUTPUT inserted.AlocacaoId \
+      	                      values(@CPF,@DataAlocacao,@ContratoLocacao)"
 
       let InsertAlocaccacoFerramentaDML = "insert into Alocacoes_Ferramentas(AlocacaoId, FerramentaId) \
-                                           values('@AlocacaoId','@Patrimonio')"
+                                           values(@AlocacaoId,@Patrimonio)"
 
       let GetAllAlocacoesDML = "Select * from Alocacoes"
 
@@ -282,15 +283,17 @@ module internal Repository=
       
       let InsertAlocacao conection (alocacaco:AlocacaoInsert) = 
       
-         let alocaccaoId = 
+         let AlocacaoId = 
             GetCommand InsertAlocacaoDML [
                      <@alocacaco.Responsavel.CPF@>;
-                     <@alocacaco.DataAlocacao@> ] 
+                     <@alocacaco.DataAlocacao@> ;
+                     <@alocacaco.ContratoLocacao@>] 
             |> ExecutarComando conection 
             |> Convert.ToInt32
 
+         printfn "id criado: %i" AlocacaoId
          for ferramenta in alocacaco.Ferramentas do
-            GetCommand InsertAlocaccacoFerramentaDML [ <@ alocaccaoId @> ; <@ ferramenta.Patrimonio  @> ]
+            GetCommand InsertAlocaccacoFerramentaDML [ <@ AlocacaoId @> ; <@ ferramenta.Patrimonio  @> ]
             |> ExecutarComando conection |> ignore 
 
       let tableRowToAlocacao (row:DataRow) ferramentas responsavel : Alocacao = 
@@ -303,7 +306,7 @@ module internal Repository=
                }
 
       /// retorna as ferramentas alocadas e o id da respectiva alocação
-      let ``Tabela para FerramentasAlocadas e IdAloaccoes`` ferramentas (table:DataTable) : (FerramentaAlocada * int) []=
+      let ``Tabela para FerramentasAlocadas e IdAloaccoes`` ferramentas (table:DataTable) : (FerramentaAlocadaInfo * int) []=
             [| for row in table.Rows 
                   do yield { Ferramenta = ferramentas 
                                           |> Array.find (fun (x:Ferramenta) -> x.Patrimonio = Convert.ToInt32 row.["FerramentaId"]);

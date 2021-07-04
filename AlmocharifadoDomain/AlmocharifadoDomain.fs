@@ -40,14 +40,15 @@ type Funcionario = {Nome:string;CPF:string;Cargo:string;Email:string;Foto:string
 type Devolucao = {Ferramenta:Ferramenta;Data:DateTime;Observacoe:string }
 
 [<CLIMutable>]
-type FerramentaAlocada =  {Ferramenta:Ferramenta;DataDevolucao:DateTime option;Observacoes:string}
+type FerramentaAlocadaInfo =  {Ferramenta:Ferramenta;DataDevolucao:DateTime option;Observacoes:string}
+                               with member this.Devolvida = Option.isSome this.DataDevolucao
    
 
 [<CLIMutable>]
 type Alocacao = 
    {
       Id:int;
-      FerramentasAlocadas:FerramentaAlocada [];
+      FerramentasAlocadas:FerramentaAlocadaInfo [];
       Responsavel:Funcionario;ContratoLocacao:string;
       DataAlocacao:DateTime
    }
@@ -56,11 +57,17 @@ type Alocacao =
 module Alocacoes=
    
    type FerramentasFetcher = unit->Ferramenta seq
-   type AlocacoesFetcher = unit->Alocacao seq
+   type FaInfoFetcher = unit->FerramentaAlocadaInfo seq
 
-   let FerramentaAlocada (listaAlocacoesFetcheer:AlocacoesFetcher) (ferramenta:Ferramenta) =
-      listaAlocacoesFetcheer ()
-      |> Seq.exists(fun aloc -> Seq.contains ferramenta aloc.Ferramentas; )
+   //todo: implementar 
+   let FerramentaAlocada (FaInfoFetcheer:FaInfoFetcher) (ferramenta:Ferramenta) =
+      FaInfoFetcheer ()
+      |> Seq.filter(fun fa -> fa.Ferramenta = ferramenta && fa.Devolvida)
+      |> Seq.length
+      |> function
+      | 0 -> false
+      | 1 -> true
+      | _ -> failwith "Ferramenta parece estar aloccada mais de uma vez"
 
    let GetProximoPatrimonio (ferramentasFetcher:FerramentasFetcher) =
       let ferramentas = ferramentasFetcher () 
@@ -75,23 +82,27 @@ module Ferramentas=
 //TODO: TRAZER FILTROS PARA CA
 //   let FiltrarPorTextoLivre ferramentas =
       
-   //TODO: ENVIAR MOTIVO PELO QUAL A FERRAMENTA ESTÁ BAIXADA
+   
    let FerramentaDisponivel  (alocacoes:Alocacao seq)  ferramenta =
+      let alocacaoContemFeramenta aloc ferramenta =
+         aloc.FerramentasAlocadas 
+         |> Array.map (fun fa -> fa.Ferramenta)
+         |> Array.contains ferramenta
+
+      let GetEmprestimoInfo aloc ferramenta = 
+         Array.Find(aloc.FerramentasAlocadas,(fun fa -> fa.Ferramenta = ferramenta))
+         
+
       if ferramenta.Baixada = true then
         false
       else
          alocacoes 
          |> Seq.sortByDescending (fun aloc -> aloc.Id)
-         |> Seq.tryFind (fun aloc -> Seq.contains ferramenta aloc.Ferramentas)
-         |> function  //TODO: EXTRAIR ESTA AVALIAÇÃO PARA ACTIVE PATTERN MATCHING
-         |Some aloc when isNull aloc.Devolucoes -> false
-         |Some aloc when isNull aloc.Devolucoes -> false //TODO: PENSAR EM COMO RESOLVER ESTE NULL
-         |Some aloc when aloc.Devolucoes 
-            |> Seq.exists  (fun dev -> dev.Ferramenta = ferramenta) -> true
-         |Some aloc when aloc.Devolucoes 
-            |> Seq.exists  (fun dev -> dev.Ferramenta = ferramenta) |> not -> false
+         |> Seq.tryFind (fun aloc -> alocacaoContemFeramenta aloc ferramenta )
+         |> function  
+         |Some aloc -> Option.isSome (GetEmprestimoInfo aloc ferramenta).DataDevolucao
          |None -> true
-         | _ -> failwith "situação não prevista"
+         //| _ -> failwith "situação não prevista"
          
 
       //alocacoes
@@ -108,7 +119,7 @@ module Ferramentas=
             match FerramentaDisponivel alocacoes ferramenta with 
             |false -> 
                alocacoes
-               |> Seq.filter (fun aloc -> Seq.contains ferramenta aloc.Ferramentas) 
+               |> Seq.filter (fun aloc -> Seq.contains ferramenta <| Array.map (fun fa -> fa.Ferramenta) aloc.FerramentasAlocadas) 
                |> Seq.exactlyOne
                |> Some
             |true -> None

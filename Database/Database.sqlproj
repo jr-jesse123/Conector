@@ -65,7 +65,6 @@
     <Build Include="dbo\Tables\Funcionarios.sql" />
     <Build Include="dbo\Tables\Aloacoes.sql" />
     <Build Include="dbo\Tables\Alocacoes_Ferramentas.sql" />
-    <Build Include="dbo\Tables\Alocacao_Devolucoes.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
