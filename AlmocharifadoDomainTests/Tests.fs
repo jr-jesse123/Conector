@@ -85,6 +85,7 @@ open Repository
 open AutoFixture
 open Bogus
 open AutoBogus
+open AutoFixture.Xunit2
 
 type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
    let dbfixture = new InteGrationTestDatabase()
@@ -358,7 +359,57 @@ type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
           | :? SqlException as ex when 
              ex.Message.Contains("UNIQUE KEY constraint") || ex.Message.Contains("duplicate key") -> true
           | _ -> reraise()
-       
+   
+   [<Theory>]
+   [<InlineAutoData>]
+   let ``Ferramenta pode ser alocada, devolvida e alocada novamente`` observacoes =
+      //observacoes |> isNull |> not ==> lazy
+      printfn "%A" observacoes
+      let alocacao = AutoFaker<AlocacaoInsert>().Generate()
+           
+      let ferramentasCorrigidas = alocacao.Ferramentas |> Array.map (fun f -> {f with Baixada=false;EmManutencao=false})
+      let alocacao2 = {alocacao 
+                           with Responsavel={alocacao.Responsavel with CPF=Faker().Person.Cpf(false)};
+                                 Ferramentas=ferramentasCorrigidas
+                                 }
+      
+      let funcionarioInsert = mapper.Map<FuncionarioInsert>(alocacao2.Responsavel)
+      let ferramentasInsert = mapper.Map<FerramentaInsert[]>(alocacao2.Ferramentas)
+      AlmocharifadoRepository.InsertFuncionario sqlcon funcionarioInsert
+      for ferramenta in ferramentasInsert do FerramentaRepository.InserirFErramenta sqlcon ferramenta
+      AlmocharifadoRepository.InsertAlocacao sqlcon alocacao2
+
+      let ferramentas = FerramentaRepository.GetAllFerramentas sqlcon
+      let funcionarios = AlmocharifadoRepository.GetAllFuncioarios sqlcon 
+      let alocadevolver = Array.last <| AlmocharifadoRepository.GetAllAlocacoes sqlcon  ferramentas funcionarios 
+           
+      AlmocharifadoRepository.RegistrarDevolucaoDeDevolverFerramenta sqlcon
+         alocadevolver alocadevolver.FerramentasAlocadas.[0].Ferramenta 
+         System.DateTime.Now observacoes
+
+      let ferramentas = FerramentaRepository.GetAllFerramentas sqlcon
+      let funcionarios = AlmocharifadoRepository.GetAllFuncioarios sqlcon 
+           
+      let Alocacoes = AlmocharifadoRepository.GetAllAlocacoes sqlcon  ferramentas funcionarios 
+
+      let alocacaoDevolvida = Alocacoes |> Array.find (fun aloc -> aloc.Id = alocadevolver.Id)
+
+      test<@ alocacaoDevolvida.FerramentasAlocadas.[0].Devolvida 
+         && not alocacaoDevolvida.FerramentasAlocadas.[1].Devolvida
+         && alocacaoDevolvida.FerramentasAlocadas.[0].Observacoes = observacoes @>
+
+
+      let novaalocacao :AlocacaoInsert = { Ferramentas=[|alocacao2.Ferramentas.[0]|]; 
+                                             Responsavel=alocacaoDevolvida.Responsavel ; DataAlocacao=DateTime.Now;
+                                             ContratoLocacao=alocacaoDevolvida.ContratoLocacao}
+      
+      AlmocharifadoRepository.InsertAlocacao sqlcon novaalocacao
+
+      //with
+      //   | :? SqlException as ex when 
+      //      ex.Message.Contains("UNIQUE KEY constraint") || ex.Message.Contains("duplicate key") -> true
+      //   | _ -> reraise()
+    
 
    interface IDisposable with 
       member this.Dispose () = (dbfixture :> IDisposable).Dispose()

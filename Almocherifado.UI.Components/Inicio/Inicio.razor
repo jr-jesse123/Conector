@@ -87,6 +87,15 @@
                             <tr>
                                 <HistoricoFerramentaTr Alocacao="alocacao" Ferramenta="ferramenta"></HistoricoFerramentaTr>
                             </tr>
+
+
+                            
+                                var ferramentaAlocada = alocacao.FerramentasAlocadas.First(d => d.Ferramenta.Patrimonio == ferramenta.Patrimonio);
+                                if (ferramentaAlocada.Devolvida)
+                                {
+                                    @ferramentaAlocada.Observacoes;
+                                }
+                            
                         }
                     }
 

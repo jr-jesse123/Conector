@@ -31,9 +31,13 @@
 
 
 <td>
-    @*@if (Alocacao.Devolucoes?.FirstOrDefault(d => d.Ferramenta == Ferramenta) is not null)
-    {
-        @Alocacao.Devolucoes.FirstOrDefault(d => d.Ferramenta == Ferramenta).Data.ToShortDateString();
-    }*@
-
+    @{ 
+        var ferramentaalocadainfo = Alocacao.FerramentasAlocadas.FirstOrDefault(d => d.Ferramenta.Patrimonio == Ferramenta.Patrimonio);
+            if (ferramentaalocadainfo.Devolvida)
+            {
+                @ferramentaalocadainfo.DataDevolucao.Value.ToShortDateString();
+            }
+    }
+        
+    
 </td>

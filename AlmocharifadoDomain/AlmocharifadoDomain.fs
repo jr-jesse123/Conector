@@ -12,6 +12,7 @@ Disponível
 Baixada
 *)
 
+   
 
 //type Fotos = private Fotos of string []
 
@@ -39,8 +40,12 @@ type Funcionario = {Nome:string;CPF:string;Cargo:string;Email:string;Foto:string
 //[<CLIMutable>]
 //type Devolucao = {Ferramenta:Ferramenta;Data:DateTime;Observacoe:string }
 
+//holds an datetype record with custom comparison
+
 [<CLIMutable>]
-type FerramentaAlocadaInfo =  {Ferramenta:Ferramenta;DataDevolucao:DateTime option;Observacoes:string}
+type FerramentaAlocadaInfo =  {Ferramenta:Ferramenta;
+                                 DataDevolucao:DateTime option; //TODO: ENVOVLER ESSE CARA NUM RECORDE COM CUSTOM CUSTOMEQUALITY E NOCCOMPARISSON CCOMO NO CURSO DE TYPE DRIVEN DEVELOPEMENTE PARA SIMPLIFICAR TESTES E COMPARAÇÕES
+                                 Observacoes:string}
                                with member this.Devolvida = Option.isSome this.DataDevolucao
    
 
@@ -121,7 +126,11 @@ module Ferramentas=
             match FerramentaDisponivel alocacoes ferramenta with 
             |false -> 
                alocacoes
-               |> Seq.filter (fun aloc -> Seq.contains ferramenta <| Array.map (fun fa -> fa.Ferramenta) aloc.FerramentasAlocadas) 
+               |> Seq.filter (fun aloc -> aloc.FerramentasAlocadas 
+                                          |> Array.filter( fun fa -> not fa.Devolvida)
+                                          |> Array.map (fun fa -> fa.Ferramenta) 
+                                          |> Seq.contains ferramenta
+                              )  
                |> Seq.exactlyOne
                |> Some
             |true -> None

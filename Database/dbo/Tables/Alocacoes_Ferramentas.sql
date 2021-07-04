@@ -1,9 +1,9 @@
 ﻿CREATE TABLE [dbo].[Alocacoes_Ferramentas]
 (
-	[FerramentaId] INT NOT NULL unique constraint FK_Alocacoes_Ferramentas references Ferramentas(PatrimonioId),
+	[FerramentaId] INT NOT NULL  constraint FK_Alocacoes_Ferramentas references Ferramentas(PatrimonioId),
 	AlocacaoId  int not null constraint FK_Aloccacoes references Alocacoes(AlocacaoId),
 	DataDevolucao datetime2 null ,
 	Observacoes varchar(max) null 
-	primary key (FerramentaId,AlocacaoId)
+	CONSTRAINT [PK_aloc_fer] primary key (FerramentaId,AlocacaoId)
 
 )

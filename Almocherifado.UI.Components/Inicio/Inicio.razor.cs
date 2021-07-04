@@ -46,24 +46,7 @@ namespace Almocherifado.UI.Components.Inicio
 
 
         }
-        void OnPesquisaChage(object args)
-        {
-            //var text = ((string)args.Value);
-
-            //if (string.IsNullOrWhiteSpace(text))
-            //    return;
-
-            //var ferramentas =   Ferramentas.Where(f => f.Nome.Contem(text) || f.Marca.Contem(text) || f.Modelo.Contem(text)).ToArray();
-            //var alocacoes = Alocacoes.Where(a => a.Responsavel.Nome.Contem(text) ||
-            //                                a.ContratoLocacao.Contem(text) ||
-            //                                a.Ferramentas.Any(f => ferramentas.Contains(f)))
-            //                          .ToArray();
-
-            //ferramentasAtuais = ferramentas;
-            //AlocacoesAtuais = alocacoes;
-        }
-
-
+        
         protected override void OnInitialized()
         {
             Ferramentas = FerramentaRepository.GetAllFerramentas().ToArray();

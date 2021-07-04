@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Ferramentas]
 (
 	[PatrimonioId] INT NOT NULL PRIMARY KEY ,
-	Nome varchar(100) not null unique,
+	Nome varchar(100) not null constraint UQ_Ferramenta_Nome unique,
 	Marca varchar(50) not null,
 	Modelo varchar(50) not null,
 	Descricao  varchar(max) not null default '',

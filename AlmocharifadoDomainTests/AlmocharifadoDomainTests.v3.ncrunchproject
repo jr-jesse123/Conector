@@ -3,10 +3,5 @@
     <AdditionalFilesToIncludeForProject>
       <Value>DbScripts\FerramentasTable.sql</Value>
     </AdditionalFilesToIncludeForProject>
-    <IgnoredTests>
-      <NamedTestSelector>
-        <TestName>Tests+InfraEstruturaTests.Teste  de configura��o RepositorryProfile</TestName>
-      </NamedTestSelector>
-    </IgnoredTests>
   </Settings>
 </ProjectConfiguration>

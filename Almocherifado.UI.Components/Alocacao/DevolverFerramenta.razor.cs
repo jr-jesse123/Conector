@@ -14,6 +14,7 @@ namespace Almocherifado.UI.Components.Alocacao
 {
     public partial class DevolverFerramenta : FormBase
     {
+        FerramentaDisplay ferramentaDisplay;
         [Inject] IAlmocharifadoRepository repo { get; set; }
         [Inject] IFerramentaRepository ferramentaRepo { get; set; }
         DevolucaoInputModel devolucaoInput { get; set; } = new();
@@ -32,8 +33,6 @@ namespace Almocherifado.UI.Components.Alocacao
 
             if (form.EditContext.Validate())
             {
-                
-
                 foreach (var devolucaoInput in devolucaoInput.FerramentasEComentarios)
                 {
                     var ferramenta = devolucaoInput.Key;
@@ -46,13 +45,13 @@ namespace Almocherifado.UI.Components.Alocacao
 
                     ferramentaRepo.RegistrarDevolucaoDeDevolverFerramenta(alocacao,ferramenta,DateTime.Now,devolucaoInput.Value);
                 }
-                
 
 
 
-                
+
                 devolucaoInput = new();
                 FerramentasEComentarios = new();
+                ferramentaDisplay.RefreshMe();
             } 
 
         }
