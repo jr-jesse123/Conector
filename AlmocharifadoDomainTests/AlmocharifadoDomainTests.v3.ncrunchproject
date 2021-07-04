@@ -3,25 +3,5 @@
     <AdditionalFilesToIncludeForProject>
       <Value>DbScripts\FerramentasTable.sql</Value>
     </AdditionalFilesToIncludeForProject>
-    <IgnoredTests>
-      <NamedTestSelector>
-        <TestName>Tests+InfraEstruturaTests.Teste  de configura��o RepositorryProfile</TestName>
-      </NamedTestSelector>
-      <NamedTestSelector>
-        <TestName>Tests+InfraEstruturaTests.Registro de saida de manuten��o executado e recuperado coreretamente</TestName>
-      </NamedTestSelector>
-      <NamedTestSelector>
-        <TestName>Tests+InfraEstruturaTests.Registro de ferramenta em manuten��o executado e recuperado coreretamente</TestName>
-      </NamedTestSelector>
-      <NamedTestSelector>
-        <TestName>Tests+InfraEstruturaTests.Funcionario � armazenado e recuperado corretamente</TestName>
-      </NamedTestSelector>
-      <NamedTestSelector>
-        <TestName>Tests+InfraEstruturaTests.Ferramenta � corretamente recuperada do banco de dados</TestName>
-      </NamedTestSelector>
-      <NamedTestSelector>
-        <TestName>Tests+InfraEstruturaTests.Ferramenta � corretamente  salva no banco de dados</TestName>
-      </NamedTestSelector>
-    </IgnoredTests>
   </Settings>
 </ProjectConfiguration>

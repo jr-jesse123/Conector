@@ -90,8 +90,9 @@ type IFerramentaRepository =
 type IAlmocharifadoRepository =
    abstract member GetAllFuncionarios:unit->Funcionario []
    abstract member SalvarFuncionario:FuncionarioInsert->unit
-   //abstract member GetAllAlocacoes:unit->Alocacao []
-   //abstract member SalvarAlocacao:Alocacao->unit
+   abstract member GetAllAlocacoes:unit->Alocacao []
+   abstract member SalvarAlocacao:AlocacaoInsert->unit
+   
 
 
 open Microsoft.FSharp.Quotations
@@ -374,6 +375,9 @@ type  AlmocharifadoRepository(conStr) =
    interface IAlmocharifadoRepository with
       member this.GetAllFuncionarios () = GetAllFuncioarios conection
       member this.SalvarFuncionario funcionario = InsertFuncionario conection funcionario
+      member this.GetAllAlocacoes () = 
+         GetAllAlocacoes conection (GetAllFerramentas conection) (GetAllFuncioarios conection) 
+      member this.SalvarAlocacao alocacao = InsertAlocacao conection alocacao
 
 
    interface IDisposable with member this.Dispose () = conection.Dispose ()

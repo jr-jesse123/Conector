@@ -276,13 +276,8 @@ type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
    
    [<Property>]
    let ``let alocacoes sao persistidas e recuperadas corretamente`` () =
-      let alocacao = AutoFaker<AlocacaoInsert>()
-                        .Generate()
+      let alocacao = AutoFaker<AlocacaoInsert>().Generate()
       
-
-                        
-      printfn "%A" alocacao.Ferramentas.[0].Baixada
-      printfn "%A" alocacao.Ferramentas.[0].EmManutencao
       let ferramentasCorrigidas = alocacao.Ferramentas |> Array.map (fun f -> {f with Baixada=false;EmManutencao=false})
       let alocacao2 = {alocacao 
                            with Responsavel={alocacao.Responsavel with CPF=Faker().Person.Cpf(false)};
