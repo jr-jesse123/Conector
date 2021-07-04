@@ -1,4 +1,5 @@
-﻿using AlmocharifadoApplication;
+﻿using Almocharifado.InfraEstrutura;
+using AlmocharifadoApplication;
 using Almocherifado.UI.Components;
 using Almocherifado.UI.Components.Funcionarios;
 using Almocherifado.UI.Components.Models;

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Components.Forms;
 using System.Threading.Tasks;
+using Almocharifado.InfraEstrutura;
 
 namespace Almocherifado.UI.Components.Funcionarios
 {
@@ -34,7 +35,7 @@ namespace Almocherifado.UI.Components.Funcionarios
 
             if (form.EditContext.Validate())
             {
-                var funcionarioDomain = mapper.Map<Funcionario>(FuncionarioInput);
+                var funcionarioDomain = mapper.Map<FuncionarioInsert>(FuncionarioInput);
 
                 FileHelper.SaveFileToRoot(FuncionarioInput.Foto.Stream, funcionarioDomain.Foto);
                  

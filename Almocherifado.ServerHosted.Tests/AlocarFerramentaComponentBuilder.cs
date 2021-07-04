@@ -1,6 +1,4 @@
-﻿using ]7
-    7
-    AlmocharifadoApplication;
+﻿using Almocharifado.InfraEstrutura;
 using Almocherifado.UI.Components.Alocacao;
 using Almocherifado.UI.Components.Models;
 using AutoMapper;

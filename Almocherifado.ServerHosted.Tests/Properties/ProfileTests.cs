@@ -45,7 +45,7 @@ namespace Almocherifado.UI.Tests.Properties
 
             alocDomain.ContratoLocacao.Should().Be(alocModel.ContratoLocacao);
             alocDomain.DataAlocacao.Should().Be(alocModel.Data);
-            alocDomain.Ferramentas.Should().BeEquivalentTo(alocModel.Ferramentas);
+            alocDomain.FerramentasAlocadas.Should().BeEquivalentTo(alocModel.Ferramentas);
             alocDomain.Id.Should().Be(0);
             alocDomain.Responsavel.Should().Be(alocModel.Responsavel);
 
@@ -83,7 +83,7 @@ namespace Almocherifado.UI.Tests.Properties
             domain.Marca.Should().Be(ferramentaModel.Marca);
             domain.Modelo.Should().Be(ferramentaModel.Modelo);
             domain.Nome.Should().Be(ferramentaModel.Nome);
-            domain.Patrimonio.Should().Be(ferramentaModel.Patrimonio.ToString());
+            domain.Patrimonio.Should().Be(ferramentaModel.Patrimonio);
         }
 
 

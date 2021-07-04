@@ -8,14 +8,14 @@ using AutoMapper;
 using FluentValidation;
 using OneOf;
 using System;
+using Almocharifado.InfraEstrutura;
 
 namespace Almocherifado.UI.Tests
 {
     public class CadastrarFerramentaBuilder : IDisposable
     {
         public TestContext ctx { get; set; } = new TestContext();
-        public Mock<IProximoPatrimonioProvider> proximoPatrimonioStub { get; set; } =
-            new Mock<IProximoPatrimonioProvider>();
+        
         public Mock<IAlmocharifadoRepository> repositoryStub { get; set; } =
             new Mock<IAlmocharifadoRepository>();
         public Mock<IMapper> mapperStub { get; set; } = 
@@ -38,15 +38,9 @@ namespace Almocherifado.UI.Tests
             ctx.JSInterop.Mode = JSRuntimeMode.Loose;   
         }
 
-        public CadastrarFerramentaBuilder ComProximoPatrimonio(int ProximoPatrimonio)
-        {
-            proximoPatrimonioStub.Setup(pp => pp.GetProximoPatrimonio()).Returns(ProximoPatrimonio);
-            return this;
-        }
-        
         public IRenderedComponent<CadastrarFerramentas> Build()
         {
-            ctx.Services.AddSingleton(proximoPatrimonioStub.Object);
+            
             ctx.Services.AddSingleton(repositoryStub.Object);
             ctx.Services.AddSingleton(mapperStub.Object);
 

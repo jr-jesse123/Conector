@@ -1,4 +1,5 @@
-﻿using AlmocharifadoApplication;
+﻿using Almocharifado.InfraEstrutura;
+using AlmocharifadoApplication;
 using Entities;
 using Microsoft.AspNetCore.Components;
 using Microsoft.FSharp.Core;
@@ -65,7 +66,7 @@ namespace Almocherifado.UI.Components.Alocacao
             if (string.IsNullOrWhiteSpace((string)args.Value))
                 return;
 
-            ferramentaAtual = Ferramentas.Where(f => f.Patrimonio == (string)args.Value).SingleOrDefault();
+            ferramentaAtual = Ferramentas.Where(f => f.Patrimonio == (int)args.Value).SingleOrDefault();
             
         }
 

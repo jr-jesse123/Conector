@@ -339,7 +339,7 @@ type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
          let funcionarios = AlmocharifadoRepository.GetAllFuncioarios sqlcon 
          let alocadevolver = Array.last <| AlmocharifadoRepository.GetAllAlocacoes sqlcon  ferramentas funcionarios 
       
-         AlmocharifadoRepository.DevolverFerramenta sqlcon
+         AlmocharifadoRepository.RegistrarDevolucaoDeDevolverFerramenta sqlcon
             alocadevolver alocadevolver.FerramentasAlocadas.[0].Ferramenta 
              System.DateTime.Now observacoes
 

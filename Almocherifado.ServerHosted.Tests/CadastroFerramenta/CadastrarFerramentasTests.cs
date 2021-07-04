@@ -89,7 +89,6 @@ namespace Almocherifado.UI.Tests
 
             using var builder = new CadastrarFerramentaBuilder();
             using var cut =  builder
-                .ComProximoPatrimonio(15)
                 .Build();
 
             CadastrarFerramenta(ferramenta, cut);

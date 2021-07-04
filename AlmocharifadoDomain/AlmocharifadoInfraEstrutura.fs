@@ -64,6 +64,8 @@ module MapperExtensions=
 
 
 open MapperExtensions
+open System
+
 type RepositoryProfile() as this=
    
    inherit Profile() 
@@ -85,7 +87,7 @@ type IFerramentaRepository =
    abstract member GetAllFerramentas:unit->Ferramenta []
    abstract member RegistrarBaixaDeFerramenta:Ferramenta->unit
    abstract member RegistrarManutencaoDeFerramenta:Ferramenta -> RegistroManutencao ->unit
-   
+   abstract member RegistrarDevolucaoDeDevolverFerramenta:Alocacao->Ferramenta->DateTime->string->unit
 
 type IAlmocharifadoRepository =
    abstract member GetAllFuncionarios:unit->Funcionario []
@@ -307,7 +309,8 @@ module internal Repository=
          "update Alocacoes_Ferramentas set DataDevolucao = @DataDevolucao , Observacoes = @Observacoes \
          where FerramentaId = @Patrimonio and AlocacaoId = @Id"
       
-      let DevolverFerramenta conection alocacao (ferramenta:Ferramenta) (DataDevolucao:DateTime) Observacoes =  
+      let RegistrarDevolucaoDeDevolverFerramenta 
+                  conection alocacao (ferramenta:Ferramenta) (DataDevolucao:DateTime) Observacoes =  
          
          GetCommand DevolverFerramentaDML [ <@ alocacao.Id @> ; <@ ferramenta.Patrimonio @> ;
                                              <@ Observacoes @> ; <@ DataDevolucao @>]
@@ -384,7 +387,8 @@ type  AlmocharifadoRepository(conStr) =
       member this.RegistrarManutencaoDeFerramenta ferramenta registro = 
               RegistrarManutencao conection ferramenta.Patrimonio registro
       member thi.RegistrarBaixaDeFerramenta ferramenta = ()
-      //member this.RegistrarFimManutencao = 
+      member this.RegistrarDevolucaoDeDevolverFerramenta alocacao ferramenta data observacoes = 
+                     RegistrarDevolucaoDeDevolverFerramenta conection alocacao ferramenta data observacoes
 
    interface IAlmocharifadoRepository with
       member this.GetAllFuncionarios () = GetAllFuncioarios conection

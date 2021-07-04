@@ -1,4 +1,5 @@
-﻿using Almocherifado.UI.Components.Forms;
+﻿using Almocharifado.InfraEstrutura;
+using Almocherifado.UI.Components.Forms;
 using Almocherifado.UI.Components.Models;
 using Entities;
 using Microsoft.AspNetCore.Components;
@@ -53,7 +54,7 @@ namespace Almocherifado.UI.Components.Alocacao
 
             if (form.EditContext.Validate())
             {
-                var alocacao = mapper.Map<Entities.Alocacao>(alocacaoInput);
+                var alocacao = mapper.Map<AlocacaoInsert>(alocacaoInput);
                 try
                 {
                     repo.SalvarAlocacao(alocacao);

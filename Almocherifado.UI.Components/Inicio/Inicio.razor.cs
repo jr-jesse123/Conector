@@ -1,4 +1,5 @@
-﻿using AlmocharifadoApplication;
+﻿using Almocharifado.InfraEstrutura;
+using AlmocharifadoApplication;
 using Entities;
 using Microsoft.AspNetCore.Components;
 using System.Linq;
@@ -36,8 +37,11 @@ namespace Almocherifado.UI.Components.Inicio
             if (string.IsNullOrWhiteSpace((string)args.Value))
                 return;
 
-            ferramentasAtuais = Ferramentas.Where(f => f.Patrimonio == (string)args.Value).ToArray();
-            AlocacoesAtuais = Alocacoes.Where(a => a.Ferramentas.Any(f => ferramentasAtuais.Contains(f))).ToArray();
+            ferramentasAtuais = Ferramentas.Where(f => f.Patrimonio == (int)args.Value).ToArray();
+            AlocacoesAtuais = Alocacoes
+                    .Where(a => a.FerramentasAlocadas
+                                .Any(f => ferramentasAtuais.Contains(f.Ferramenta)))
+                                .ToArray();
 
 
         }

@@ -1,4 +1,5 @@
-﻿using AlmocharifadoApplication;
+﻿using Almocharifado.InfraEstrutura;
+using AlmocharifadoApplication;
 using Entities;
 using Microsoft.AspNetCore.Components;
 using System;
@@ -16,9 +17,9 @@ namespace Almocherifado.UI.Components.Ferramentas
         void ToogleManutencao(Ferramenta ferramenta,bool valor)
         {
             if (valor)
-                Ferramentasrepo.EnviarFerramentaParaManutencao(ferramenta);
+                Ferramentasrepo.RegistrarManutencaoDeFerramenta(ferramenta, RegistroManutencao.Entrada);
             else
-                Ferramentasrepo.FinalizarManutencao(ferramenta);
+                Ferramentasrepo.RegistrarManutencaoDeFerramenta(ferramenta, RegistroManutencao.Saida);
         }
 
 
@@ -29,7 +30,7 @@ namespace Almocherifado.UI.Components.Ferramentas
         {
             foreach (var item in FerramentasChecadas)
             {
-                Ferramentasrepo.BaixarFerramenta(item);
+                Ferramentasrepo.RegistrarBaixaDeFerramenta(item);
             }
 
             FerramentasChecadas.Clear();

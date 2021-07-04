@@ -2,6 +2,7 @@
 using AlmocharifadoApplication;
 using AutoMapper;
 using Microsoft.AspNetCore.Components.Forms;
+using Almocharifado.InfraEstrutura;
 
 namespace Almocherifado.UI.Components.Forms
 {

@@ -36,8 +36,8 @@ type Ferramenta =
 [<CLIMutable>]
 type Funcionario = {Nome:string;CPF:string;Cargo:string;Email:string;Foto:string}
 
-[<CLIMutable>]
-type Devolucao = {Ferramenta:Ferramenta;Data:DateTime;Observacoe:string }
+//[<CLIMutable>]
+//type Devolucao = {Ferramenta:Ferramenta;Data:DateTime;Observacoe:string }
 
 [<CLIMutable>]
 type FerramentaAlocadaInfo =  {Ferramenta:Ferramenta;DataDevolucao:DateTime option;Observacoes:string}
