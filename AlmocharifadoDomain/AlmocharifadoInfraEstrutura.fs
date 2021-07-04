@@ -248,6 +248,8 @@ module internal Repository=
       let InsertFuncionarioDML = "insert into Funcionarios(CPF,Nome,Cargo,Email,Foto) \
       	values(@CPF,@Nome, @Cargo, @Email, @Foto)"
 
+      
+         
 
       let tableToFuncionarios (table:DataTable) : Funcionario[] =
          let str = string
@@ -276,11 +278,34 @@ module internal Repository=
 
       let InsertAlocaccacoFerramentaDML = "insert into Alocacoes_Ferramentas(AlocacaoId, FerramentaId) \
                                            values(@AlocacaoId,@Patrimonio)"
+   
+      
 
       let GetAllAlocacoesDML = "Select * from Alocacoes"
 
       let  getAllFerramentasAlocadasDML = "select * from Alocacoes_Ferramentas"
       
+      let ``Tabela para FerramentasAlocadas e IdAloaccoes`` ferramentas (table:DataTable) : (FerramentaAlocadaInfo * int) []=
+         let  datafromnullabedb (dbvalue:obj) = 
+            if  dbvalue = (box DBNull.Value ) then 
+               None 
+            else 
+               Some <| Convert.ToDateTime dbvalue;
+
+         [| for row in table.Rows 
+               do yield { Ferramenta = ferramentas 
+                                       |> Array.find (fun (x:Ferramenta) -> x.Patrimonio = Convert.ToInt32 row.["FerramentaId"]);
+                             DataDevolucao = datafromnullabedb row.["DataDevolucao"];
+                             //row.["DataDevolucao"] |> Option.ofObj |> Option.map Convert.ToDateTime;
+                             Observacoes = row.["Observacoes"] |> string
+                           } , Convert.ToInt32 row.["AlocacaoId"]
+         |]
+
+      let GetAllFerramentasAlocadasInfo conection ferramentas =
+         GetCommand getAllFerramentasAlocadasDML []
+         |> GetTable conection
+         |> ``Tabela para FerramentasAlocadas e IdAloaccoes`` ferramentas
+
       let InsertAlocacao conection (alocacaco:AlocacaoInsert) = 
       
          let AlocacaoId = 
@@ -291,14 +316,14 @@ module internal Repository=
             |> ExecutarComando conection 
             |> Convert.ToInt32
 
-         printfn "id criado: %i" AlocacaoId
+         
          for ferramenta in alocacaco.Ferramentas do
             GetCommand InsertAlocaccacoFerramentaDML [ <@ AlocacaoId @> ; <@ ferramenta.Patrimonio  @> ]
             |> ExecutarComando conection |> ignore 
 
       let tableRowToAlocacao (row:DataRow) ferramentas responsavel : Alocacao = 
                {
-                  Id = Convert.ToInt32 row.["Id"]; 
+                  Id = Convert.ToInt32 row.["AlocacaoId"]; 
                   Responsavel = responsavel;
                   DataAlocacao = Convert.ToDateTime row.["DataAlocacao"];
                   FerramentasAlocadas = ferramentas;
@@ -306,14 +331,7 @@ module internal Repository=
                }
 
       /// retorna as ferramentas alocadas e o id da respectiva alocação
-      let ``Tabela para FerramentasAlocadas e IdAloaccoes`` ferramentas (table:DataTable) : (FerramentaAlocadaInfo * int) []=
-            [| for row in table.Rows 
-                  do yield { Ferramenta = ferramentas 
-                                          |> Array.find (fun (x:Ferramenta) -> x.Patrimonio = Convert.ToInt32 row.["FerramentaId"]);
-                                DataDevolucao = row.["DataDevolucao"] |> Option.ofObj |> Option.map Convert.ToDateTime;
-                                Observacoes = row.["Observacoes"] |> string
-                              } , Convert.ToInt32 row.["AloccacaoId"]
-            |]
+      
 
       let GetAllAlocacoes conection ferramentas responsaveis :Alocacao [] =
          let Alocacoestable = GetCommand GetAllAlocacoesDML []
@@ -328,7 +346,7 @@ module internal Repository=
          [|for AlocacaoRow in Alocacoestable.Rows do
             let ferramentas = 
                FerramentasAlocadas
-               |> Array.filter (fun fa -> snd fa = Convert.ToInt32 AlocacaoRow.["Id"])
+               |> Array.filter (fun fa -> snd fa = Convert.ToInt32 AlocacaoRow.["AlocacaoId"])
                
            
             let responsavel = 

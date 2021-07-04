@@ -19,6 +19,7 @@ type TestsProfile() as this =
    do ignore <| this.CreateMap<Ferramenta,FerramentaInsert>() 
    do ignore <| this.CreateMap<FuncionarioInsert,Funcionario>() 
    do ignore <| this.CreateMap<Funcionario,FuncionarioInsert>() 
+   do ignore <| this.CreateMap<Alocacao,AlocacaoInsert>() 
 
 
 type InteGrationTestDatabase ()=
@@ -275,19 +276,52 @@ type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
    
    [<Property>]
    let ``let alocacoes sao persistidas e recuperadas corretamente`` () =
-      let alocacao = AutoFaker<AlocacaoInsert>().Generate()
+      let alocacao = AutoFaker<AlocacaoInsert>()
+                        .Generate()
       
-      let alocacao = {alocacao with Responsavel={alocacao.Responsavel with CPF=Faker().Person.Cpf(false)}}
 
+                        
+      printfn "%A" alocacao.Ferramentas.[0].Baixada
+      printfn "%A" alocacao.Ferramentas.[0].EmManutencao
+      let ferramentasCorrigidas = alocacao.Ferramentas |> Array.map (fun f -> {f with Baixada=false;EmManutencao=false})
+      let alocacao2 = {alocacao 
+                           with Responsavel={alocacao.Responsavel with CPF=Faker().Person.Cpf(false)};
+                                Ferramentas=ferramentasCorrigidas
+                                }
+      
       try
-         let funcionarioInsert = mapper.Map<FuncionarioInsert>(alocacao.Responsavel)
-         let ferramentasInsert = mapper.Map<FerramentaInsert[]>(alocacao.Ferramentas)
+         let funcionarioInsert = mapper.Map<FuncionarioInsert>(alocacao2.Responsavel)
+         let ferramentasInsert = mapper.Map<FerramentaInsert[]>(alocacao2.Ferramentas)
          AlmocharifadoRepository.InsertFuncionario sqlcon funcionarioInsert
          for ferramenta in ferramentasInsert do FerramentaRepository.InserirFErramenta sqlcon ferramenta
-         AlmocharifadoRepository.InsertAlocacao sqlcon alocacao
+         AlmocharifadoRepository.InsertAlocacao sqlcon alocacao2
+
+         let ferramentas = FerramentaRepository.GetAllFerramentas sqlcon
+         
+         //let ferramentasAloccadas = AlmocharifadoRepository.GetAllFerramentasAlocadasInfo sqlcon ferramentas 
+         
+         let funcionarios = AlmocharifadoRepository.GetAllFuncioarios sqlcon 
+         let alocacoesPersistidas = AlmocharifadoRepository.GetAllAlocacoes sqlcon  ferramentas funcionarios
+
+         let last = alocacoesPersistidas |>  Array.last 
+         test <@ last.Responsavel = alocacao2.Responsavel @>
+         test <@ last.ContratoLocacao = alocacao2.ContratoLocacao @>
+         test <@ last.DataAlocacao.ToString()  = alocacao2.DataAlocacao.ToString()@>
+         
+         let aproxDatetime (datetime:DateTime) = 
+            DateTime(datetime.Year,datetime.Month,datetime.Day)
+         
+         test <@ last.FerramentasAlocadas 
+                  |> Array.map (fun fa -> {fa.Ferramenta with DataCompra = aproxDatetime fa.Ferramenta.DataCompra  }) 
+                  |> Array.forall (fun f -> alocacao2.Ferramentas
+                                          |> Array.map (fun f -> {f with DataCompra= aproxDatetime f.DataCompra})
+                                          |> Array.contains f) @>
+         //test <@ last.FerramentasAlocadas.[2].Ferramenta  = alocacao2.Ferramentas.[2] @>
+
+         
       with
       | :? SqlException as ex when 
-         ex.Message.Contains("UNIQUE KEY constraint") || ex.Message.Contains("duplicate key") -> ()
+         ex.Message.Contains("UNIQUE KEY constraint") || ex.Message.Contains("duplicate key") -> test <@ true @> 
       | _ -> reraise()
 
    interface IDisposable with 
