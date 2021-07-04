@@ -121,6 +121,7 @@ open System.Data.Common
 open System.Data
 open System.Data
 open System
+open System
 
 module internal Repository=
    open RepositoryHelper
@@ -301,6 +302,18 @@ module internal Repository=
                              Observacoes = row.["Observacoes"] |> string
                            } , Convert.ToInt32 row.["AlocacaoId"]
          |]
+      
+      let DevolverFerramentaDML = 
+         "update Alocacoes_Ferramentas set DataDevolucao = @DataDevolucao , Observacoes = @Observacoes \
+         where FerramentaId = @Patrimonio and AlocacaoId = @Id"
+      
+      let DevolverFerramenta conection alocacao (ferramenta:Ferramenta) (DataDevolucao:DateTime) Observacoes =  
+         
+         GetCommand DevolverFerramentaDML [ <@ alocacao.Id @> ; <@ ferramenta.Patrimonio @> ;
+                                             <@ Observacoes @> ; <@ DataDevolucao @>]
+         |> ExecutarComando conection
+         |> ignore
+         
 
       let GetAllFerramentasAlocadasInfo conection ferramentas =
          GetCommand getAllFerramentasAlocadasDML []
@@ -357,6 +370,7 @@ module internal Repository=
 
             yield tableRowToAlocacao AlocacaoRow (Array.map fst ferramentas) responsavel |]
         
+         
 
 open Repository
 open FerramentaRepository
