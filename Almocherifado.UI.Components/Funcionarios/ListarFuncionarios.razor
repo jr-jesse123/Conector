@@ -4,8 +4,8 @@
     <div class="row d-flex justify-content-between my-4 ">
         <div class="col-auto">
 
-            <div class="input-group" ;">
-                <input type="text" class="form-control" aria-label="Dollar amount (with dot and two decimal places)">
+            <div class="input-group">
+                <input type="text" @oninput="OnPesquisaPorNomeFuncionario"  class="form-control" aria-label="Dollar amount (with dot and two decimal places)">
                 <span class="input-group-text">
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0)">
@@ -38,7 +38,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var funcEFer in funcionariosEFerramentas)
+                @foreach (var funcEFer in funcionariosEFerramentasSelecionados)
                 {
                     <FuncionarioTr  Funcionario="funcEFer.Key" Alocacoes="funcionariosEAlocacoes[funcEFer.Key]" Ferramentas="funcEFer.Value"></FuncionarioTr>
                 }

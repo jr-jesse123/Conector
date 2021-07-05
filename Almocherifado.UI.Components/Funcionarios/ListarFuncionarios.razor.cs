@@ -19,7 +19,9 @@ namespace Almocherifado.UI.Components.Funcionarios
         Dictionary<Funcionario, FerramentaAlocadaInfo[]> funcionariosEFerramentas { get; set; }
         //ATENÇÃO: funcionarios e alocações não possui todos os funciona´rios
         Dictionary<Funcionario, Entities.Alocacao[]> funcionariosEAlocacoes { get; set; }
-        Entities.Alocacao[] alocacoes { get; set; }
+        Dictionary<Funcionario, FerramentaAlocadaInfo[]> funcionariosEFerramentasSelecionados { get; set; }
+        //ATENÇÃO: funcionarios e alocações não possui todos os funciona´rios
+        
 
         protected override void OnInitialized()
         {
@@ -45,6 +47,7 @@ namespace Almocherifado.UI.Components.Funcionarios
 
             funcionariosEFerramentas = funcComFerramentasDic;
 
+            funcionariosEFerramentasSelecionados = funcionariosEFerramentas;
 
             var alocacoesPorFuncionario = alocacoes
                 .Select(aloc => (aloc.Responsavel, aloc))
@@ -61,6 +64,20 @@ namespace Almocherifado.UI.Components.Funcionarios
                 if (!funcionariosEAlocacoes.Keys.Contains(funcionario))
                     funcionariosEAlocacoes.Add(funcionario, new Entities.Alocacao[] { });
             }
+
+        }
+
+        void OnPesquisaPorNomeFuncionario(ChangeEventArgs args)
+        {
+            if (string.IsNullOrWhiteSpace((string)args.Value))
+            {
+                funcionariosEFerramentasSelecionados = funcionariosEFerramentas;
+                return;
+            }
+
+            var funcionariosFiltradods = funcionariosEFerramentas.Where(f => f.Key.Nome.ToUpper().Contains(args.Value.ToString().ToUpper()));
+
+            funcionariosEFerramentasSelecionados = new (funcionariosFiltradods);               ;
 
         }
     }

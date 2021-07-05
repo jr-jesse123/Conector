@@ -29,13 +29,13 @@ namespace Almocherifado.UI.Components.Alocacao
         {
             base.OnSubmitAsync();
 
-            devolucaoInput.FerramentasEComentarios = FerramentasEComentarios;
+            devolucaoInput.FerramentasEComentarios =  FerramentasEComentarios;
 
             if (form.EditContext.Validate())
             {
                 foreach (var devolucaoInput in devolucaoInput.FerramentasEComentarios)
                 {
-                    var ferramenta = devolucaoInput.Key;
+                    var ferramenta = devolucaoInput.Ferramenta;
                     var alocacao = Alocacoes.Where(aloc =>
                         aloc.Finalizada == false &&
                         aloc.FerramentasAlocadas
@@ -43,7 +43,7 @@ namespace Almocherifado.UI.Components.Alocacao
                             .Select(fa => fa.Ferramenta).Contains(ferramenta))
                             .Single();
 
-                    ferramentaRepo.RegistrarDevolucaoDeDevolverFerramenta(alocacao,ferramenta,DateTime.Now,devolucaoInput.Value);
+                    ferramentaRepo.RegistrarDevolucaoDeDevolverFerramenta(alocacao,ferramenta,DateTime.Now,devolucaoInput.Comentario);
                 }
 
 
@@ -55,6 +55,6 @@ namespace Almocherifado.UI.Components.Alocacao
             } 
 
         }
-        Dictionary<Ferramenta,string> FerramentasEComentarios { get; set; } = new();
+        List<FerramentaDevolucaoInputModel> FerramentasEComentarios { get; set; } = new();
     }
 }

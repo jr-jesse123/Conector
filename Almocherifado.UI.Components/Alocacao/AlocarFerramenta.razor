@@ -18,7 +18,8 @@
             <MensagemFerramentaDisponível>
 
                 <h4 class="text-success fw-bold">Disponível para alocação</h4>
-                <button class="btn btn-outline-info w-75" @onclick="@(() => FerramentasSelecionadas.Add(@context))">"Adicionar Ferramenta"</button>
+                <button class="btn btn-outline-info w-75" 
+                        @onclick="@(() => FerramentasSelecionadas.Add(@context))">"Adicionar Ferramenta"</button>
             </MensagemFerramentaDisponível>
 
 
@@ -41,12 +42,13 @@
                         <th scope="col">FERRAMENTA</th>
                         <th scope="col">MARCA</th>
                         <th scope="col">MODELO</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in FerramentasSelecionadas)
                     {
-                        <FerramentaAlocacaoTr Ferramenta="item"></FerramentaAlocacaoTr>
+                        <FerramentaAlocacaoTr OnRemove="() => FerramentasSelecionadas.Remove(item)" Ferramenta="item"></FerramentaAlocacaoTr>
                     }
                 </tbody>
             </table>

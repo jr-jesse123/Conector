@@ -1,4 +1,4 @@
-﻿
+﻿@using Almocherifado.UI.Components.Ferramentas.Status
 
 <div class="row">
     <div class="container h-100 mt-5">
@@ -34,33 +34,76 @@
             <div class="col">
                 <div class="card text-dark bg-light mb-3">
                     <div class="card-body">
-                        <h5 class="card-title"> <b>FERRAMENTAS</b></h5>
-                        <table>
-                            <tr>
-                                <td>
-                                    <b class="fs-3">@FerramentasCadastradas</b>
-                                </td>
-                                <td>
-                                    <p class="mx-3 my-auto">FERRAMENTAS CADASTRADAS</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <b class="fs-3 text-success">@FerramentasDisponiveis</b>
-                                </td>
-                                <td>
-                                    <p class="mx-3 my-auto">FERRAMENTAS DISPONÍVEIS</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <b class="fs-3 text-danger">@FerramentasAlocadas</b>
-                                </td>
-                                <td>
-                                    <p class="mx-3 my-auto">FERRAMENTAS ALOCADAS</p>
-                                </td>
-                            </tr>
-                        </table>
+                        @if (FerramentaSelecionada is not null)
+                        {
+                            @if (FerramentaSelecionada is not null)
+                            {
+
+                                if (Alocacoes
+                                        .Any(aloc => aloc.FerramentasAlocadas
+                                        .Where(fa => !fa.Devolvida).Select(f => f.Ferramenta).Contains(FerramentaSelecionada)))
+                                {
+                                    var aloc = Alocacoes
+                                                   .Where(aloc => aloc.FerramentasAlocadas.Where(fa => !fa.Devolvida)
+                                                                                           .Select(fa => fa.Ferramenta)
+                                                                                           .Contains(FerramentaSelecionada))
+                                                   .Single();
+
+                                        <div style="height:150px">
+                                            <h1>@FerramentaSelecionada.Nome</h1>
+                                            <h5> <strong>Patrimônio:</strong> @FerramentaSelecionada.Patrimonio</h5>
+                                            <h3 class="d-3">Ferramenta Alocada</h3>
+                                        </div>
+                                }
+                                else if (FerramentaSelecionada.EmManutencao)
+                                {
+                                    <div style="height:150px">
+                                        <h1>@FerramentaSelecionada.Nome</h1>
+                                        <h5> <strong>Patrimônio:</strong> @FerramentaSelecionada.Patrimonio</h5>
+                                        <h3 class="Text-Danger d-3">Ferramenta Em Manutenção</h3>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div style="height:150px">
+                                        <h1>@FerramentaSelecionada.Nome</h1>
+                                        <h5> <strong>Patrimônio:</strong> @FerramentaSelecionada.Patrimonio</h5>
+                                        <h3 class="Text-Success d-3">Disponível para Alocação</h3>
+                                    </div>
+                                }
+                            }
+                        }
+                        else
+                        {
+
+                            <h5 class="card-title"> <b>FERRAMENTAS</b></h5>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <b class="fs-3">@FerramentasCadastradas</b>
+                                    </td>
+                                    <td>
+                                        <p class="mx-3 my-auto">FERRAMENTAS CADASTRADAS</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <b class="fs-3 text-success">@FerramentasDisponiveis</b>
+                                    </td>
+                                    <td>
+                                        <p class="mx-3 my-auto">FERRAMENTAS DISPONÍVEIS</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <b class="fs-3 text-danger">@FerramentasAlocadas</b>
+                                    </td>
+                                    <td>
+                                        <p class="mx-3 my-auto">FERRAMENTAS ALOCADAS</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        }
                     </div>
                 </div>
             </div>
@@ -80,22 +123,30 @@
                 </thead>
                 <tbody>
 
-                    @foreach (var ferramenta in ferramentasAtuais)
+                    @if (PatrimonioAtual > 0)
                     {
-                        @foreach (var alocacao in AlocacoesAtuais)
+
+                        @foreach (var ferramenta in ferramentasAtuais)
                         {
-                            <tr>
-                                <HistoricoFerramentaTr Alocacao="alocacao" Ferramenta="ferramenta"></HistoricoFerramentaTr>
-                            </tr>
-
-
-                            
+                            @foreach (var alocacao in AlocacoesAtuais)
+                            {
                                 var ferramentaAlocada = alocacao.FerramentasAlocadas.First(d => d.Ferramenta.Patrimonio == ferramenta.Patrimonio);
-                                if (ferramentaAlocada.Devolvida)
-                                {
-                                    @ferramentaAlocada.Observacoes;
-                                }
+                                <tr>
+                                    <HistoricoFerramentaTr Alocacao="alocacao" Ferramenta="ferramenta"></HistoricoFerramentaTr>
+                                </tr>
+
                             
+                                if (ferramentaAlocada.Devolvida && !string.IsNullOrWhiteSpace(ferramentaAlocada.Observacoes))
+                                {
+                                    <tr>
+                                        <td colspan="5">
+                                            <strong>Observações:</strong> @ferramentaAlocada.Observacoes;
+
+                                        </td>
+                                    </tr>
+                                }
+
+                            }
                         }
                     }
 

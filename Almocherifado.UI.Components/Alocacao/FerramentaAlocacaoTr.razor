@@ -13,8 +13,12 @@
     <td style="max-width: 127px;">
         <p style="text-transform: uppercase;" class="fs-5">@Ferramenta.Modelo</p>
     </td>
+    <td>
+        <button @onclick="OnRemove" type="button" class="btn-close" aria-label="Close"></button>
+    </td>
 </tr>
 
 @code {
     [Parameter] public Ferramenta Ferramenta { get; set; }
+    [Parameter] public EventCallback OnRemove { get; set; }
 }

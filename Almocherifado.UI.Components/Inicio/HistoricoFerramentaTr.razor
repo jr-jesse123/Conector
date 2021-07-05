@@ -12,7 +12,10 @@
     @Ferramenta.Nome - @Ferramenta.Patrimonio
 </td>
 <td style="text-align: left;width: 300px;">
-    @if (Alocacao.Responsavel is not null)
+    @if (Ferramenta.EmManutencao)
+    {
+        <span class="text-danger">MANUTENÇÃO</span>
+    }else if (Alocacao.Responsavel is not null)
     {
         @Alocacao.Responsavel.Nome
     }
@@ -26,7 +29,7 @@
 
 <td>
     
-    @Alocacao.DataAlocacao.ToShortDateString()
+     @Alocacao.DataAlocacao.ToShortDateString()
 </td>
 
 

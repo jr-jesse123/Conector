@@ -4,12 +4,15 @@
 @code{
     [Parameter] public Ferramenta Ferramenta { get; set;}
     [Parameter] public string Comentario { get; set; }
+    [Parameter] public EventCallback<string> ComentarioChanged { get; set; }
 }
+
+
 
 <div class="row">
     <div class="col-auto">
         <label>Observacoes para @Ferramenta.Nome:</label>
-        <textarea @bind="Comentario" @bind:event="oninput"
+        <textarea @bind="Comentario" @oninput="@(v => ComentarioChanged.InvokeAsync((string)v.Value))"
                   class="form-control" style="width:446px;height:113px"></textarea>
     </div>
 </div>
