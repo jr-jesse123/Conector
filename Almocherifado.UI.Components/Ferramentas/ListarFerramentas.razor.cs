@@ -13,7 +13,7 @@ namespace Almocherifado.UI.Components.Ferramentas
 
     public partial class ListarFerramentas
     {
-
+        ModalFoto modalFoto;
         void ToogleManutencao(Ferramenta ferramenta,bool valor)
         {
             if (valor)
@@ -21,7 +21,6 @@ namespace Almocherifado.UI.Components.Ferramentas
             else
                 Ferramentasrepo.RegistrarManutencaoDeFerramenta(ferramenta, RegistroManutencao.Saida);
         }
-
 
         bool enabledAtribute { get => !(FerramentasChecadas.Count > 0) ; }
 
@@ -34,30 +33,33 @@ namespace Almocherifado.UI.Components.Ferramentas
             }
 
             FerramentasChecadas.Clear();
-            modalBaixa.Hide();
+            StateHasChanged();
+            
         }
-
-        //IEnumerable<string> textoConfirmacaoBaixa { get; set; }
-
-        //IEnumerable<string> getTextoConfirmacaoBaixa()
-        //{
-        //    return FerramentasChecadas.Select(f => $"{f.Nome } Patrimônio: {f.Patrimonio}");
-        //}
-
 
         void FiltrarPorTextoLivre(string valor)
         {   
             //var valor = ((string)args.Value).ToUpper();
             if (string.IsNullOrWhiteSpace(valor))
                 FerramentasVisiveis = Ferramentas;
-            
-            FerramentasVisiveis =
+
+            var ferramentasElegiveisPorAlocacao = Alocacoes
+                            .Where(aloc => aloc.Responsavel.Nome.ToUpper().Contains(valor.ToUpper())
+                                            | aloc.ContratoLocacao.ToUpper().Contains(valor.ToUpper())
+                        ).SelectMany(aloc => aloc.FerramentasAlocadas.Select(fa => fa.Ferramenta)
+                        ).ToArray();
+
+
+            var ferramentasElegiveis = FerramentasVisiveis =
                     Ferramentas
                     .Where(f => ( f.Descricao is not null && f.Descricao.ToUpper().Contains(valor.ToUpper()))
                               | f.Marca.ToUpper().Contains(valor.ToUpper())
                               | f.Modelo.ToUpper().Contains(valor.ToUpper())
                               | f.Nome.ToUpper().Contains(valor.ToUpper())
                          ).ToArray();
+
+
+            FerramentasVisiveis = ferramentasElegiveis.Concat(ferramentasElegiveisPorAlocacao).Distinct().ToArray();
         }
 
         void FiltrarPorStatus(ChangeEventArgs args)

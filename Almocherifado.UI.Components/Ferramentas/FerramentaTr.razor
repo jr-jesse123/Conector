@@ -2,11 +2,12 @@
  
 @code{
     [Parameter] public EventCallback<Entities.Ferramenta> OnCheckChanged { get; set; }
+    [Parameter] public EventCallback<string> OnFotoClicked { get; set; }
 }
 <tr>
     <td><input @onchange="() => OnCheckChanged.InvokeAsync(Ferramenta)" type="checkbox"></td>
     <th>
-        <FotoCarroussel LinkFotos="Ferramenta.Fotos"></FotoCarroussel>
+        <FotoCarroussel OnFotoClicked="(x) => { if (OnFotoClicked.HasDelegate) OnFotoClicked.InvokeAsync(x).Wait(); }" LinkFotos="Ferramenta.Fotos"></FotoCarroussel>
     </th>
     <td>
         <h5>@Ferramenta.Nome</h5>

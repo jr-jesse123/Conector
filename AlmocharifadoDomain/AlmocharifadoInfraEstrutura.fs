@@ -390,7 +390,7 @@ type  AlmocharifadoRepository(conStr) =
       member this.GetAllFerramentas () = GetAllFerramentas conection 
       member this.RegistrarManutencaoDeFerramenta ferramenta registro = 
               RegistrarManutencao conection ferramenta.Patrimonio registro
-      member thi.RegistrarBaixaDeFerramenta ferramenta = ()
+      member thi.RegistrarBaixaDeFerramenta ferramenta = RegistrarBaixaFerramenta conection ferramenta.Patrimonio
       member this.RegistrarDevolucaoDeDevolverFerramenta alocacao ferramenta data observacoes = 
                      RegistrarDevolucaoDeDevolverFerramenta conection alocacao ferramenta data observacoes
 

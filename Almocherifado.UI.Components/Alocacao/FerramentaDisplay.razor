@@ -22,12 +22,17 @@
         }
         else
         {
-            @if (FeramentaDisponivel)
+            @if (ferramentaAtual.EmManutencao)
+            {
+                <h4 class="text-danger fw-bold">Ferramenta Em Manutenção</h4>
+
+            }
+            else if (FeramentaDisponivel)
             {
                 @MensagemFerramentaDisponível(ferramentaAtual)
 
             }
-            else if(AlocacaoAtual is null)
+            else if (AlocacaoAtual is null)
             {
                 <h1>ferramenta baixada</h1>
             }
@@ -35,7 +40,7 @@
             {
                 @MensagemFerramentaInDisponível((ferramentaAtual, AlocacaoAtual))
             }
-    }
+        }
 
     </div>
 </div>

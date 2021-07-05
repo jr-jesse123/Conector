@@ -49,7 +49,6 @@ namespace Almocherifado.UI.Components.Inicio
         void OnPatrimonioChage(ChangeEventArgs args)
         {
 
-
             if (string.IsNullOrWhiteSpace((string)args.Value))
             {
                 PatrimonioAtual = 0;
@@ -62,8 +61,6 @@ namespace Almocherifado.UI.Components.Inicio
                     .Where(a => a.FerramentasAlocadas
                                 .Any(f => ferramentasAtuais.Contains(f.Ferramenta)))
                                 .ToArray();
-
-
         }
 
         protected override void OnInitialized()
@@ -74,8 +71,6 @@ namespace Almocherifado.UI.Components.Inicio
             FerramentasCadastradas = Ferramentas.Length;
             FerramentasDisponiveis = Ferramentas.Where(f => Entities.Ferramentas.FerramentaDisponivel(Alocacoes, f)).Count();
             FerramentasAlocadas = FerramentasCadastradas - FerramentasDisponiveis;
-
-
 
         }
     }

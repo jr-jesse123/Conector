@@ -12,6 +12,7 @@ namespace Almocherifado.UI.Components
         public void Hide()
         {
             modalclass = "modal fade";
+            StateHasChanged();
         }
         public void Show()
         {
@@ -29,6 +30,7 @@ namespace Almocherifado.UI.Components
             await OnCorfirma.InvokeAsync();
 
             Hide();
+            StateHasChanged();
         }
     }
 }

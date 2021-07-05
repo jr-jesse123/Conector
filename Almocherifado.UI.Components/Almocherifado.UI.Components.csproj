@@ -5,14 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Ferramentas\FotoCarroussel.razor.css" />
     <None Remove="Ferramentas\ListarFerramentas.razor.css" />
+    <None Remove="Ferramentas\ModalFoto.razor.css" />
     <None Remove="Inicio.razor.css" />
     <None Remove="Layout\MenuLateral\MenuLateral.razor.css" />
     <None Remove="Uploader.razor.css" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Ferramentas\FotoCarroussel.razor.css" />
     <Content Include="Ferramentas\ListarFerramentas.razor.css" />
+    <Content Include="Ferramentas\ModalFoto.razor.css" />
     <Content Include="Layout\MenuLateral\MenuLateral.razor.css" />
     <Content Include="Uploader.razor.css" />
   </ItemGroup>

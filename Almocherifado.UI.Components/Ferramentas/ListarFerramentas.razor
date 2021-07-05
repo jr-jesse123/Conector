@@ -2,13 +2,11 @@
 @using Almocherifado.UI.Components.Ferramentas
 @using Almocherifado.UI.Components.Ferramentas.Status
 
-@foreach (var item in FerramentasChecadas)
-{
-    @item.Nome;
-}
+
+
 
 <Modal @ref="modalBaixa" OnCorfirma="() => baixar()" TextoTitulo="Confirmar Baixa" TextoConfirma="Baixar">
-    <body>
+    <body> @* body é o nome do renderfragment do modal *@
         @foreach (var item in FerramentasChecadas)
         {
             @(item.Nome +" Patrimônio: " + @item.Patrimonio) <br>
@@ -71,11 +69,12 @@
                 </tr>
             </thead>
             <tbody>
+                <ModalFoto @ref="modalFoto"></ModalFoto>
                 @if (Ferramentas is not null)
                 {
                     foreach (var item in FerramentasVisiveis)
                     {
-                        <FerramentaTr OnCheckChanged="AdicionarOuRemoverFerramentaChecada" Ferramenta="item">
+                        <FerramentaTr OnFotoClicked="(x) => { modalFoto.SetFoto(x);  modalFoto.Show(); } " OnCheckChanged="AdicionarOuRemoverFerramentaChecada" Ferramenta="item">
                             <StatusFragment>
                                 @if (item.Baixada)
                                 {
@@ -91,16 +90,17 @@
                                     {
                                         System.Diagnostics.Debugger.Break();
                                     }
-                                    <StatusAlocada OnChange="@((vlr)=> ToogleManutencao(item,vlr))"
-                                                   EmManutencao="item.EmManutencao" Alocacao="alocacao.Value">
+                                    <FerramentaManutencao EmManutencao="item.EmManutencao" OnChange="@((vlr)=> ToogleManutencao(item,vlr))"></FerramentaManutencao>
+                                    <StatusAlocada Alocacao="alocacao.Value">
 
                                     </StatusAlocada>
-                                        
+
                                 }
                                 else
                                 {
-                                    <StatusDisponivel ></StatusDisponivel>
-                                    
+                                    <FerramentaManutencao EmManutencao="item.EmManutencao" OnChange="@((vlr)=> ToogleManutencao(item,vlr))"></FerramentaManutencao>
+                                    <StatusDisponivel></StatusDisponivel>
+
                                 }
                             </StatusFragment>
                         </FerramentaTr>

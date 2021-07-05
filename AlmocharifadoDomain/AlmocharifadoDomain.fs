@@ -91,25 +91,26 @@ module Ferramentas=
       
    
    let FerramentaDisponivel  (alocacoes:Alocacao seq)  ferramenta =
-      let alocacaoContemFeramenta aloc ferramenta =
-         aloc.FerramentasAlocadas 
-         |> Array.map (fun fa -> fa.Ferramenta)
-         |> Array.contains ferramenta
 
-      let GetEmprestimoInfo aloc ferramenta = 
-         Array.Find(aloc.FerramentasAlocadas,(fun fa -> fa.Ferramenta = ferramenta))
+         let alocacaoContemFeramenta aloc ferramenta =
+            aloc.FerramentasAlocadas 
+            |> Array.map (fun fa -> fa.Ferramenta)
+            |> Array.contains ferramenta
+
+         let GetEmprestimoInfo aloc ferramenta = 
+            Array.Find(aloc.FerramentasAlocadas,(fun fa -> fa.Ferramenta = ferramenta))
          
 
-      if ferramenta.Baixada = true then
-        false
-      else
-         alocacoes 
-         |> Seq.sortByDescending (fun aloc -> aloc.Id)
-         |> Seq.tryFind (fun aloc -> alocacaoContemFeramenta aloc ferramenta )
-         |> function  
-         |Some aloc -> Option.isSome (GetEmprestimoInfo aloc ferramenta).DataDevolucao
-         |None -> true
-         //| _ -> failwith "situação não prevista"
+         if ferramenta.Baixada = true then
+           false
+         else
+            alocacoes 
+            |> Seq.sortByDescending (fun aloc -> aloc.Id)
+            |> Seq.tryFind (fun aloc -> alocacaoContemFeramenta aloc ferramenta )
+            |> function  
+            |Some aloc -> Option.isSome (GetEmprestimoInfo aloc ferramenta).DataDevolucao
+            |None -> true
+            //| _ -> failwith "situação não prevista"
          
 
       //alocacoes
