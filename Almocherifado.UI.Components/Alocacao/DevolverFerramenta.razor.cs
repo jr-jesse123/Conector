@@ -1,4 +1,5 @@
-﻿using AlmocharifadoApplication;
+﻿using Almocharifado.InfraEstrutura;
+using AlmocharifadoApplication;
 using Almocherifado.UI.Components.Forms;
 using Almocherifado.UI.Components.Models;
 using Entities;
@@ -13,28 +14,47 @@ namespace Almocherifado.UI.Components.Alocacao
 {
     public partial class DevolverFerramenta : FormBase
     {
-
+        FerramentaDisplay ferramentaDisplay;
         [Inject] IAlmocharifadoRepository repo { get; set; }
         [Inject] IFerramentaRepository ferramentaRepo { get; set; }
-        DevolucaoInputModel devolucaoInput { get; set; } = new()  ;
+        DevolucaoInputModel devolucaoInput { get; set; } = new();
+        
+        Entities.Alocacao[] Alocacoes = new Entities.Alocacao[] { };
 
-
+        protected override void OnInitialized()
+        {
+            Alocacoes = repo.GetAllAlocacoes();
+        }
         protected override void OnSubmitAsync()
         {
             base.OnSubmitAsync();
 
-            devolucaoInput.FerramentasEComentarios = FerramentasEComentarios;
+            devolucaoInput.FerramentasEComentarios =  FerramentasEComentarios;
 
             if (form.EditContext.Validate())
             {
-                var devolucoes = mapper.Map<Devolucao[]>(devolucaoInput);
+                foreach (var devolucaoInput in devolucaoInput.FerramentasEComentarios)
+                {
+                    var ferramenta = devolucaoInput.Ferramenta;
+                    var alocacao = Alocacoes.Where(aloc =>
+                        aloc.Finalizada == false &&
+                        aloc.FerramentasAlocadas
+                            .Where(fa => !fa.Devolvida)
+                            .Select(fa => fa.Ferramenta).Contains(ferramenta))
+                            .Single();
 
-                ferramentaRepo.DevolverFerramentas(devolucoes);
+                    ferramentaRepo.RegistrarDevolucaoDeDevolverFerramenta(alocacao,ferramenta,DateTime.Now,devolucaoInput.Comentario);
+                }
+
+
+
+
                 devolucaoInput = new();
                 FerramentasEComentarios = new();
+                ferramentaDisplay.RefreshMe();
             } 
 
         }
-        Dictionary<Ferramenta,string> FerramentasEComentarios { get; set; } = new();
+        List<FerramentaDevolucaoInputModel> FerramentasEComentarios { get; set; } = new();
     }
 }

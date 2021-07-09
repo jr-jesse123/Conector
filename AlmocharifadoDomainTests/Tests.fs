@@ -1,344 +1,418 @@
 
-
 module Tests
-
+open Almocharifado.InfraEstrutura
 open System
 open Xunit
-open InfraEstrutura
-open Microsoft.EntityFrameworkCore
-open AutoFixture
+open Xunit.Abstractions
+open AutoMapper
 open Entities
+open FsCheck
+open FsCheck.Xunit
+open System.Data.SqlClient
+open System.IO
 open Swensen.Unquote
-open System.Collections.Generic
-open Microsoft.EntityFrameworkCore
-open Microsoft.EntityFrameworkCore.Diagnostics
+
+open Bogus.Extensions.Brazil
+
+type TestsProfile() as this = 
+   inherit Profile()
+   do ignore <| this.CreateMap<Ferramenta,FerramentaInsert>() 
+   do ignore <| this.CreateMap<FuncionarioInsert,Funcionario>() 
+   do ignore <| this.CreateMap<Funcionario,FuncionarioInsert>() 
+   do ignore <| this.CreateMap<Alocacao,AlocacaoInsert>() 
 
 
+type InteGrationTestDatabase ()=
 
-let getContext ()=
-   let options = DbContextOptionsBuilder<AlmocharifadoContext>()
-                  //.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Almocharifado2Tests;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False").Options
-                  .UseInMemoryDatabase("Almocharifado2Tests").Options
-   let context = new AlmocharifadoContext(options)
-   do context.Database.EnsureDeleted() |> ignore
-   do context.Database.EnsureCreated() |> ignore
-   context
+   let rd = Random()
+   let dbName = $"TESTE_{rd.Next()}"
 
-type InfraEstruturaTests() =
-   let context = getContext()
+   let mutable con = new SqlConnection(Repository.conStr "master")
+   
+   let CreateCMD = $" IF not EXISTS (SELECT name FROM master.sys.databases WHERE name = N'{dbName}') \
+                     Create DataBase {dbName}"
+                    
+   do con.Open()
+   let cmd = new SqlCommand(CreateCMD,con)
+   do cmd.ExecuteNonQuery() |> ignore
+      cmd.Dispose()
 
-   [<Fact>]
-   let ``Funcionario é salvo  corretamente`` () =
-      let funcionario = Fixture().Build<Funcionario>().Create()
+   do con.ChangeDatabase(dbName)
+   do SqlCommand($"USE {dbName}",con).ExecuteNonQuery() |> ignore
 
-      context.Funcionarios.Add(funcionario)
-      context.SaveChanges()
+   do con <- new SqlConnection(Repository.conStr dbName)
+   do con.Open()
 
-      test <@ context.Funcionarios.CountAsync().Result = 1 @>
-
-      let funcRecuperado = context.Funcionarios.Find(funcionario.CPF)
-
-      test <@ funcRecuperado = funcionario @>
-      
-   [<Fact>]
-   let ``Ferramenta é salvo  corretamente`` () =
-      let ferramenta = 
-         Fixture().Build<Ferramenta>()
-            //.With((fun x -> x.Id),0)
-            .Create()
-  
-      context.Ferramentas.Add(ferramenta)
-      context.SaveChanges()
-      
-      test <@ context.Ferramentas.CountAsync().Result = 1 @>
-      
-      let ferramentaRecuperado = context.Ferramentas.Find(ferramenta.Patrimonio)
-      
-      //test <@ ferramentaRecuperado.Id <> 0 @>
-      test <@ ferramentaRecuperado   = ferramenta @>
-            
-   [<Fact>]
-   let ``Alocacao é salvo  corretamente`` () =
-      
-      let ferramenta = Fixture().Build<Ferramenta>()
-                        //.With((fun x -> x.Id),0)
-                        .Create() 
-      let ferramenta2 = Fixture().Build<Ferramenta>()
-                                 //.With((fun x -> x.Id),0)
-                                 .Create() 
-      let ferramentas = [ferramenta;ferramenta2]
-
-      //let devolucao1 = Fixture().Build<Devolucao>()
-      //                  .With((fun x -> x.Id),0).Create() 
-      //let devolucao2 = Fixture().Build<Devolucao>()
-      //                  .With((fun x -> x.Id),0).Create() 
-
-      let aloc = 
-             Fixture().Build<Alocacao>()
-                  .With((fun x -> x.Id),0)
-                  .With((fun x -> x.Ferramentas), List(ferramentas) :> seq<Ferramenta> )
-                  .With((fun x -> x.Devolucoes), List() :> seq<Devolucao> )
-                  .Create()
-                  
-               
-
-      context.Alocaoes.Add(aloc)
-      context.SaveChanges()
-    
-      test <@ aloc.Id <> 0 @>
-      
-      let alocRecuperado = context.Alocaoes.Find(aloc.Id)
-      
-      test <@ aloc = alocRecuperado @>
-
-      test <@ context.Ferramentas.CountAsync().Result = 2 @>
-      test <@ context.Funcionarios.CountAsync().Result = 1 @>
-
-   interface IDisposable with member this.Dispose()= context.Database.EnsureDeleted() |> ignore
+   let script = 
+      $"USE {dbName}" + Environment.NewLine +
+      File.ReadAllText("./DbScripts/FerramentasTable.sql")
      
+   let cmd = new SqlCommand(script,con)
+   do cmd.ExecuteNonQuery() |> ignore
+   do con.Close()
+   do printfn "%s" "nova db"
 
-type ApplicationTests() =
-   let context = getContext()
+   interface IDisposable with 
+      member this.Dispose () =
+         let sqlcmd = $" USE MASTER"
+
+         try
+            con <- new SqlConnection(Repository.conStr "master")  
+           
+         with 
+         | :? InvalidOperationException as ex when ex.Message.Contains("current state is open") -> ()
+         
+         let cmd = SqlCommand(sqlcmd,con)
+         cmd.Connection.Open()
+
+         cmd.ExecuteNonQuery() |> ignore
+         try
+            do SqlCommand($"DROP database {dbName}",con).ExecuteNonQuery() |> ignore
+         with| :? SqlException as ex -> ()
+
+         con.Dispose()
+   member _.DataBaseConection = con
+
+
+module helpers=
+   let naovazio = String.IsNullOrWhiteSpace >> not
+   let getalltexts o = o.GetType().GetProperties() 
+                        |> Seq.filter (fun x -> x.PropertyType = typeof<string>)
+                        |> Seq.map (fun x -> x.GetValue o :?> string)
+
+
+open Repository
+open AutoFixture
+open Bogus
+open AutoBogus
+open AutoFixture.Xunit2
+
+type InfraEstruturaTests(outputHelper:ITestOutputHelper)=
+   let dbfixture = new InteGrationTestDatabase()
+   let sqlcon = dbfixture.DataBaseConection
+
+   let mapper = MapperConfiguration(fun cfg -> cfg.AddProfile<TestsProfile>()).CreateMapper()
+
    [<Fact>]
-   let ``Ferramenta já alocada é reconhecida corretamente``()=
+   let ``Teste  de configuraï¿½ï¿½o RepositorryProfile`` ()=
+      let config = new MapperConfiguration(fun  cfg -> cfg.AddProfile<RepositoryProfile>())
+      config.AssertConfigurationIsValid()
+   
+   
+   //[<Property(MaxTest = 100)>]
+   [<Property(MaxTest=100)>]
+   let ``Ferramenta ï¿½ corretamente  salva no banco de dados`` (ferramenta:FerramentaInsert)  =
+      helpers.getalltexts ferramenta |> Seq.forall helpers.naovazio ==> lazy
+
+      let ferramentainput = {ferramenta with Fotos=Fixture().Build<string>().CreateMany() |> Seq.toArray}
       
-      let alocacoes = Fixture().Build<Alocacao>().CreateMany(5)
-      let alocacoesFetcher () = alocacoes
-      let ferramentas = alocacoes 
-                        |> Seq.collect (fun aloc -> aloc.Ferramentas)
-      test <@ ferramentas 
-         |> Seq.forall (fun ferramenta -> Alocacoes.FerramentaAlocada alocacoesFetcher ferramenta ) @>
-
-   [<Fact>]
-   let ``Ferramenta não alocada é reconhecida corretamente``()=
-   
-      let alocacoes = Fixture().Build<Alocacao>().CreateMany(5)
-      let alocaccoesFetcher () = alocacoes
-      let ferramentas = alocacoes 
-                        |> Seq.collect (fun aloc -> aloc.Ferramentas)
-
-      let ferramentaNaoAlocada = Fixture().Build<Ferramenta>().Create()
-      test <@ not(Alocacoes.FerramentaAlocada alocaccoesFetcher ferramentaNaoAlocada)  @>
-
-
-   [<Theory>]
-   [<InlineData(10,11)>]
-   [<InlineData(20,21)>]
-   [<InlineData(0,1)>]
-   let ``Proximo número de patrimônio é obtido corretamente`` qtd expected =
-      let mutable patrimonio = 0
-      let proximoPatrimonio () = 
-         patrimonio <- patrimonio + 1 
-         string patrimonio
+      try
+         FerramentaRepository.InserirFErramenta sqlcon ferramentainput  
+            |> ignore
       
-      let ferramentasFetcher qtd () = 
-         if qtd = 0 then 
-            [] :> IEnumerable<Ferramenta>
-         else
-            Fixture().Build<Ferramenta>()
-               //.With((fun x -> x.Id),0)
-               .With<string>((fun fer -> fer.Patrimonio),fun _ -> proximoPatrimonio ()  )
-               .CreateMany(qtd)
-                                    
-      let ferramentas = ferramentasFetcher qtd
-
-      let proximo = Alocacoes.GetProximoPatrimonio (ferramentas)
-      test <@ proximo = expected @>
-
-    
-    
-   [<Fact>]
-   let ``Ferramenta é devolvida corretamente`` () =
-      let context = getContext()
-    
-      let ferramenta = Fixture().Build<Ferramenta>()
-                           .Create() 
-      let ferramenta2 = Fixture().Build<Ferramenta>()
-                           .Create() 
-      let ferramentas = [ferramenta;ferramenta2]
-    
-      let aloc = Fixture().Build<Alocacao>()
-                     .With((fun x -> x.Id),0)
-                     .With((fun x -> x.Ferramentas), List(ferramentas) :> seq<Ferramenta> )
-                     .With((fun x -> x.Devolucoes), List() :> seq<Devolucao> )
-                     .Create()
-       
-      context.Alocaoes.Add aloc |> ignore
-      context.SaveChanges()
-    
+      with
+      | :? SqlException as ex when
+            ex.Message.Contains("UNIQUE KEY constraint")
+            || ex.Message.Contains("duplicate key") -> ()
+      | _ -> reraise()
       
-
-      let devolucao = {Id=0;Ferramenta=ferramenta;Data=DateTime.Now;Observacoe=""}
-
-      let alocacao = context.Alocaoes|> Seq.find (fun aloc -> aloc.Ferramentas |> Seq.contains(devolucao.Ferramenta)) 
-      let Devolucoes :seq<Devolucao> = devolucao :: (List.ofSeq alocacao.Devolucoes) :> _
-
-      let novoAloc = {alocacao with  Devolucoes=Devolucoes; }
-      let alocacaoOld = context.Find<Alocacao>(alocacao.Id)
-
-
-
-
-      test <@  novoAloc.Devolucoes |> Seq.length = 1  @>
-      printfn "%i"  devolucao.Id
-      context.Devolucoes.Add devolucao
-      printfn "%i"  devolucao.Id
-      test <@  context.Entry(devolucao).State = EntityState.Added @>
-      
-      context.Entry(devolucao).Property("AlocacaoId").CurrentValue <- aloc.Id
-      let current = context.Entry(devolucao).Property("AlocacaoId").CurrentValue
-      
-      context.SaveChanges()
-
-
-      let aloc = context.Alocaoes.ToListAsync().Result |> Seq.exactlyOne
-
-      test<@ aloc.Devolucoes |> Seq.length = 1 @>
-
-      let devolvida = Ferramentas.FerramentaDisponivel [aloc] ferramenta
-
-      test <@ devolvida @>
-
-
-      
-       
-
-
-      
-
-[<Theory>]   
-[<InlineData(1)>]
-[<InlineData(2)>]
-[<InlineData(4)>]
-[<InlineData(9)>]
-let ``Ferramenta alocada é corretamente reconhecida como não disponível`` indice =
-   let alocacoes = Fixture().CreateMany<Alocacao>(10) |> Seq.toList
-
-   let ferramenta = alocacoes.[indice].Ferramentas |> Seq.head
-   
-   let atual = Ferramentas.FerramentaDisponivel alocacoes ferramenta
-
-   test <@ not atual @>
-   
-
-      
-[<Theory>]   
-[<InlineData(1)>]
-[<InlineData(2)>]
-[<InlineData(4)>]
-[<InlineData(9)>]
-let ``Ferramenta não alocada é corretamente reconhecida Como disponível`` indice =
-   let alocacoes = Fixture().CreateMany<Alocacao>(10) |> Seq.toList
-   let ferramenta = Fixture().Create<Ferramenta>()
-   let atual = Ferramentas.FerramentaDisponivel alocacoes ferramenta
-   test <@  atual @>
-   
-
-[<Theory>]   
-[<InlineData(1)>]
-[<InlineData(2)>]
-[<InlineData(4)>]
-let ``Ferramentas.GetAlocacaoDeFerramentaAlocada recupera a alocacao de uma ferramenta corretamente`` indice =
-   
-   let alocacoes = Fixture().CreateMany<Alocacao>(10) |> Seq.toList
-   
-   let ferramenta = alocacoes.[indice].Ferramentas |> Seq.head
-
-   let locacaoRecuperada = Ferramentas.GetAlocacaoDeFerramentaAlocada alocacoes ferramenta
-   
-   test <@ Option.isSome locacaoRecuperada @>
-   test <@ locacaoRecuperada = Some alocacoes.[indice] @>
-
-[<Fact>]      
-let ``Ferramentas.GetAlocacaoDeFerramentaAlocada retorna none em caso de ferramenta livre``  =
-   
-   let alocacoes = Fixture().CreateMany<Alocacao>(10) |> Seq.toList
-   
-   let ferramenta = Fixture().Create<Ferramenta>()
-
-   let locacaoRecuperada = Ferramentas.GetAlocacaoDeFerramentaAlocada alocacoes ferramenta   
-   test <@ Option.isNone locacaoRecuperada @>
-   
-      
-
-[<Fact>]
-let ``Responsável é corretamente recuperado em alocacao `` =
-   let respo = Fixture().Create<Funcionario>();
-
-   let ferramenta = Fixture().Build<Ferramenta>()
-                              .Create() 
-   let ferramenta2 = Fixture().Build<Ferramenta>()
-                        .Create() 
-   let ferramentas = [ferramenta;ferramenta2]
-   
-
-   let ferramentas  = Fixture().CreateMany<Ferramenta>();
  
-   let aloc = Fixture().Build<Alocacao>()
-                  .With((fun x -> x.Id),0)
-                  .With((fun x -> x.Ferramentas), List(ferramentas) :> seq<Ferramenta>)
-                  .With<Funcionario>((fun x -> x.Responsavel), respo )
-                  .With((fun x -> x.Devolucoes), List() :> seq<Devolucao> )
-                  .Create()
+   [<Property>]
+   let ``Ferramenta ï¿½ corretamente recuperada do banco de dados`` 
+                                                (ferramenta:FerramentaInsert)  =
+      (helpers.getalltexts ferramenta
+         |> Seq.forall helpers.naovazio  ) ==> lazy
 
-   let context = getContext()
-   context.Add aloc
-   context.SaveChanges()
+      let ferramentainput = {ferramenta with Fotos=Fixture().Build<string>().CreateMany() |> Seq.toArray}
 
-   //let contex = getContext()
-   let aloc = context.Alocaoes.SingleAsync().Result
+      try
+         FerramentaRepository.InserirFErramenta sqlcon ferramentainput|> ignore
+           
+         let ferramentas = FerramentaRepository.GetAllFerramentas sqlcon
 
-   test <@ aloc.Responsavel = respo @>
+         ferramentas 
+                  |> Array.exists (fun x -> x.Nome = ferramentainput.Nome 
+                                             && x.Marca = ferramentainput.Marca
+                                             && x.Modelo = ferramentainput.Modelo
+                                             && ferramentainput.DataCompra.ToString() = x.DataCompra.ToString()
+                                             && ferramentainput.Descricao = x.Descricao
+                                             && ferramentainput.Fotos = x.Fotos)  
 
-type Teste2()=
+      with
+      | :? SqlException as ex when 
+         ex.Message.Contains("UNIQUE KEY constraint") || ex.Message.Contains("duplicate key") -> true
+      | _ -> reraise()
 
-   [<Fact>]
-   let ``Responsável é corretamente recuperado em alocacao `` () =
-      let respo = Fixture().Create<Funcionario>();
+   let rd = Random()
+   [<Property>]
+   let ``Registro de ferramenta em manutenï¿½ï¿½o executado e recuperado coreretamente``() =
+         
+         let ferramentas = Fixture().Build<FerramentaInsert>().CreateMany() |> Array.ofSeq
 
-      let ferramentas  = Fixture().CreateMany<Ferramenta>();
+         try
+            let ferramentasInput = 
+               ferramentas
+               |> Array.map (fun fer -> {fer with Fotos=Fixture().Build<string>().CreateMany() |> Seq.toArray })
+
+            for ferInput in ferramentasInput do FerramentaRepository.InserirFErramenta sqlcon ferInput
+            let ferramentasArmazenadas = FerramentaRepository.GetAllFerramentas sqlcon
+      
+            let emManutencao = ferramentasArmazenadas.[rd.Next (ferramentasArmazenadas.Length - 1)]
+            FerramentaRepository.RegistrarManutencao sqlcon emManutencao.Patrimonio RegistroManutencao.Entrada
+
+            let ferramentaEmManutencao = FerramentaRepository.GetAllFerramentas sqlcon
+                                          |> Array.filter (fun fer -> fer.EmManutencao && fer.Patrimonio = emManutencao.Patrimonio )
+                                          |> Array.exactlyOne
+                                          
+
+            test <@emManutencao.Nome = ferramentaEmManutencao.Nome 
+               && emManutencao.Marca = ferramentaEmManutencao.Marca
+               && emManutencao.Modelo = ferramentaEmManutencao.Modelo
+               && emManutencao.DataCompra.ToString() = ferramentaEmManutencao.DataCompra.ToString()
+               && emManutencao.Descricao = ferramentaEmManutencao.Descricao
+               && emManutencao.Fotos = ferramentaEmManutencao.Fotos @>
+      
+         with
+         | :? SqlException as ex when 
+            ex.Message.Contains("UNIQUE KEY constraint") || ex.Message.Contains("duplicate key") -> ()
+         | _ -> reraise()
+
+   [<Property>]
+   let ``Registro de saida de manutenï¿½ï¿½o executado e recuperado coreretamente``() =
+           
+      let ferramentas = Fixture().Build<FerramentaInsert>().CreateMany() |> Seq.toArray
+
+      try
+         let ferramentasInput = 
+            ferramentas
+            //mapper.Map<FerramentaInsert[]>(ferramentas)
+            |> Array.map (fun fer -> {fer with Fotos=Fixture().Build<string>().CreateMany() |> Seq.toArray })
+
+         for ferInput in ferramentasInput do FerramentaRepository.InserirFErramenta sqlcon ferInput
+         let ferramentasArmazenadas = FerramentaRepository.GetAllFerramentas sqlcon
+         for fer in ferramentasArmazenadas do 
+         FerramentaRepository.RegistrarManutencao sqlcon fer.Patrimonio RegistroManutencao.Entrada
+
+         let ManutencaoFinalizada = ferramentasArmazenadas.[rd.Next (ferramentasArmazenadas.Length - 1)]
+         FerramentaRepository.RegistrarManutencao sqlcon ManutencaoFinalizada.Patrimonio RegistroManutencao.Saida
+
+         let ferramentaEmManutencao = FerramentaRepository.GetAllFerramentas sqlcon
+                                       |> Array.filter (fun fer -> not fer.EmManutencao && fer.Patrimonio = ManutencaoFinalizada.Patrimonio )
+                                       |> Array.exactlyOne
+                                            
+
+         test <@ManutencaoFinalizada.Nome = ferramentaEmManutencao.Nome 
+            && ManutencaoFinalizada.Marca = ferramentaEmManutencao.Marca
+            && ManutencaoFinalizada.Modelo = ferramentaEmManutencao.Modelo
+            && ManutencaoFinalizada.DataCompra.ToString() = ferramentaEmManutencao.DataCompra.ToString()
+            && ManutencaoFinalizada.Descricao = ferramentaEmManutencao.Descricao
+            && ManutencaoFinalizada.Fotos = ferramentaEmManutencao.Fotos @>
+        
+      with
+      | :? SqlException as ex when 
+         ex.Message.Contains("UNIQUE KEY constraint") || ex.Message.Contains("duplicate key") -> ()
+      | _ -> reraise()
+
+   let ``Ferramenta ï¿½ baixada corretamente `` ()=
+
+         let ferramentas = Fixture().Build<Ferramenta>()
+                                    .With((fun x -> x.Baixada), false)
+                                    .CreateMany()
+
+         try
+            let ferramentasInput = 
+               mapper.Map<FerramentaInsert[]>(ferramentas)
+               |> Array.map (fun fer -> {fer with Fotos=Fixture().Build<string>().CreateMany() |> Seq.toArray })
+
+            for ferInput in ferramentasInput do FerramentaRepository.InserirFErramenta sqlcon ferInput
+            let ferramentasArmazenadas = FerramentaRepository.GetAllFerramentas sqlcon
+            for fer in ferramentasArmazenadas do 
+            FerramentaRepository.RegistrarManutencao sqlcon fer.Patrimonio RegistroManutencao.Entrada
+
+            let FerramentaBaixada = ferramentasArmazenadas.[rd.Next (ferramentasArmazenadas.Length - 1)]
+            FerramentaRepository.RegistrarBaixaFerramenta sqlcon FerramentaBaixada.Patrimonio 
+
+            let ferBaixadaPersistida = FerramentaRepository.GetAllFerramentas sqlcon
+                                          |> Array.filter (fun fer -> not fer.EmManutencao && fer.Patrimonio = FerramentaBaixada.Patrimonio )
+                                          |> Array.exactlyOne
+                                               
+
+            test <@FerramentaBaixada.Nome = ferBaixadaPersistida.Nome 
+               && FerramentaBaixada.Marca = ferBaixadaPersistida.Marca
+               && FerramentaBaixada.Modelo = ferBaixadaPersistida.Modelo
+               && FerramentaBaixada.DataCompra.ToString() = ferBaixadaPersistida.DataCompra.ToString()
+               && FerramentaBaixada.Descricao = ferBaixadaPersistida.Descricao
+               && FerramentaBaixada.Fotos = ferBaixadaPersistida.Fotos @>
+           
+         with
+         | :? SqlException as ex when 
+            ex.Message.Contains("UNIQUE KEY constraint") || ex.Message.Contains("duplicate key") -> ()
+         | _ -> reraise()
+   
+   #if INTERACTIVE
+   #r "nuget: Bogus"
+   #r "nuget: AutoBogus"
+   open Bogus
+   open AutoBogus
+   open Bogus.Extensions.Brazil
+   #endif
+
+   [<Property>]
+   let ``Funcionario ï¿½ armazenado e recuperado corretamente`` () =
+      let funcionarioInsert = AutoFaker<FuncionarioInsert>()
+                                 .Generate()
+      let funcionarioInsert = {funcionarioInsert with CPF=Faker().Person.Cpf(false)}
+
+      printfn "%A" funcionarioInsert
+      AlmocharifadoRepository.InsertFuncionario sqlcon funcionarioInsert
+
+
+      let funcionarios = AlmocharifadoRepository.GetAllFuncioarios sqlcon 
+
+      let testMap = MapperConfiguration(fun cfg -> cfg.AddProfile<TestsProfile>()).CreateMapper()
+      let funcionario = testMap.Map<Funcionario>(funcionarioInsert)
+      printfn "mapeado %A" funcionario
+      printfn "lista: %A" funcionarios
+      funcionarios |> Array.contains funcionario
+   
+   [<Property>]
+   let ``let alocacoes sao persistidas e recuperadas corretamente`` () =
+      let alocacao = AutoFaker<AlocacaoInsert>().Generate()
+      
+      let ferramentasCorrigidas = alocacao.Ferramentas |> Array.map (fun f -> {f with Baixada=false;EmManutencao=false})
+      let alocacao2 = {alocacao 
+                           with Responsavel={alocacao.Responsavel with CPF=Faker().Person.Cpf(false)};
+                                Ferramentas=ferramentasCorrigidas
+                                }
+      
+      try
+         let funcionarioInsert = mapper.Map<FuncionarioInsert>(alocacao2.Responsavel)
+         let ferramentasInsert = mapper.Map<FerramentaInsert[]>(alocacao2.Ferramentas)
+         AlmocharifadoRepository.InsertFuncionario sqlcon funcionarioInsert
+         for ferramenta in ferramentasInsert do FerramentaRepository.InserirFErramenta sqlcon ferramenta
+         AlmocharifadoRepository.InsertAlocacao sqlcon alocacao2
+
+         let ferramentas = FerramentaRepository.GetAllFerramentas sqlcon
+         
+         //let ferramentasAloccadas = AlmocharifadoRepository.GetAllFerramentasAlocadasInfo sqlcon ferramentas 
+         
+         let funcionarios = AlmocharifadoRepository.GetAllFuncioarios sqlcon 
+         let alocacoesPersistidas = AlmocharifadoRepository.GetAllAlocacoes sqlcon  ferramentas funcionarios
+
+         let last = alocacoesPersistidas |>  Array.last 
+         test <@ last.Responsavel = alocacao2.Responsavel @>
+         test <@ last.ContratoLocacao = alocacao2.ContratoLocacao @>
+         test <@ last.DataAlocacao.ToString()  = alocacao2.DataAlocacao.ToString()@>
+         
+         let aproxDatetime (datetime:DateTime) = 
+            DateTime(datetime.Year,datetime.Month,datetime.Day)
+         
+         test <@ last.FerramentasAlocadas 
+                  |> Array.map (fun fa -> {fa.Ferramenta with DataCompra = aproxDatetime fa.Ferramenta.DataCompra  }) 
+                  |> Array.forall (fun f -> alocacao2.Ferramentas
+                                          |> Array.map (fun f -> {f with DataCompra= aproxDatetime f.DataCompra})
+                                          |> Array.contains f) @>
+         //test <@ last.FerramentasAlocadas.[2].Ferramenta  = alocacao2.Ferramentas.[2] @>
+   
+      with
+      | :? SqlException as ex when 
+         ex.Message.Contains("UNIQUE KEY constraint") || ex.Message.Contains("duplicate key") -> test <@ true @> 
+      | _ -> reraise()
+   
+   [<Property>]
+   let ``Ferramentas sÃ£o devolvidias corretamente`` (observacoes:string)  =
+      observacoes |> isNull |> not ==> lazy
+      let alocacao = AutoFaker<AlocacaoInsert>().Generate()
+      
+      let ferramentasCorrigidas = alocacao.Ferramentas |> Array.map (fun f -> {f with Baixada=false;EmManutencao=false})
+      let alocacao2 = {alocacao 
+                           with Responsavel={alocacao.Responsavel with CPF=Faker().Person.Cpf(false)};
+                                Ferramentas=ferramentasCorrigidas
+                                }
+      try     
+         let funcionarioInsert = mapper.Map<FuncionarioInsert>(alocacao2.Responsavel)
+         let ferramentasInsert = mapper.Map<FerramentaInsert[]>(alocacao2.Ferramentas)
+         AlmocharifadoRepository.InsertFuncionario sqlcon funcionarioInsert
+         for ferramenta in ferramentasInsert do FerramentaRepository.InserirFErramenta sqlcon ferramenta
+         AlmocharifadoRepository.InsertAlocacao sqlcon alocacao2
+
+         let ferramentas = FerramentaRepository.GetAllFerramentas sqlcon
+         let funcionarios = AlmocharifadoRepository.GetAllFuncioarios sqlcon 
+         let alocadevolver = Array.last <| AlmocharifadoRepository.GetAllAlocacoes sqlcon  ferramentas funcionarios 
+      
+         AlmocharifadoRepository.RegistrarDevolucaoDeDevolverFerramenta sqlcon
+            alocadevolver alocadevolver.FerramentasAlocadas.[0].Ferramenta 
+             System.DateTime.Now observacoes
+
+         let ferramentas = FerramentaRepository.GetAllFerramentas sqlcon
+         let funcionarios = AlmocharifadoRepository.GetAllFuncioarios sqlcon 
+      
+         let Alocacoes = AlmocharifadoRepository.GetAllAlocacoes sqlcon  ferramentas funcionarios 
+
+         let alocacaoDevolvida = Alocacoes |> Array.find (fun aloc -> aloc.Id = alocadevolver.Id)
+
+         alocacaoDevolvida.FerramentasAlocadas.[0].Devolvida 
+            && not alocacaoDevolvida.FerramentasAlocadas.[1].Devolvida
+            && alocacaoDevolvida.FerramentasAlocadas.[0].Observacoes = observacoes
+
+      with
+          | :? SqlException as ex when 
+             ex.Message.Contains("UNIQUE KEY constraint") || ex.Message.Contains("duplicate key") -> true
+          | _ -> reraise()
+   
+   [<Theory>]
+   [<InlineAutoData>]
+   let ``Ferramenta pode ser alocada, devolvida e alocada novamente`` observacoes =
+      //observacoes |> isNull |> not ==> lazy
+      printfn "%A" observacoes
+      let alocacao = AutoFaker<AlocacaoInsert>().Generate()
+           
+      let ferramentasCorrigidas = alocacao.Ferramentas |> Array.map (fun f -> {f with Baixada=false;EmManutencao=false})
+      let alocacao2 = {alocacao 
+                           with Responsavel={alocacao.Responsavel with CPF=Faker().Person.Cpf(false)};
+                                 Ferramentas=ferramentasCorrigidas
+                                 }
+      
+      let funcionarioInsert = mapper.Map<FuncionarioInsert>(alocacao2.Responsavel)
+      let ferramentasInsert = mapper.Map<FerramentaInsert[]>(alocacao2.Ferramentas)
+      AlmocharifadoRepository.InsertFuncionario sqlcon funcionarioInsert
+      for ferramenta in ferramentasInsert do FerramentaRepository.InserirFErramenta sqlcon ferramenta
+      AlmocharifadoRepository.InsertAlocacao sqlcon alocacao2
+
+      let ferramentas = FerramentaRepository.GetAllFerramentas sqlcon
+      let funcionarios = AlmocharifadoRepository.GetAllFuncioarios sqlcon 
+      let alocadevolver = Array.last <| AlmocharifadoRepository.GetAllAlocacoes sqlcon  ferramentas funcionarios 
+           
+      AlmocharifadoRepository.RegistrarDevolucaoDeDevolverFerramenta sqlcon
+         alocadevolver alocadevolver.FerramentasAlocadas.[0].Ferramenta 
+         System.DateTime.Now observacoes
+
+      let ferramentas = FerramentaRepository.GetAllFerramentas sqlcon
+      let funcionarios = AlmocharifadoRepository.GetAllFuncioarios sqlcon 
+           
+      let Alocacoes = AlmocharifadoRepository.GetAllAlocacoes sqlcon  ferramentas funcionarios 
+
+      let alocacaoDevolvida = Alocacoes |> Array.find (fun aloc -> aloc.Id = alocadevolver.Id)
+
+      test<@ alocacaoDevolvida.FerramentasAlocadas.[0].Devolvida 
+         && not alocacaoDevolvida.FerramentasAlocadas.[1].Devolvida
+         && alocacaoDevolvida.FerramentasAlocadas.[0].Observacoes = observacoes @>
+
+
+      let novaalocacao :AlocacaoInsert = { Ferramentas=[|alocacao2.Ferramentas.[0]|]; 
+                                             Responsavel=alocacaoDevolvida.Responsavel ; DataAlocacao=DateTime.Now;
+                                             ContratoLocacao=alocacaoDevolvida.ContratoLocacao}
+      
+      AlmocharifadoRepository.InsertAlocacao sqlcon novaalocacao
+
+      //with
+      //   | :? SqlException as ex when 
+      //      ex.Message.Contains("UNIQUE KEY constraint") || ex.Message.Contains("duplicate key") -> true
+      //   | _ -> reraise()
     
-      let aloc = Fixture().Build<Alocacao>()
-                     .With((fun x -> x.Id),0)
-                     .With((fun x -> x.Ferramentas), List(ferramentas) :> seq<Ferramenta>)
-                     .With<Funcionario>((fun x -> x.Responsavel), respo )
-                     .With((fun x -> x.Devolucoes), List() :> seq<Devolucao> )
-                     .Create()
-   
-      let context = getContext()
-      context.Add aloc
-      context.SaveChanges()
 
-      //let context2 = getContext()
-      let aloc = context.Alocaoes.SingleAsync().Result
-
-      test <@ aloc.Responsavel = respo @>
+   interface IDisposable with 
+      member this.Dispose () = (dbfixture :> IDisposable).Dispose()
+                  //let ferramentastore = mapper.Map<FerramentaStore>(ferramenta)
 
 
-
-
-
-   
-   //[<Fact>]
-   //let ``Ferramenta é devolvida corretamente `` () =
-   //   let respo = Fixture().Create<Funcionario>();
-
-   //   let ferramentas  = Fixture().CreateMany<Ferramenta>();
-    
-   //   let aloc = Fixture().Build<Alocacao>()
-   //                  .With((fun x -> x.Id),0)
-   //                  .With((fun x -> x.Ferramentas), List(ferramentas) :> seq<Ferramenta>)
-   //                  .With<Funcionario>((fun x -> x.Responsavel), respo )
-   //                  .With((fun x -> x.Devolucoes), List() :> seq<Devolucao> )
-   //                  .Create()
-   
-   //   let context = getContext()
-   //   context.Add aloc
-   //   context.SaveChanges()
-
-   //   //let context2 = getContext()
-   //   let aloc = context.Alocaoes.SingleAsync().Result
-
-   //   test <@ aloc.Responsavel = respo @>
-   //   test <@ aloc.Ferramentas |> Seq.length = 3 @>
-   //   test <@ aloc.Devolucoes |> Seq.length = 1 @>

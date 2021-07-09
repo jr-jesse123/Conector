@@ -2,6 +2,7 @@
 using AlmocharifadoApplication;
 using AutoMapper;
 using Microsoft.AspNetCore.Components.Forms;
+using Almocharifado.InfraEstrutura;
 
 namespace Almocherifado.UI.Components.Forms
 {
@@ -14,7 +15,7 @@ namespace Almocherifado.UI.Components.Forms
 
         [Parameter] public RenderFragment Uploader { get; set; }
 
-        protected EditForm form;
+        public EditForm form;
 
         protected virtual void OnSubmitAsync() 
         {

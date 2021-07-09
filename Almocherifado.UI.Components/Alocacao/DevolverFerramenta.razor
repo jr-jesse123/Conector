@@ -10,7 +10,7 @@
     <h2> <b> DEVOLVER FERRAMENTA</b></h2>
 
     <div class="row d-flex justify-content-between my-4 ">
-        <FerramentaDisplay TextoBtnConfrimacao="@("Devolver Ferramenta")">
+        <FerramentaDisplay @ref="ferramentaDisplay" TextoBtnConfrimacao="@("Devolver Ferramenta")">
             <MensagemFerramentaDisponível>
                 <h4 class="text-danger fw-bold">Ferramenta No Estoque</h4>
             </MensagemFerramentaDisponível>
@@ -20,9 +20,10 @@
                 <p>@*<b>Responsável:</b>@context.alocacao.Responsavel.Nome*@</p>
                 <p><b>AlocadaEm:</b>@context.alocacao.DataAlocacao.ToShortDateString()</p>
                 <button class="btn btn-outline-info w-75" 
-                        @onclick="() => { 
-                                    if (!FerramentasEComentarios.Keys.Contains(context.ferramenta))
-                                    FerramentasEComentarios.Add(context.ferramenta, new string(new char[] { }));} ">
+                        @onclick="() => {
+                                      if (!FerramentasEComentarios.Select(fc => fc.Ferramenta).Contains(context.ferramenta))
+                                      //.Keys.Contains(context.ferramenta))
+                                      FerramentasEComentarios.Add(new Models.FerramentaDevolucaoInputModel(context.ferramenta,new string(new char[] { })));} ">
                 "Devolver Ferramenta"</button>
             </MensagemFerramentaInDisponível>
         </FerramentaDisplay>
@@ -38,12 +39,13 @@
                     <th scope="col">FERRAMENTA</th>
                     <th scope="col">MARCA</th>
                     <th scope="col">MODELO</th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in FerramentasEComentarios)
                 {
-                    <FerramentaAlocacaoTr Ferramenta="item.Key" ></FerramentaAlocacaoTr>
+                    <FerramentaAlocacaoTr OnRemove="() => FerramentasEComentarios.Remove(item)" Ferramenta="item.Ferramenta"></FerramentaAlocacaoTr>
                 }
             </tbody>
         </table>
@@ -61,14 +63,18 @@
 
                 @foreach (var ferramenta in FerramentasEComentarios)
                 {
-                    <ComentarioDevolucao Ferramenta="ferramenta.Key" Comentario="@ferramenta.Value"/>
+                    <ComentarioDevolucao Ferramenta="ferramenta.Ferramenta"  @bind-Comentario="@ferramenta.Comentario"/>
+                    
                 }
 
+                @if (FerramentasEComentarios.Count > 0)
+                {
+                    <div class="d-flex justify-content-end mt-4">
+                        <button type="button" @onclick="OnCancelClic" class="btn btn-outline-danger mx-4">Cancelar</button>
+                        <button type="button" @onclick="OnSubmitAsync" class="btn btn-primary">Salvar</button>
+                    </div>
+                }
 
-                <div class="d-flex justify-content-end mt-4">
-                    <button type="button" @onclick="OnCancelClic" class="btn btn-outline-danger mx-4">Cancelar</button>
-                    <button type="button" @onclick="OnSubmitAsync" class="btn btn-primary">Salvar</button>
-                </div>
             </div>
         </EditForm>
     </div>

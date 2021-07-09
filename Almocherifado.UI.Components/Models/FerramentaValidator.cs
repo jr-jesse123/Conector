@@ -14,6 +14,7 @@ namespace Almocherifado.UI.Components
             RuleFor(f => f.DataDaCompra)
                 .InclusiveBetween(new DateTime(1990, 01, 01), DateTime.Now.Date);
             RuleFor(f => f.Fotos).NotEmpty().WithMessage("É preciso adicionar ao menos uma foto");
+            RuleFor(f => f.Patrimonio).NotEmpty();
 
         }
     }

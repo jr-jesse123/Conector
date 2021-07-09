@@ -1,27 +1,30 @@
 ﻿@page "/AlocarFerramenta"
+
 @using Entities
+
 
 @inherits FormBase
 
 @code{
-  
- }
+
+}
 
 <Toast @ref="toast"></Toast>
 <div class="container h-100 mt-5">
     <h2> <b> ALOCAR FERRAMENTA</b></h2>
 
     <div class="row d-flex justify-content-between my-4 ">
-        <FerramentaDisplay>
-            <MensagemFerramentaDisponível >
-                
+        <FerramentaDisplay @ref="ferramentaDisplay">
+            <MensagemFerramentaDisponível>
+
                 <h4 class="text-success fw-bold">Disponível para alocação</h4>
-                <button class="btn btn-outline-info w-75" @onclick="@(() => FerramentasSelecionadas.Add(@context))">"Adicionar Ferramenta"</button>
+                <button class="btn btn-outline-info w-75" 
+                        @onclick="@(() => FerramentasSelecionadas.Add(@context))">"Adicionar Ferramenta"</button>
             </MensagemFerramentaDisponível>
 
 
-            <MensagemFerramentaInDisponível >
-                
+            <MensagemFerramentaInDisponível>
+
                 <h4 class="text-danger fw-bold">@(context.ferramenta.Baixada ? "Ferramenta Baixada" : "Ferramenta Indisponível") </h4>
                 <p><b>Responsável:</b>@context.alocacao?.Responsavel.Nome</p>
                 <p><b>AlocadaEm:</b>@context.alocacao?.DataAlocacao.ToShortDateString()</p>
@@ -29,43 +32,46 @@
         </FerramentaDisplay>
 
         @if (FerramentasSelecionadas.Count > 0)
-	{
-		 
-	
-        <table class="table mb-5">
-            <thead>
-                <tr>
-                    <th scope="col">PATRIMÔNIO</th>
-                    <th scope="col">FERRAMENTA</th>
-                    <th scope="col">MARCA</th>
-                    <th scope="col">MODELO</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in FerramentasSelecionadas)
-                {
-                <FerramentaAlocacaoTr Ferramenta="item"></FerramentaAlocacaoTr>
-                }
-            </tbody>
-        </table>
+        {
+
+
+            <table class="table mb-5">
+                <thead>
+                    <tr>
+                        <th scope="col">PATRIMÔNIO</th>
+                        <th scope="col">FERRAMENTA</th>
+                        <th scope="col">MARCA</th>
+                        <th scope="col">MODELO</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in FerramentasSelecionadas)
+                    {
+                        <FerramentaAlocacaoTr OnRemove="() => FerramentasSelecionadas.Remove(item)" Ferramenta="item"></FerramentaAlocacaoTr>
+                    }
+                </tbody>
+            </table>
         }
         <EditForm class="@formClass" Model="alocacaoInput" @ref="form" OnSubmit="OnSubmitAsync">
+            
+            
             <FluentValidationValidator></FluentValidationValidator>
 
             <div class="row">
                 <div class="col-4">
                     <div class="mb-3">
                         <label class="form-label">* Responsável</label>
-                        <InputSelect @bind-Value="teste" class="form-select">
+                        <InputSelect @bind-Value="teste" class="form-select" id="responsavel">
                             <option value="" disabled selected>Escolha o Responsável</option>
 
                             @if (Funcionarios != null)
                             {
-                            @foreach (var funcionario in Funcionarios)
+                                @foreach (var funcionario in Funcionarios)
                                 {
-                            <option value="@funcionario.CPF">
-                                @funcionario.Nome
-                            </option>
+                                    <option value="@funcionario.CPF">
+                                        @funcionario.Nome
+                                    </option>
                                 }
                             }
                         </InputSelect>
@@ -78,7 +84,7 @@
                 <div class="col-4">
                     <div class="mb-3">
                         <label class="form-label">* Contrato/Locação</label>
-                        <InputText @bind-Value="alocacaoInput.ContratoLocacao" type="text" class="form-control" />
+                        <InputText @bind-Value="alocacaoInput.ContratoLocacao" type="text" class="form-control"   id="contratoLocacao" />
                         <div class="invalid-feedback">
                             <ValidationMessage For="() => alocacaoInput.ContratoLocacao"></ValidationMessage>
                         </div>
@@ -87,7 +93,7 @@
                 <div class="col-4">
                     <div class="mb-3">
                         <label class="form-label">* Data Locação</label>
-                        <InputDate @bind-Value="alocacaoInput.Data" class="form-control">
+                        <InputDate @bind-Value="alocacaoInput.Data" class="form-control"  id="dataLocacao">
 
                         </InputDate>
                         <div class="invalid-feedback">
@@ -121,7 +127,7 @@
 
                 <div class="d-flex justify-content-end mt-4">
                     <button type="button" @onclick="OnCancelClic" class="btn btn-outline-danger mx-4">Cancelar</button>
-                    <button type="button" @onclick="OnSubmitAsync" class="btn btn-primary">Salvar</button>
+                    <button type="button" id="SalvarBtn" @onclick="OnSubmitAsync" class="btn btn-primary">Salvar</button>
                 </div>
             </div>
         </EditForm>

@@ -10,6 +10,7 @@ a{
     font-family: Inter;
     color: white;
     cursor:pointer;
+    
 }
 Menu-Item li {
     color: white;
@@ -21,5 +22,24 @@ Menu-Item li {
 
 .icon-container {
     min-width: 30px;
+}
+
+h5 {
+    font-size: .9em !important;
+    vertical-align: middle;
+    margin: auto auto;
+}
+
+a {
+    font-size: .9em !important;
+}     
+
+@media only screen and (min-width : 1224px) {
+    h5 {
+        font-size: 1.25em !important;
+    }
+    ul > div > a {
+        font-size: 1.25em !important;
+    }
 }
 

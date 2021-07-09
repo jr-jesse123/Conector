@@ -1,4 +1,4 @@
-﻿using AlmocharifadoApplication;
+﻿using Almocharifado.InfraEstrutura;
 using Almocherifado.UI.Components.Forms;
 using Almocherifado.UI.Components.Models;
 using Entities;
@@ -13,8 +13,7 @@ namespace Almocherifado.UI.Components.Alocacao
     public partial class AlocarFerramenta : FormBase
     {
 
-        //[Inject] IPrintingService PrintingService { get; set; }
-
+        FerramentaDisplay ferramentaDisplay;
 
         Toast toast;
 
@@ -44,7 +43,8 @@ namespace Almocherifado.UI.Components.Alocacao
 
         protected void OnFuncionarioSelect(string cpf)
         {
-            alocacaoInput.Responsavel = Funcionarios.Single(f => f.CPF == (string)cpf);
+            var selected = Funcionarios.Single(f => f.CPF == cpf);
+            alocacaoInput.Responsavel = selected;
         }
 
 
@@ -56,7 +56,7 @@ namespace Almocherifado.UI.Components.Alocacao
 
             if (form.EditContext.Validate())
             {
-                var alocacao = mapper.Map<Entities.Alocacao>(alocacaoInput);
+                var alocacao = mapper.Map<AlocacaoInsert>(alocacaoInput);
                 try
                 {
                     repo.SalvarAlocacao(alocacao);
@@ -69,7 +69,7 @@ namespace Almocherifado.UI.Components.Alocacao
                 {
                     toast.Show(ex.Message, "Erro");
                 }
-                
+                ferramentaDisplay.RefreshMe();
             }
 
         }

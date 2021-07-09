@@ -58,7 +58,7 @@
                             <div class="mb-3">
                                 <label for="DataDaCompraInput" class="form-label"><b>*</b>Data da Compra:</label>
                                 
-                                <InputDate min="1990-01-01" max="@DateTime.Now.Date.ToString("yyyy-MM-dd")"  @bind-Value="FerramentaInput.DataDaCompra" id="DataDaCompraInput" type="text" class="form-control" />
+                                <InputDate style="font-size:15px" min="1990-01-01" max="@DateTime.Now.Date.ToString("yyyy-MM-dd")"  @bind-Value="FerramentaInput.DataDaCompra" id="DataDaCompraInput" type="text" class="form-control" />
                                 <div class="invalid-feedback">
                                     <ValidationMessage For="() => FerramentaInput.DataDaCompra" />
                                 </div>
@@ -68,7 +68,7 @@
                         <div class="col-4">
                             <div class="mb-3">
                                 <label  class="form-label"><b>*</b>Patrimônio</label>
-                                <InputNumber id="ProximoPatrimonio" disabled @bind-Value="@ProximoPatrimonio" class="form-control" />
+                                <input id="ProximoPatrimonio"  value="@ProximoPatrimonio.ToString("0000")" class="form-control" />
 
                             </div>
 
@@ -96,7 +96,7 @@
 
                     <div class="w-100 d-flex f¨lex-row justify-content-end">
                         <button @onclick="OnCancelClic" class="btn btn-outline-danger mx-4">Cancelar</button>
-                        <button type="button" @onclick="OnSubmit" class="btn btn-dark">Continuar</button>
+                        <button type="button" id="SalvarBtn" @onclick="OnSubmit" class="btn btn-dark">Continuar</button>
                     </div>
 
                 </div>

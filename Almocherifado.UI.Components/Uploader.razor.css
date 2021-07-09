@@ -1,4 +1,6 @@
-﻿
+﻿#inputFile {
+    max-width: 24vw;
+}
 /*Input File*/
 #DropArea {
     padding: 50px 25px;
@@ -24,4 +26,7 @@ body .e-upload-drag-hover {
     margin-left: 5%;
 }
 
+#DataDaCompraInput{
+    font-size: 15px;
+}
 

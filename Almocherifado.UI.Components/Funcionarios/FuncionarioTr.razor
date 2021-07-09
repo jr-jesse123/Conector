@@ -1,17 +1,17 @@
 ﻿@using Entities
 @code{
     [Parameter] public Funcionario Funcionario { get; set; } = new();
-    [Parameter] public Ferramenta[] Ferramentas { get; set; } = new Entities.Ferramenta[] { };
+    [Parameter] public FerramentaAlocadaInfo[] Ferramentas { get; set; } = new Entities.FerramentaAlocadaInfo[] { };
     [Parameter] public Entities.Alocacao[] Alocacoes { get; set; } = new Entities.Alocacao[] { };
 }
 
 <tr>
     <th>
-        <img src=@Funcionario.Foto style="height: 100px;width:70px;" alt="">
+        <img  src=@Funcionario.Foto style="height: 100px;width:70px;" >
     </th>
     <th style="text-align: left;width: 300px;">
         <h6 style="text-transform: uppercase;">@Funcionario.Nome</h6>
-        @foreach (var item in Alocacoes)
+        @foreach (var item in Alocacoes.Where(aloc => !aloc.Finalizada))
         {
     <p><b>Contrato:</b>@(" " + item.ContratoLocacao)</p>
         }
@@ -21,9 +21,9 @@
     </th>
 
     <th class="pe-5" style="max-width: 127px;">
-        @foreach (var item in Ferramentas)
+        @foreach (var item in Ferramentas.Where(f => !f.Devolvida))
         {
-        <p><b>@item.Nome</b> - Patrimônio @Convert.ToInt32(item.Patrimonio).ToString("00000")</p>
+        <p><b>@item.Ferramenta.Nome</b> - Patrimônio @Convert.ToInt32(item.Ferramenta.Patrimonio).ToString("00000")</p>
         }
 
         

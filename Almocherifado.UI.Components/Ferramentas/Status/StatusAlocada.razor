@@ -1,7 +1,5 @@
 ﻿@code{
     [Parameter] public Entities.Alocacao Alocacao { get; set; }
-    [Parameter] public bool EmManutencao { get; set; }
-    [Parameter] public EventCallback<bool> OnChange { get; set; }
 
     protected override void OnParametersSet()
     {
@@ -12,15 +10,8 @@
     }
 }
 
-<div class="form-check form-switch">
-    <input class="form-check-input" type="checkbox" @onchange="(args) => OnChange.InvokeAsync((bool)args.Value).Wait() " checked="@EmManutencao" id="flexSwitchCheckDefault">
-    <label class="form-check-label" for="flexSwitchCheckDefault">Ferramenta Em Manutenção</label>
-</div>
 
-@*<div class="fw-normal text-danger ">
-    <input type="checkbox"  class="bg-danger">
-    <span style="font-size: 12px;">Em manutenção</span>
-</div>*@
+
 <div>
     <p class="my-0">
         <b style="font-size: 12px;"> Responsável:</b>

@@ -1,11 +1,15 @@
-﻿<div class="row">
+﻿@using Almocherifado.UI.Components.Ferramentas.Status
+
+<div class="row">
     <div class="container h-100 mt-5">
         <div class="row">
-            <div class="col">
-                <h1 class="">QUADRO RESUMO</h1>
+            <div class="col" >
+                <h2>QUADRO RESUMO</h2>
                 <div class="input-group" ;">
-                    <input type="text" class="form-control" aria-label="Dollar amount (with dot and two decimal places)">
+                    <input type="text" class="form-control">
+
                     <span class="input-group-text">
+
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <g clip-path="url(#clip0)">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M10.442 10.4417C10.5349 10.3487 10.6452 10.275 10.7666 10.2247C10.888 10.1743 11.0181 10.1484 11.1495 10.1484C11.2809 10.1484 11.411 10.1743 11.5324 10.2247C11.6538 10.275 11.7641 10.3487 11.857 10.4417L15.707 14.2917C15.8946 14.4792 16.0001 14.7336 16.0002 14.9989C16.0003 15.2641 15.895 15.5186 15.7075 15.7062C15.52 15.8939 15.2656 15.9993 15.0004 15.9994C14.7351 15.9995 14.4806 15.8942 14.293 15.7067L10.443 11.8567C10.35 11.7639 10.2763 11.6536 10.2259 11.5322C10.1756 11.4108 10.1497 11.2806 10.1497 11.1492C10.1497 11.0178 10.1756 10.8877 10.2259 10.7663C10.2763 10.6449 10.35 10.5346 10.443 10.4417H10.442Z" fill="#05374D" />
@@ -30,33 +34,76 @@
             <div class="col">
                 <div class="card text-dark bg-light mb-3">
                     <div class="card-body">
-                        <h5 class="card-title"> <b>FERRAMENTAS</b></h5>
-                        <table>
-                            <tr>
-                                <td>
-                                    <b class="fs-3">@FerramentasCadastradas</b>
-                                </td>
-                                <td>
-                                    <p class="mx-3 my-auto">FERRAMENTAS CADASTRADAS</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <b class="fs-3 text-success">@FerramentasDisponiveis</b>
-                                </td>
-                                <td>
-                                    <p class="mx-3 my-auto">FERRAMENTAS DISPONÍVEIS</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <b class="fs-3 text-danger">@FerramentasAlocadas</b>
-                                </td>
-                                <td>
-                                    <p class="mx-3 my-auto">FERRAMENTAS ALOCADAS</p>
-                                </td>
-                            </tr>
-                        </table>
+                        @if (FerramentaSelecionada is not null)
+                        {
+                            @if (FerramentaSelecionada is not null)
+                            {
+
+                                if (Alocacoes
+                                        .Any(aloc => aloc.FerramentasAlocadas
+                                        .Where(fa => !fa.Devolvida).Select(f => f.Ferramenta).Contains(FerramentaSelecionada)))
+                                {
+                                    var aloc = Alocacoes
+                                                   .Where(aloc => aloc.FerramentasAlocadas.Where(fa => !fa.Devolvida)
+                                                                                           .Select(fa => fa.Ferramenta)
+                                                                                           .Contains(FerramentaSelecionada))
+                                                   .Single();
+
+                                        <div style="height:150px">
+                                            <h1>@FerramentaSelecionada.Nome</h1>
+                                            <h5> <strong>Patrimônio:</strong> @FerramentaSelecionada.Patrimonio</h5>
+                                            <h3 class="d-3">Ferramenta Alocada</h3>
+                                        </div>
+                                }
+                                else if (FerramentaSelecionada.EmManutencao)
+                                {
+                                    <div style="height:150px">
+                                        <h1>@FerramentaSelecionada.Nome</h1>
+                                        <h5> <strong>Patrimônio:</strong> @FerramentaSelecionada.Patrimonio</h5>
+                                        <h3 class="Text-Danger d-3">Ferramenta Em Manutenção</h3>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div style="height:150px">
+                                        <h1>@FerramentaSelecionada.Nome</h1>
+                                        <h5> <strong>Patrimônio:</strong> @FerramentaSelecionada.Patrimonio</h5>
+                                        <h3 class="Text-Success d-3">Disponível para Alocação</h3>
+                                    </div>
+                                }
+                            }
+                        }
+                        else
+                        {
+
+                            <h5 class="card-title"> <b>FERRAMENTAS</b></h5>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <b class="fs-3">@FerramentasCadastradas</b>
+                                    </td>
+                                    <td>
+                                        <p class="mx-3 my-auto">FERRAMENTAS CADASTRADAS</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <b class="fs-3 text-success">@FerramentasDisponiveis</b>
+                                    </td>
+                                    <td>
+                                        <p class="mx-3 my-auto">FERRAMENTAS DISPONÍVEIS</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <b class="fs-3 text-danger">@FerramentasAlocadas</b>
+                                    </td>
+                                    <td>
+                                        <p class="mx-3 my-auto">FERRAMENTAS ALOCADAS</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        }
                     </div>
                 </div>
             </div>
@@ -76,15 +123,32 @@
                 </thead>
                 <tbody>
 
-                    @foreach (var item in AlocacoesAtuais)
+                    @if (PatrimonioAtual > 0)
                     {
-                        <tr>
-                            <HistoricoFerramentaTr Alocacao="item" Ferramenta="ferramentaAtual"></HistoricoFerramentaTr>
-                        </tr>
+
+                        @foreach (var ferramenta in ferramentasAtuais)
+                        {
+                            @foreach (var alocacao in AlocacoesAtuais)
+                            {
+                                var ferramentaAlocada = alocacao.FerramentasAlocadas.First(d => d.Ferramenta.Patrimonio == ferramenta.Patrimonio);
+                                <tr>
+                                    <HistoricoFerramentaTr Alocacao="alocacao" Ferramenta="ferramenta"></HistoricoFerramentaTr>
+                                </tr>
+
+                            
+                                if (ferramentaAlocada.Devolvida && !string.IsNullOrWhiteSpace(ferramentaAlocada.Observacoes))
+                                {
+                                    <tr>
+                                        <td colspan="5">
+                                            <strong>Observações:</strong> @ferramentaAlocada.Observacoes;
+
+                                        </td>
+                                    </tr>
+                                }
+
+                            }
+                        }
                     }
-
-
-
 
                 </tbody>
             </table>

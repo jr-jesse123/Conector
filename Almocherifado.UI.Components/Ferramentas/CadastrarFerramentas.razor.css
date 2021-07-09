@@ -1,11 +1,11 @@
-﻿.half-contained {
-    width: calc(44%);
+﻿e-file-container{
+    max-width: 100px;
+}
+
+.half-contained {
+    width: 44%;
 }
 
 .was-validated .invalid-feedback {
     display: block 
-}
-
-#DataDaCompraInput{
-    font-size:12px;
 }

@@ -1,4 +1,5 @@
-﻿using AlmocharifadoApplication;
+﻿using Almocharifado.InfraEstrutura;
+using AlmocharifadoApplication;
 using Entities;
 using Microsoft.AspNetCore.Components;
 using System;
@@ -15,10 +16,12 @@ namespace Almocherifado.UI.Components.Funcionarios
         [Inject] IFerramentaRepository FerramentaRepository { get; set; }
 
         
-        Dictionary<Funcionario,Ferramenta[]> funcionariosEFerramentas { get; set; }
+        Dictionary<Funcionario, FerramentaAlocadaInfo[]> funcionariosEFerramentas { get; set; }
         //ATENÇÃO: funcionarios e alocações não possui todos os funciona´rios
         Dictionary<Funcionario, Entities.Alocacao[]> funcionariosEAlocacoes { get; set; }
-        Entities.Alocacao[] alocacoes { get; set; }
+        Dictionary<Funcionario, FerramentaAlocadaInfo[]> funcionariosEFerramentasSelecionados { get; set; }
+        //ATENÇÃO: funcionarios e alocações não possui todos os funciona´rios
+        
 
         protected override void OnInitialized()
         {
@@ -27,23 +30,24 @@ namespace Almocherifado.UI.Components.Funcionarios
             var ferrametnas = FerramentaRepository.GetAllFerramentas();
 
             var ferramentasPorFunc = alocacoes
-                    .Select(aloc => (aloc.Responsavel,aloc.Ferramentas))
+                    .Select(aloc => (aloc.Responsavel,aloc.FerramentasAlocadas))
                     .GroupBy(tuple => tuple.Responsavel)
                     .Select(g =>
-                        new KeyValuePair<Funcionario,Ferramenta[]>(g.Key, g.SelectMany(g => g.Ferramentas).ToArray()
+                        new KeyValuePair<Funcionario,FerramentaAlocadaInfo[]>(g.Key, g.SelectMany(g => g.FerramentasAlocadas).ToArray()
                     )
                 );
 
-            var funcComFerramentasDic = new Dictionary<Funcionario,Ferramenta[]>(ferramentasPorFunc);
+            var funcComFerramentasDic = new Dictionary<Funcionario, FerramentaAlocadaInfo[]>(ferramentasPorFunc);
 
             foreach (var funcionario in funcionarios)
             {
                 if (!funcComFerramentasDic.Keys.Contains(funcionario))
-                    funcComFerramentasDic.Add(funcionario, new Ferramenta[] { });
+                    funcComFerramentasDic.Add(funcionario, new FerramentaAlocadaInfo[] { });
             }
 
             funcionariosEFerramentas = funcComFerramentasDic;
 
+            funcionariosEFerramentasSelecionados = funcionariosEFerramentas;
 
             var alocacoesPorFuncionario = alocacoes
                 .Select(aloc => (aloc.Responsavel, aloc))
@@ -60,6 +64,20 @@ namespace Almocherifado.UI.Components.Funcionarios
                 if (!funcionariosEAlocacoes.Keys.Contains(funcionario))
                     funcionariosEAlocacoes.Add(funcionario, new Entities.Alocacao[] { });
             }
+
+        }
+
+        void OnPesquisaPorNomeFuncionario(ChangeEventArgs args)
+        {
+            if (string.IsNullOrWhiteSpace((string)args.Value))
+            {
+                funcionariosEFerramentasSelecionados = funcionariosEFerramentas;
+                return;
+            }
+
+            var funcionariosFiltradods = funcionariosEFerramentas.Where(f => f.Key.Nome.ToUpper().Contains(args.Value.ToString().ToUpper()));
+
+            funcionariosEFerramentasSelecionados = new (funcionariosFiltradods);               ;
 
         }
     }

@@ -1,0 +1,29 @@
+﻿@code{
+    public void Show()
+    {
+        display = "block";
+        StateHasChanged();
+    }
+    private void Hide() => display = "none";
+
+    public void SetFoto(string url)
+    {
+        fotourl = url;
+    }
+
+    string fotourl { get; set; } = "";
+
+    string display { get; set; } = "none";
+}
+
+<div id="myModal" style="display:@display;" class="modal">
+
+    <!-- The Close Button -->
+    <span @onclick="() => Hide()" class="close">&times;</span>
+
+    <!-- Modal Content (The Image) -->
+    <img class="modal-content" src="@fotourl" id="img01">
+
+    <!-- Modal Caption (Image Text) -->
+    <div id="caption"></div>
+</div>

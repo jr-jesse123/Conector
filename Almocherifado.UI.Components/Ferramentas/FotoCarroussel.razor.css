@@ -1,0 +1,9 @@
+﻿.expansible{
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.expansible:hover {opacity: 0.7;}
+.carousel-control-next, .carousel-control-prev{
+    z-index:0;
+}

@@ -2,12 +2,10 @@ using FluentValidation.AspNetCore;
 using Almocherifado.UI.Areas.Identity;
 using Almocherifado.UI.Data;
 using Append.Blazor.Printing;
-using AutoMapper;
 using BlazorDownloadFile;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
-using InfraEstrutura;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -20,9 +18,8 @@ using Microsoft.Extensions.Hosting;
 using Syncfusion.Blazor;
 using AlmocharifadoApplication;
 using Almocherifado.UI.Components.Models;
-using Microsoft.Extensions.Logging.Console;
-using Microsoft.Extensions.Logging;
 using System;
+using Almocharifado.InfraEstrutura;
 
 namespace Almocherifado.UI
 {
@@ -75,16 +72,22 @@ namespace Almocherifado.UI
             services.AddBlazorDownloadFile();
             services.AddScoped<IPrintingService, PrintingService>();
 
+            services.AddScoped<IAlmocharifadoRepository, AlmocharifadoRepository>(
+                sc => new AlmocharifadoRepository(Configuration.GetConnectionString("AlmocharifadoDb"))
+                );
 
-            
-            services.AddDbContext<AlmocharifadoContext>
-                    (builder => builder
-                        .UseSqlServer(Configuration.GetConnectionString("AlmocharifadoDb"))
-                        .LogTo(log => Console.WriteLine(log))
-                        ); 
+            services.AddScoped<IFerramentaRepository, AlmocharifadoRepository>(
+                sc => new AlmocharifadoRepository(Configuration.GetConnectionString("AlmocharifadoDb"))
+                );
 
-            
-          
+            //services.AddDbContext<AlmocharifadoContext>
+            //        (builder => builder
+            //            .UseSqlServer(Configuration.GetConnectionString("AlmocharifadoDb"))
+            //            .LogTo(log => Console.WriteLine(log))
+            //            ); 
+
+
+
             services.AddAutoMapper(typeof(CadastroFuncionarioModel));
 
             services.ConfigurarPatrimonio();
@@ -96,10 +99,10 @@ namespace Almocherifado.UI
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, 
              ApplicationDbContext applicationDbContext,
-            UserManager<IdentityUser> userManager, AlmocharifadoContext context)
+            UserManager<IdentityUser> userManager)
         {
 
-            context.Database.EnsureCreated();
+            
 
             Syncfusion.Licensing.SyncfusionLicenseProvider
                 .RegisterLicense("NDUyMjY2QDMxMzkyZTMxMmUzMFB3VlplMFgwZm9KYVR6UVZ3dG1pcTcvSzg0elBLaTFsSi9maTRUVVZUcHc9");

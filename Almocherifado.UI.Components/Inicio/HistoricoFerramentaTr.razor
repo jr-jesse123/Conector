@@ -10,10 +10,12 @@
 
 <td>
     @Ferramenta.Nome - @Ferramenta.Patrimonio
-    MAINFOLD - 0023
 </td>
 <td style="text-align: left;width: 300px;">
-    @if (Alocacao.Responsavel is not null)
+    @if (Ferramenta.EmManutencao)
+    {
+        <span class="text-danger">MANUTENÇÃO</span>
+    }else if (Alocacao.Responsavel is not null)
     {
         @Alocacao.Responsavel.Nome
     }
@@ -27,15 +29,18 @@
 
 <td>
     
-    @Alocacao.DataAlocacao.ToShortDateString()
+     @Alocacao.DataAlocacao.ToShortDateString()
 </td>
 
 
 <td>
-    20/03/2021
-    @if (Alocacao.Devolucoes?.FirstOrDefault(d => d.Ferramenta == Ferramenta) is not null)
-    {
-        @Alocacao.Devolucoes.FirstOrDefault(d => d.Ferramenta == Ferramenta).Data.ToShortDateString();
+    @{ 
+        var ferramentaalocadainfo = Alocacao.FerramentasAlocadas.FirstOrDefault(d => d.Ferramenta.Patrimonio == Ferramenta.Patrimonio);
+            if (ferramentaalocadainfo.Devolvida)
+            {
+                @ferramentaalocadainfo.DataDevolucao.Value.ToShortDateString();
+            }
     }
-
+        
+    
 </td>

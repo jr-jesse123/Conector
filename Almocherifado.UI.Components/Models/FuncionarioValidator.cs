@@ -10,7 +10,6 @@ namespace Almocherifado.UI.Components.Models
             RuleFor(f => f.CPF).IsValidCPF() ;
             RuleFor(f => f.Cargo).NotEmpty();
             RuleFor(f => f.Email).NotEmpty().EmailAddress();
-            RuleFor(f => f.Foto).NotEmpty();
         }
     }
 

@@ -1,3 +1,7 @@
 ﻿<ProjectConfiguration>
-  <Settings />
+  <Settings>
+    <AdditionalFilesToIncludeForProject>
+      <Value>DbScripts\FerramentasTable.sql</Value>
+    </AdditionalFilesToIncludeForProject>
+  </Settings>
 </ProjectConfiguration>

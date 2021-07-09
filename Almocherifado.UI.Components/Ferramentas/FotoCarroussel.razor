@@ -2,26 +2,21 @@
 
 @code{
     string id = Guid.NewGuid().ToString().Split('-').First();
-
     [Parameter]
-    public IEnumerable<string> LinkFotos { get; set; } =
-        new List<string>()
-        //{
-        //            "017.241.251-09.png",
-        //            "017.241.251-09.png"
-        //}
-        ;
+    public IEnumerable<string> LinkFotos { get; set; } = new List<string>();
+    [Parameter] public EventCallback<string> OnFotoClicked { get; set; }
 }
-<div id="@("Indicators1" + id)" class="carousel slide d-flex align-items-center" data-bs-ride="carousel" style="width: 100px;height: 100px;">
-    <!-- <div class="carousel-indicators">
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-    </div> -->
-    <div class="carousel-inner">
-        
+
+
+
+<div id="@("Indicators1" + id)" class="carousel slide d-flex align-items-center expansible" 
+     data-bs-ride="carousel" style="width: 100px; height: 100px; object-fit: contain">
+ 
+    <div class="carousel-inner" style="max-height:100px !important;">
+
         <div class="carousel-item active">
-            <img src="@( "/" + LinkFotos.First())" class="d-block w-100 " >
+            <img @onclick="@(() => { if (OnFotoClicked.HasDelegate) OnFotoClicked.InvokeAsync("/" + LinkFotos.First()).Wait(); })" 
+                 src="@( "/" + LinkFotos.First())" class="d-block w-100 expansible ">
         </div>
 
         @if (LinkFotos.Count() > 1)
@@ -29,7 +24,13 @@
             @foreach (var item in LinkFotos.Skip(1))
             {
                 <div class="carousel-item">
-                    <img src="@("/" +item)" class="d-block w-100" >
+                    <img style="object-fit:contain;max-height:100px !important;"
+                         src="@("/" +item)"
+                         @onclick="@(() => { if (OnFotoClicked.HasDelegate) OnFotoClicked.InvokeAsync("/" + item).Wait(); })"
+                         class="d-block w-100">
+
+                    <!-- The Modal -->
+
                 </div>
             }
         }

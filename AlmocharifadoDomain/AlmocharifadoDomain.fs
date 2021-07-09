@@ -5,6 +5,15 @@ open System
 open System.Collections.Generic
 
 
+(*
+alocada
+em manutenção
+Disponível
+Baixada
+*)
+
+   
+
 //type Fotos = private Fotos of string []
 
 [<CLIMutable>]
@@ -12,7 +21,7 @@ type Ferramenta =
                         {
                            Nome:string;Marca:string;
                            Modelo:string;DataCompra:DateTime;
-                           Patrimonio:string;Fotos: string [];
+                           Patrimonio:int;Fotos: string [];
                            Descricao:string
                            EmManutencao:bool
                            Baixada:bool
@@ -28,26 +37,44 @@ type Ferramenta =
 [<CLIMutable>]
 type Funcionario = {Nome:string;CPF:string;Cargo:string;Email:string;Foto:string}
 
+//[<CLIMutable>]
+//type Devolucao = {Ferramenta:Ferramenta;Data:DateTime;Observacoe:string }
+
+//holds an datetype record with custom comparison
+
 [<CLIMutable>]
-type Devolucao = {Id:int;Ferramenta:Ferramenta;Data:DateTime;Observacoe:string }
+type FerramentaAlocadaInfo =  {Ferramenta:Ferramenta;
+                                 DataDevolucao:DateTime option; //TODO: ENVOVLER ESSE CARA NUM RECORDE COM CUSTOM CUSTOMEQUALITY E NOCCOMPARISSON CCOMO NO CURSO DE TYPE DRIVEN DEVELOPEMENTE PARA SIMPLIFICAR TESTES E COMPARAÇÕES
+                                 Observacoes:string}
+                               with member this.Devolvida = Option.isSome this.DataDevolucao
+   
 
 [<CLIMutable>]
 type Alocacao = 
    {
-      Id:int;Ferramentas:Ferramenta seq;
+      Id:int;
+      FerramentasAlocadas:FerramentaAlocadaInfo [];
       Responsavel:Funcionario;ContratoLocacao:string;
       DataAlocacao:DateTime
-      Devolucoes:Devolucao seq
    }
+   with member this.Finalizada = 
+      this.FerramentasAlocadas |> Array.forall (fun fa -> fa.Devolvida ) 
+
 
 module Alocacoes=
    
    type FerramentasFetcher = unit->Ferramenta seq
-   type AlocacoesFetcher = unit->Alocacao seq
+   type FaInfoFetcher = unit->FerramentaAlocadaInfo seq
 
-   let FerramentaAlocada (listaAlocacoesFetcheer:AlocacoesFetcher) (ferramenta:Ferramenta) =
-      listaAlocacoesFetcheer ()
-      |> Seq.exists(fun aloc -> Seq.contains ferramenta aloc.Ferramentas; )
+   //todo: implementar 
+   let FerramentaAlocada (FaInfoFetcheer:FaInfoFetcher) (ferramenta:Ferramenta) =
+      FaInfoFetcheer ()
+      |> Seq.filter(fun fa -> fa.Ferramenta = ferramenta && fa.Devolvida)
+      |> Seq.length
+      |> function
+      | 0 -> false
+      | 1 -> true
+      | _ -> failwith "Ferramenta parece estar aloccada mais de uma vez"
 
    let GetProximoPatrimonio (ferramentasFetcher:FerramentasFetcher) =
       let ferramentas = ferramentasFetcher () 
@@ -62,23 +89,28 @@ module Ferramentas=
 //TODO: TRAZER FILTROS PARA CA
 //   let FiltrarPorTextoLivre ferramentas =
       
-   //TODO: ENVIAR MOTIVO PELO QUAL A FERRAMENTA ESTÁ BAIXADA
+   
    let FerramentaDisponivel  (alocacoes:Alocacao seq)  ferramenta =
-      if ferramenta.Baixada = true then
-        false
-      else
-         alocacoes 
-         |> Seq.sortByDescending (fun aloc -> aloc.Id)
-         |> Seq.tryFind (fun aloc -> Seq.contains ferramenta aloc.Ferramentas)
-         |> function  //TODO: EXTRAIR ESTA AVALIAÇÃO PARA ACTIVE PATTERN MATCHING
-         |Some aloc when isNull aloc.Devolucoes -> false
-         |Some aloc when isNull aloc.Devolucoes -> false //TODO: PENSAR EM COMO RESOLVER ESTE NULL
-         |Some aloc when aloc.Devolucoes 
-            |> Seq.exists  (fun dev -> dev.Ferramenta = ferramenta) -> true
-         |Some aloc when aloc.Devolucoes 
-            |> Seq.exists  (fun dev -> dev.Ferramenta = ferramenta) |> not -> false
-         |None -> true
-         | _ -> failwith "situação não prevista"
+
+         let alocacaoContemFeramenta aloc ferramenta =
+            aloc.FerramentasAlocadas 
+            |> Array.map (fun fa -> fa.Ferramenta)
+            |> Array.contains ferramenta
+
+         let GetEmprestimoInfo aloc ferramenta = 
+            Array.Find(aloc.FerramentasAlocadas,(fun fa -> fa.Ferramenta = ferramenta))
+         
+
+         if ferramenta.Baixada = true then
+           false
+         else
+            alocacoes 
+            |> Seq.sortByDescending (fun aloc -> aloc.Id)
+            |> Seq.tryFind (fun aloc -> alocacaoContemFeramenta aloc ferramenta )
+            |> function  
+            |Some aloc -> Option.isSome (GetEmprestimoInfo aloc ferramenta).DataDevolucao
+            |None -> true
+            //| _ -> failwith "situação não prevista"
          
 
       //alocacoes
@@ -95,94 +127,11 @@ module Ferramentas=
             match FerramentaDisponivel alocacoes ferramenta with 
             |false -> 
                alocacoes
-               |> Seq.filter (fun aloc -> Seq.contains ferramenta aloc.Ferramentas) 
+               |> Seq.filter (fun aloc -> aloc.FerramentasAlocadas 
+                                          |> Array.filter( fun fa -> not fa.Devolvida)
+                                          |> Array.map (fun fa -> fa.Ferramenta) 
+                                          |> Seq.contains ferramenta
+                              )  
                |> Seq.exactlyOne
                |> Some
             |true -> None
-//namespace Dtos 
-//open Entities
-//open System
-//open System.Collections.Generic
-//   [<CLIMutable>]
-//   type FuncionarioDto = Funcionario
-      
-//   [<CLIMutable>]
-//   type FerramentaDto  = 
-//      {
-//            Id:int
-//            Nome:string;Marca:string;
-//            Modelo:string;DataDaCompra:DateTime;
-//            Patrimonio:int;Fotos:ICollection<string>;
-//            Descricao:string
-//         }
-//   open FluentValidation
-//   [<AutoOpen>]
-//   module FerramentaDto=
-//      let FromDomain (ferramenta:Ferramenta) =
-   
-//                     {Id=ferramenta.Id;
-//                     Nome=ferramenta.Nome;
-//                     Modelo=ferramenta.Modelo;
-//                     Patrimonio=ferramenta.Patrimonio;
-//                     Fotos= new List<string>(ferramenta.Fotos) :> ICollection<string> ;
-//                     Descricao=ferramenta.Descricao;
-//                     Marca=ferramenta.Marca;
-//                     DataDaCompra=ferramenta.DataCompra
-//                     }
-         
-//      let ToDomain ferramentaDto :  Ferramenta =
-//                    {
-//                     Id=ferramentaDto.Id;
-//                     Nome=ferramentaDto.Nome;
-//                     Modelo=ferramentaDto.Modelo;
-//                     Patrimonio=ferramentaDto.Patrimonio;
-//                     Fotos= ferramentaDto.Fotos |> Array.ofSeq ;
-//                     Descricao=ferramentaDto.Descricao;
-//                     Marca=ferramentaDto.Marca;
-//                     DataCompra=ferramentaDto.DataDaCompra
-//                     }
-      
-//      //let ValidaiteFerramentaDto (builder:IRuleBuilder<>) ferDto =
-         
-
-//      type FerramentaValidator () as this = 
-//         inherit AbstractValidator<FerramentaDto>()
-//         do this.RuleFor(fun f -> f.DataDaCompra)
-//                     .InclusiveBetween(DateTime(1980,1,1),DateTime.Now)
-//                     .WithMessage("Data deve estar entre 1980 e hoje") 
-//                     |> ignore
-
-//         do this.RuleFor(fun f -> f.Nome).NotEmpty() |> ignore
-//         do this.RuleFor(fun f -> f.Modelo).NotEmpty() |> ignore
-//         do this.RuleFor(fun f -> f.Marca).NotEmpty() |> ignore
-//         do this.RuleFor(fun f -> f.Fotos).NotEmpty() |> ignore
-
-
-//   module DTO  =
-//      [<CLIMutable>]
-//      type AlocacaoDto =
-//         {
-//            Id:int;Ferramentas:ICollection<Ferramenta> ;
-//            Responsavel:FuncionarioDto;ContratoLocacao:string;
-//            DataAlocacao:DateTime
-//         }
-//      [<AutoOpen>]
-//      module AlocacaoDto=
-//         let ToDomain alocDto : Alocacao =
-//            {
-//               Id=alocDto.Id;
-//               Responsavel=alocDto.Responsavel
-//               ContratoLocacao=alocDto.ContratoLocacao
-//               DataAlocacao=alocDto.DataAlocacao
-//               Ferramentas=alocDto.Ferramentas
-//            }
-//         let FromDomain  (aloc:Alocacao) =
-//            {
-//               Id=aloc.Id;
-//               Responsavel=aloc.Responsavel
-//               ContratoLocacao=aloc.ContratoLocacao
-//               DataAlocacao=aloc.DataAlocacao
-//               Ferramentas= aloc.Ferramentas |> List<Ferramenta>
-//            }
-         
-   

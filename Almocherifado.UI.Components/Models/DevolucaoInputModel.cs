@@ -8,9 +8,21 @@ using System.Threading.Tasks;
 
 namespace Almocherifado.UI.Components.Models
 {
+    public class FerramentaDevolucaoInputModel
+    {
+        public FerramentaDevolucaoInputModel(Ferramenta ferramenta, string comentario)
+        {
+            Ferramenta = ferramenta;
+            Comentario = comentario;
+        }
+
+        public Ferramenta Ferramenta { get; set; }
+        public string Comentario { get; set; }
+
+    }
     public record DevolucaoInputModel
     {
-        public Dictionary<Ferramenta, string> FerramentasEComentarios { get; set; }
+        public List<FerramentaDevolucaoInputModel> FerramentasEComentarios { get; set; }
     }
 
     public class DevolucaoInputvalidator : AbstractValidator<DevolucaoInputModel>
