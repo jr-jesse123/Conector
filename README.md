@@ -1,4 +1,4 @@
 # Conector
 Connector inventory control
 
-Project constructed in blazor 
+an inventory control developed in blazor.
